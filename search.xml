@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/12/19/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>羊羊日记</title>
+    <url>/2022/12/22/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0/</url>
+    <content><![CDATA[<p>今天大约已经是进入羊圈的第四天。阳的第一天，嗓子有一点干涩的感觉，不痛，发烧也只是象征性地温度涨了涨，我本以为这新冠不过如此，结果不过是象征性地客气一下，来了手先礼后兵。第二天腰子就被偷袭，打得我猝不及防，那种隐隐作痛的感觉，描述起来就是能够清楚的感觉到两边腰子传来阵阵痛感，但却说不出到底是哪处。到了今天，也就是阳历四天，最疼疼疼的腰子已经不疼了，与此同时也喜提了一个红红的鼻子，没错就是小丑^o^的那个红鼻。因为狂流鼻涕，就需要一直拿纸擤鼻涕。越流、越擤、越红、越痛，说起来鼻子肯定早已习惯这样的事情，因为平常感冒鼻子也会遭受这样的苦难。</p>
+<p>这次羊和平常感冒最大的不同之处，就个人经历来说是腰子遭受了从未有过的折磨。网上传言的小刀剌嗓子其实和平常感冒的咽痛如出一辙，甚至还没有感冒更有剌嗓子的感觉，发烧也只是徒有其名而无其实。</p>
+<p>ps：目前还未嗑过药，全靠免疫力了</p>
+]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
+      <tags>
+        <tag>羊羊日记</tag>
+      </tags>
+  </entry>
+</search>

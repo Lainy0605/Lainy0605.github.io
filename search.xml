@@ -64,12 +64,87 @@
 </ol>
 </li>
 </ul>
-<h1 id="session使用过程中，遇到一些字段为undefined"><a href="#session使用过程中，遇到一些字段为undefined" class="headerlink" title="session使用过程中，遇到一些字段为undefined"></a>session使用过程中，遇到一些字段为undefined</h1><ul>
+<h1 id="session报错undefined"><a href="#session报错undefined" class="headerlink" title="session报错undefined"></a>session报错undefined</h1><ul>
 <li><p>报错原因：先发送了res再设置的req的session</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>解决方案：交换顺序</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Mysql连接失败"><a href="#Mysql连接失败" class="headerlink" title="Mysql连接失败"></a>Mysql连接失败</h1><ul>
+<li><p>报错内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Error: connect ECONNREFUSED ::<span class="number">1</span>:<span class="number">3306</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报错原因</p>
+<ul>
+<li>localhost没有和127.0.0.1映射</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ol>
+<li><p>将localhost映射为127.0.0.1，具体方法略</p>
+</li>
+<li><p>将mysql配置中host更改为127.0.01</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> mysql <span class="keyword">from</span> <span class="string">&#x27;mysql&#x27;</span></span><br><span class="line"><span class="keyword">let</span> connection = mysql.<span class="title function_">createConnection</span>(&#123;</span><br><span class="line">    host     : <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">    port     :  <span class="number">3306</span>,</span><br><span class="line">    user     : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password : <span class="string">&#x27;030605&#x27;</span>,</span><br><span class="line">    database : <span class="string">&#x27;schema_userInfo&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line">connection.<span class="title function_">connect</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connection</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+</ul>
+<h1 id="dirname报错undefined"><a href="#dirname报错undefined" class="headerlink" title="__dirname报错undefined"></a>__dirname报错undefined</h1><ul>
+<li><p>报错内容</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">ReferenceError</span>: __filename is not defined <span class="keyword">in</span> <span class="variable constant_">ES</span> <span class="variable language_">module</span> scope</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报错原因</p>
+<ul>
+<li>在node中使用ES Modules规范时，以下全局对象和变量将不可用<ul>
+<li>require</li>
+<li>module.exports</li>
+<li>exports</li>
+<li>__filename</li>
+<li>__dirname</li>
+<li>NODE_PATH</li>
+</ul>
+</li>
+<li>具体原因可以查看<a href="https://juejin.cn/post/7036744678749765640">这篇博客</a></li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li><p>如果要在ES Modules规范中使用__dirname</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// import.meta.url 返回模块的绝对的 `file:` URL。</span></span><br><span class="line"><span class="comment">// url模块中fileURLToPath()函数，返回完全解析的特定于平台的 Node.js 文件路径</span></span><br><span class="line"><span class="comment">// path模块中dirname()函数，返回路径的目录路径</span></span><br><span class="line"><span class="keyword">import</span> &#123; fileURLToPath &#125; <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; dirname &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> __filename = <span class="title function_">fileURLToPath</span>(<span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">const</span> __dirname = <span class="title function_">dirname</span>(__filename);</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h1 id="重复设置请求头"><a href="#重复设置请求头" class="headerlink" title="重复设置请求头"></a>重复设置请求头</h1><ul>
+<li><p>报错内容</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Error</span> [<span class="variable constant_">ERR_HTTP_HEADERS_SENT</span>]: <span class="title class_">Cannot</span> set headers after they are sent to the client</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报错原因</p>
+<ul>
+<li>res.send()调用了多次</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>res.send()后就return</li>
+<li>检查是否是异步的问题导致res.send()调用多次</li>
+</ul>
+</li>
+</ul>
+<h1 id="Uncaught-SyntaxError-Cannot-use-import-statement-outside-a-module"><a href="#Uncaught-SyntaxError-Cannot-use-import-statement-outside-a-module" class="headerlink" title="Uncaught SyntaxError Cannot use import statement outside a module"></a>Uncaught SyntaxError Cannot use import statement outside a module</h1><ul>
+<li><p>报错内容</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Uncaught</span> <span class="title class_">SyntaxError</span> <span class="title class_">Cannot</span> use <span class="keyword">import</span> statement outside a <span class="variable language_">module</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报错原因</p>
+<ul>
+<li>使用了es6的语法， 浏览器默认将它作为js解析会出现问题</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li><p><code>script</code>标签默认为<code>type=&quot;text/javascript&quot;</code>，需要改为<code>type=&quot;module&quot;</code></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;public/js/index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -78,6 +153,18 @@
       <tags>
         <tag>node</tag>
         <tag>mysql</tag>
+        <tag>js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>羊羊日记</title>
+    <url>/2022/12/28/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0(2)/</url>
+    <content><![CDATA[<h1 id="Day-5"><a href="#Day-5" class="headerlink" title="Day 5"></a>Day 5</h1><p>其他症状都无，唯独开始咳嗽</p>
+<h1 id="Day-6"><a href="#Day-6" class="headerlink" title="Day 6"></a>Day 6</h1><p>咳咳咳</p>
+<h1 id="Day-7"><a href="#Day-7" class="headerlink" title="Day 7"></a>Day 7</h1><p>咳咳咳咳咳死了。网上说咳嗽是一个打扫战场的过程，这战场只怕是打扫的有点久</p>
+]]></content>
+      <tags>
+        <tag>羊羊日记</tag>
       </tags>
   </entry>
 </search>

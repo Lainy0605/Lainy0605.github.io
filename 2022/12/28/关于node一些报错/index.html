@@ -7,18 +7,21 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="a simple bolg">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Effy&#39;s Home">
-<meta property="og:url" content="http://liyafei.xyz/categories/%E7%94%9F%E6%B4%BB/index.html">
+<meta name="description" content="&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MyS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于node一些报错">
+<meta property="og:url" content="http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/index.html">
 <meta property="og:site_name" content="Effy&#39;s Home">
-<meta property="og:description" content="a simple bolg">
+<meta property="og:description" content="&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MyS">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-12-28T04:37:51.000Z">
+<meta property="article:modified_time" content="2022-12-28T04:48:07.306Z">
 <meta property="article:author" content="Effy">
+<meta property="article:tag" content="node mysql">
 <meta name="twitter:card" content="summary">
 
 
-<title >Effy's Home</title>
+<title >关于node一些报错</title>
 
 <!-- Favicon -->
 
@@ -225,7 +228,8 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
@@ -246,10 +250,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            云间连下榻，<br>天上接行杯。
+                            关于node一些报错
                         </h1>
 
                         
@@ -259,7 +263,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        categories
+                                        2022
                                     </span
                                 ></li>
                             </ul>
@@ -391,73 +395,105 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-list"><li class="col-lg-4 trm-list-item " style="margin: 6px 0;"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><span class="category-list-count">（1）</span></li><li class="col-lg-4 trm-list-item " style="margin: 6px 0;"><a class="category-list-link" href="/categories/%E7%94%9F%E6%B4%BB/">生活</a><span class="category-list-count">（1）</span></li></ul>
-                
-            </div>
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            12/28
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            12:37
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <ol>
+<li><pre><code>&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;,&quot;sqlState&quot;:&quot;08004&quot;,&quot;fatal&quot;:true
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 报错原因：mysql8.0默认密码认证方案是‘caching_sha2_password&#x27;，而目前node默认的密码认证方案是&#x27;mysql_native_password&#x27;，所以无法认证成功</span><br><span class="line"></span><br><span class="line">- 解决方案</span><br><span class="line"></span><br><span class="line">  - 终端启动mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql -u root -p
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 修改密码认证方式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;这里填root用户密码&#39;;
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 重启权限</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; flush privileges;
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 退出mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; exit;
+</code></pre>
+</li>
+</ol>
 
-<!-- history -->
+</article>
+    
+    
 
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/" title="关于node一些报错">http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
 <div class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                生活
-            
-            <span data-number="01"></span>
+            Other Articles
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2022/12/22/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0/" class="trm-cover-frame trm-anima-link">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2022/12/22/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0/" class="trm-anima-link">
-                                        羊羊日记
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">12/22</li>
-                                        <li class="trm-accent-color">23:19</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%94%9F%E6%B4%BB/">
+                    生活
+                </a>
             </div>
-            
+            <h5>
+                <a href="/2022/12/22/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0/" class="trm-anima-link">
+                    羊羊日记
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/12/22</li>
+                <li>23:19</li>
+                
+                
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
+    
+</div>
 
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
-    </div>
-
-
+    
 
 
 
@@ -577,6 +613,9 @@
 
 
     <!-- 评论插件 -->
+    
+        
+        
     
 
 

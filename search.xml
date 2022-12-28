@@ -36,4 +36,28 @@
         <tag>羊羊日记</tag>
       </tags>
   </entry>
+  <entry>
+    <title>关于node一些报错</title>
+    <url>/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</url>
+    <content><![CDATA[<ol>
+<li><pre><code>&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;,&quot;sqlState&quot;:&quot;08004&quot;,&quot;fatal&quot;:true
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 报错原因：mysql8.0默认密码认证方案是‘caching_sha2_password&#x27;，而目前node默认的密码认证方案是&#x27;mysql_native_password&#x27;，所以无法认证成功</span><br><span class="line"></span><br><span class="line">- 解决方案</span><br><span class="line"></span><br><span class="line">  - 终端启动mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql -u root -p
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 修改密码认证方式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;这里填root用户密码&#39;;
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 重启权限</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; flush privileges;
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 退出mysql</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+ mysql&gt; exit;
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>node mysql</tag>
+      </tags>
+  </entry>
 </search>

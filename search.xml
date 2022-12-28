@@ -41,10 +41,17 @@
     <url>/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</url>
     <content><![CDATA[<ul>
 <li><p>报错内容</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;code&quot;</span>:<span class="string">&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;</span>,<span class="string">&quot;errno&quot;</span>:<span class="number">1251</span>,<span class="string">&quot;sqlMessage&quot;</span>:<span class="string">&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;</span>,<span class="string">&quot;sqlState&quot;</span>:<span class="string">&quot;08004&quot;</span>,<span class="string">&quot;fatal&quot;</span>:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>报错原因</p>
 <ul>
-<li><pre><code class="java">&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;,&quot;sqlState&quot;:&quot;08004&quot;,&quot;fatal&quot;:true
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 报错原因</span><br><span class="line"></span><br><span class="line">  - mysql8.0默认密码认证方案是‘caching_sha2_password&#x27;，而目前node默认的密码认证方案是&#x27;mysql_native_password&#x27;，所以无法认证成功</span><br><span class="line"></span><br><span class="line">- 解决方案</span><br><span class="line"></span><br><span class="line">  - 终端启动mysql</span><br><span class="line"></span><br><span class="line">    ```makefile</span><br><span class="line">    mysql -u root -p</span><br></pre></td></tr></table></figure>
-</code></pre>
+<li>mysql8.0默认密码认证方案是‘caching_sha2_password’，而目前node默认的密码认证方案是’mysql_native_password’，所以无法认证成功</li>
+</ul>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li><p>终端启动mysql</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>修改密码认证方式</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter user &#x27;root&#x27;@&#x27;localhost&#x27; identified with mysql_native_password by &#x27;这里填root用户密码&#x27;;</span><br></pre></td></tr></table></figure>
@@ -61,10 +68,10 @@
 <li><p>session使用过程中，遇到一些字段为undefined</p>
 <ul>
 <li><p>报错原因：先发送了res再设置的req的session</p>
-<ul>
-<li>&#96;&#96;&#96;javascript<br>router.get(‘&#x2F;captcha’,function (req,res){<br>let code &#x3D; captcha();<br>res.type(“svg”).send(code.data);<br>req.session.captcha &#x3D; code.text;<br>})<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 解决方案：交换顺序</span><br><span class="line"></span><br><span class="line">  - ```javascript</span><br><span class="line">    router.get(&#x27;/captcha&#x27;,function (req,res)&#123;</span><br><span class="line">        let code = captcha();</span><br><span class="line">        req.session.captcha = code.text;</span><br><span class="line">        res.type(&quot;svg&quot;).send(code.data);</span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure></li>
-</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
+<li><p>解决方案：交换顺序</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ol>

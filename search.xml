@@ -43,7 +43,7 @@
 <li><p>报错内容</p>
 <ul>
 <li><pre><code class="java">&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;,&quot;sqlState&quot;:&quot;08004&quot;,&quot;fatal&quot;:true
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 报错原因：mysql8.0默认密码认证方案是‘caching_sha2_password&#x27;，而目前node默认的密码认证方案是&#x27;mysql_native_password&#x27;，所以无法认证成功</span><br><span class="line"></span><br><span class="line">- 解决方案</span><br><span class="line"></span><br><span class="line">  - 终端启动mysql</span><br><span class="line"></span><br><span class="line">    ```makefile</span><br><span class="line">    mysql -u root -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- 报错原因</span><br><span class="line"></span><br><span class="line">  - mysql8.0默认密码认证方案是‘caching_sha2_password&#x27;，而目前node默认的密码认证方案是&#x27;mysql_native_password&#x27;，所以无法认证成功</span><br><span class="line"></span><br><span class="line">- 解决方案</span><br><span class="line"></span><br><span class="line">  - 终端启动mysql</span><br><span class="line"></span><br><span class="line">    ```makefile</span><br><span class="line">    mysql -u root -p</span><br></pre></td></tr></table></figure>
 </code></pre>
 </li>
 <li><p>修改密码认证方式</p>

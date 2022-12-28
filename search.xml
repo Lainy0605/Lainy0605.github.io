@@ -39,9 +39,9 @@
   <entry>
     <title>关于node一些报错</title>
     <url>/2022/12/28/%E5%85%B3%E4%BA%8Enode%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</url>
-    <content><![CDATA[<ul>
+    <content><![CDATA[<h1 id="Mysql认证失败"><a href="#Mysql认证失败" class="headerlink" title="Mysql认证失败"></a>Mysql认证失败</h1><ul>
 <li><p>报错内容</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;code&quot;</span>:<span class="string">&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;</span>,<span class="string">&quot;errno&quot;</span>:<span class="number">1251</span>,<span class="string">&quot;sqlMessage&quot;</span>:<span class="string">&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;</span>,<span class="string">&quot;sqlState&quot;</span>:<span class="string">&quot;08004&quot;</span>,<span class="string">&quot;fatal&quot;</span>:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;code&quot;</span>:<span class="string">&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;</span>,<span class="string">&quot;errno&quot;</span>:<span class="number">1251</span>,<span class="string">&quot;sqlMessage&quot;</span>:<span class="string">&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;</span>,<span class="string">&quot;sqlState&quot;</span>:<span class="string">&quot;08004&quot;</span>,<span class="string">&quot;fatal&quot;</span>:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>报错原因</p>
 <ul>
@@ -49,7 +49,7 @@
 </ul>
 </li>
 <li><p>解决方案</p>
-<ul>
+<ol>
 <li><p>终端启动mysql</p>
 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
 </li>
@@ -61,20 +61,16 @@
 </li>
 <li><p>退出mysql</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; exit;</span><br></pre></td></tr></table></figure></li>
-</ul>
+</ol>
 </li>
 </ul>
-<ol>
-<li><p>session使用过程中，遇到一些字段为undefined</p>
-<ul>
+<h1 id="session使用过程中，遇到一些字段为undefined"><a href="#session使用过程中，遇到一些字段为undefined" class="headerlink" title="session使用过程中，遇到一些字段为undefined"></a>session使用过程中，遇到一些字段为undefined</h1><ul>
 <li><p>报错原因：先发送了res再设置的req的session</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>解决方案：交换顺序</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
 </ul>
-</li>
-</ol>
 ]]></content>
       <categories>
         <category>学习</category>

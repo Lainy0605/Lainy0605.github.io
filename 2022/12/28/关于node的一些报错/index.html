@@ -9,13 +9,13 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
 <meta name="description" content="Mysql认证失败 报错内容 1&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; conside">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于node一些报错">
+<meta property="og:title" content="关于node的一些报错">
 <meta property="og:url" content="http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
 <meta property="og:description" content="Mysql认证失败 报错内容 1&quot;code&quot;:&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;,&quot;errno&quot;:1251,&quot;sqlMessage&quot;:&quot;Client does not support authentication protocol requested by server; conside">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-12-28T04:37:51.000Z">
-<meta property="article:modified_time" content="2022-12-28T07:13:02.147Z">
+<meta property="article:modified_time" content="2023-01-02T17:24:36.093Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="node">
 <meta property="article:tag" content="mysql">
@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary">
 
 
-<title >关于node一些报错</title>
+<title >关于node的一些报错</title>
 
 <!-- Favicon -->
 
@@ -255,7 +255,7 @@
                             我人傻了
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            关于node一些报错
+                            关于node的一些报错
                         </h1>
 
                         
@@ -477,7 +477,7 @@
 <ol>
 <li><p>将localhost映射为127.0.0.1，具体方法略</p>
 </li>
-<li><p>将mysql配置中host更改为127.0.01</p>
+<li><p>将mysql配置中host更改为127.0.0.1</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mysql <span class="keyword">from</span> <span class="string">&#x27;mysql&#x27;</span></span><br><span class="line"><span class="keyword">let</span> connection = mysql.<span class="title function_">createConnection</span>(&#123;</span><br><span class="line">    host     : <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">    port     :  <span class="number">3306</span>,</span><br><span class="line">    user     : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password : <span class="string">&#x27;030605&#x27;</span>,</span><br><span class="line">    database : <span class="string">&#x27;schema_userInfo&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line">connection.<span class="title function_">connect</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connection</span><br></pre></td></tr></table></figure></li>
 </ol>
 </li>
@@ -551,7 +551,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/" title="关于node一些报错">http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</a>
+        <a href="http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/" title="关于node的一些报错">http://liyafei.xyz/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>

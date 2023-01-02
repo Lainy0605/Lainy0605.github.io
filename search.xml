@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>关于node一些报错</title>
+    <title>关于node的一些报错</title>
     <url>/2022/12/28/%E5%85%B3%E4%BA%8Enode%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8A%A5%E9%94%99/</url>
     <content><![CDATA[<h1 id="Mysql认证失败"><a href="#Mysql认证失败" class="headerlink" title="Mysql认证失败"></a>Mysql认证失败</h1><ul>
 <li><p>报错内容</p>
@@ -48,7 +48,7 @@
 <ol>
 <li><p>将localhost映射为127.0.0.1，具体方法略</p>
 </li>
-<li><p>将mysql配置中host更改为127.0.01</p>
+<li><p>将mysql配置中host更改为127.0.0.1</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> mysql <span class="keyword">from</span> <span class="string">&#x27;mysql&#x27;</span></span><br><span class="line"><span class="keyword">let</span> connection = mysql.<span class="title function_">createConnection</span>(&#123;</span><br><span class="line">    host     : <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">    port     :  <span class="number">3306</span>,</span><br><span class="line">    user     : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password : <span class="string">&#x27;030605&#x27;</span>,</span><br><span class="line">    database : <span class="string">&#x27;schema_userInfo&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line">connection.<span class="title function_">connect</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connection</span><br></pre></td></tr></table></figure></li>
 </ol>
 </li>

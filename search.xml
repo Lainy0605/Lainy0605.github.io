@@ -164,4 +164,17 @@
         <tag>js</tag>
       </tags>
   </entry>
+  <entry>
+    <title>一些启动台图标的问题</title>
+    <url>/2023/01/16/tipsForMacOS/</url>
+    <content><![CDATA[<h1 id="1-删除启动台的无效图标"><a href="#1-删除启动台的无效图标" class="headerlink" title="1. 删除启动台的无效图标"></a>1. 删除启动台的无效图标</h1><ul>
+<li>安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留</li>
+<li>其中的APPNAME是想要删除的图标名字</li>
+</ul>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">sqlite3 <span class="variable">$(find /private/var/folders -name com.apple.dock.launchpad 2&gt;/dev/null)</span>/db/db \ <span class="string">&quot;DELETE FROM apps WHERE title=&#x27;APPNAME&#x27;;&quot;</span>&amp;&amp;killall Dock</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>macOS</tag>
+      </tags>
+  </entry>
 </search>

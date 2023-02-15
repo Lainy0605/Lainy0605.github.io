@@ -1,186 +1,445 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>羊羊日记其一</title>
-    <url>/2022/12/22/COVID19DiaryOne/</url>
-    <content><![CDATA[<p>今天大约已经是进入羊圈的第四天。</p>
-<h1 id="Day-1"><a href="#Day-1" class="headerlink" title="Day 1"></a>Day 1</h1><p>阳的第一天，嗓子有干涩的感觉，但不痛，发烧也只是象征性地温度涨了涨。本来以为奥密克戎不过如此，谁料竟是象征性地客气一下，来了手先礼后兵</p>
-<h1 id="Day-2"><a href="#Day-2" class="headerlink" title="Day 2"></a>Day 2</h1><p>第二天腰就被偷袭，疼得我猝不及防，那种隐隐作痛的感觉，描述起来就是能够清楚的感觉到两边腰传来阵阵痛感，但却说不出到底是哪处，喉咙也开始轻微痛</p>
-<h1 id="Day-3"><a href="#Day-3" class="headerlink" title="Day 3"></a>Day 3</h1><p>开始轻微的流鼻涕还鼻塞，喉咙继续痛痛痛，腰不痛了四肢开始痛</p>
-<h1 id="Day-4"><a href="#Day-4" class="headerlink" title="Day 4"></a>Day 4</h1><p>到了今天，也就是阳历四天，最疼疼疼的腰已经不疼了，与此同时也喜提了一个红红的鼻子，没错就是小丑^o^的那个红鼻。因为狂流鼻涕，就需要一直拿纸擤鼻涕。愈流、愈擤、愈红、愈痛，说起来鼻子想必早就习惯这样的事情，毕竟平常感冒鼻子也会遭受这样的苦难</p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这次羊和平常感冒最大的不同之处，就个人经历来说是腰遭受了从未有过的折磨。网上传言的小刀剌嗓子其实和平常感冒的咽痛如出一辙，甚至不及感冒，发烧也只是徒有其名而无其实。不知明天症状如何，是否会被打脸😴</p>
-<p><em>ps：目前还未嗑过药，全靠免疫力了</em></p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>羊羊日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>羊羊日记其二</title>
-    <url>/2022/12/28/COVID19DiaryTwo/</url>
-    <content><![CDATA[<h1 id="Day-5"><a href="#Day-5" class="headerlink" title="Day 5"></a>Day 5</h1><p>其他症状都无，唯独开始咳嗽</p>
-<h1 id="Day-6"><a href="#Day-6" class="headerlink" title="Day 6"></a>Day 6</h1><p>咳咳咳咳</p>
-<h1 id="Day-7"><a href="#Day-7" class="headerlink" title="Day 7"></a>Day 7</h1><p>咳咳咳咳咳死了。</p>
-<p>网上说咳嗽是一个打扫战场的过程，这只怕是打扫的有亿点点久</p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>羊羊日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2022年度报告</title>
-    <url>/2023/01/03/annualReviewFor2022/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>年度报告</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于node的一些报错</title>
-    <url>/2022/12/28/nodeError/</url>
-    <content><![CDATA[<h1 id="Mysql认证失败"><a href="#Mysql认证失败" class="headerlink" title="Mysql认证失败"></a>Mysql认证失败</h1><ul>
-<li><p>报错内容</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;code&quot;</span>:<span class="string">&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;</span>,<span class="string">&quot;errno&quot;</span>:<span class="number">1251</span>,<span class="string">&quot;sqlMessage&quot;</span>:<span class="string">&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;</span>,<span class="string">&quot;sqlState&quot;</span>:<span class="string">&quot;08004&quot;</span>,<span class="string">&quot;fatal&quot;</span>:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>报错原因</p>
-<ul>
-<li>mysql8.0默认密码认证方案是‘caching_sha2_password’，而目前node默认的密码认证方案是’mysql_native_password’，所以无法认证成功</li>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="1 导论1.1 什么是软件 从组成成分的角度看软件（“写的对”） 代码+文档   从问题求解的角度看软件（“写对的”） 作为一种复杂的信息制品，软件是对客观事物的深度抽象与建模，且同时包含了对复杂客观世界的问题空间与解空间的具体描述    1.2 问题域与解系统 从问题域背景出发，结合涉众主观意愿，设定系统目标，制定开发任务，细分系统交互  软件系统解决问题的基础：模拟与共享  软件系统中的某些部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="demandAndBusinessModelInnovation">
+<meta property="og:url" content="http://liyafei.xyz/2023/02/15/demandAndBusinessModelInnovation/index.html">
+<meta property="og:site_name" content="Effy&#39;s Page">
+<meta property="og:description" content="1 导论1.1 什么是软件 从组成成分的角度看软件（“写的对”） 代码+文档   从问题求解的角度看软件（“写对的”） 作为一种复杂的信息制品，软件是对客观事物的深度抽象与建模，且同时包含了对复杂客观世界的问题空间与解空间的具体描述    1.2 问题域与解系统 从问题域背景出发，结合涉众主观意愿，设定系统目标，制定开发任务，细分系统交互  软件系统解决问题的基础：模拟与共享  软件系统中的某些部">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://gitee.com/duan-jifeng/code-imgs/raw/master/202211092202311.png">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Downloads/IMG_3015.JPG">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Downloads/IMG_3016.JPG">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Downloads/IMG_3017.JPG">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Downloads/IMG_3018.JPG">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Library/Application%20Support/typora-user-images/image-20230214230840134.png">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Library/Application%20Support/typora-user-images/image-20230214230902387.png">
+<meta property="og:image" content="http://liyafei.xyz/Users/effy/Library/Application%20Support/typora-user-images/image-20230214231901239.png">
+<meta property="article:published_time" content="2023-02-15T07:11:38.000Z">
+<meta property="article:modified_time" content="2023-02-15T07:15:27.862Z">
+<meta property="article:author" content="Effy">
+<meta property="article:tag" content="课程笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/duan-jifeng/code-imgs/raw/master/202211092202311.png">
+
+
+<title >demandAndBusinessModelInnovation</title>
+
+<!-- Favicon -->
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=1.2.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+
+
+    
+
+    
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"liyafei.xyz","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.svg","icon32":"/img/lyft.svg","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":false,"hidden":"failure.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+			<a href="/" class="trm-logo-frame trm-anima-link">
+				
+					<img src="/img/lyft.svg" alt="logo">
+				
+				
+					<div class="trm-logo-text">
+						WelcomeTo<span>Effy&#39;sPage</span>
+					</div>
+				
+			</a>
+			<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+
+			<!-- menu -->
+			<div class="trm-menu">
+				<nav>
+					<ul>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/" target="">
+								Home
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/archives/" target="">
+								archives
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/categories/" target="">
+								categories
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/tags/" target="">
+								tags
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/about/" target="">
+								About
+							</a>
+							
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+			<!-- menu end -->
+			
+			<!-- mode switcher place -->
+			
+			<div class="trm-mode-switcher-place">
+				<!-- <div class="trm-hidden-switcher"> -->
+					<div class="trm-mode-switcher">
+					  <i class="far fa-sun"></i>
+					  <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+					  <label class="trm-swich" for="trm-swich"></label>
+					  <i class="far fa-moon"></i>
+					</div>
+				  <!-- </div> -->
+			</div>
+			
+			<!-- mode switcher place end -->
+
+			
+				
+				<div id="trm-search-btn" class="trm-search-btn">
+					<i class="fas fa-search"></i>
+				</div>
+				 
+			 
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" src="/img/banner.png" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            背不完了O(∩_∩)O
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            demandAndBusinessModelInnovation
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
+    <h5 class="trm-name trm-mb-15">
+        Effy
+    </h5>
+    
+    <div class="trm-label">
+        我
+        <span class="trm-typed-text">
+            <!-- Words for theme.user.typedText -->
+        </span>
+    </div>
+    
+</div>
+<!-- card header end -->
+
+<!-- sidebar social -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+
+<div class="trm-social">
+    
+        <a href="https://github.com/Lainy0605" title="Github" rel="nofollow" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/effyspage" title="Gitee" rel="nofollow" target="_blank">
+            <i class="fab fa-github-alt"></i>
+        </a>
+    
+        <a href="https://music.163.com/#/user/home?id=610482486" title="NetEaseMusic" rel="nofollow" target="_blank">
+            <i class="fab fa-itunes"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/335136462?spm_id_from=333.1007.0.0" title="Bilibili" rel="nofollow" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
+    
+        <a href="https://steamcommunity.com/profiles/76561199081278457/" title="Steam" rel="nofollow" target="_blank">
+            <i class="fab fa-steam"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+
+<!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                age:
+            </div>
+            <div class="trm-label trm-label-light">
+                19
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                City:
+            </div>
+            <div class="trm-label trm-label-light">
+                Kunshan, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                school:
+            </div>
+            <div class="trm-label trm-label-light">
+                Nanjing University
+            </div>
+        </li>
+    
 </ul>
-</li>
-<li><p>解决方案</p>
-<ol>
-<li><p>终端启动mysql</p>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改密码认证方式</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; alter user &#x27;root&#x27;@&#x27;localhost&#x27; identified with mysql_native_password by &#x27;这里填root用户密码&#x27;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启权限</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; flush privileges;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>退出mysql</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mysql&gt; exit;</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-</ul>
-<h1 id="session报错undefined"><a href="#session报错undefined" class="headerlink" title="session报错undefined"></a>session报错undefined</h1><ul>
-<li><p>报错原因：先发送了res再设置的req的session</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>解决方案：交换顺序</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="Mysql连接失败"><a href="#Mysql连接失败" class="headerlink" title="Mysql连接失败"></a>Mysql连接失败</h1><ul>
-<li><p>报错内容</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Error: connect ECONNREFUSED ::<span class="number">1</span>:<span class="number">3306</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>报错原因</p>
-<ul>
-<li>localhost没有和127.0.0.1映射</li>
-</ul>
-</li>
-<li><p>解决方案</p>
-<ol>
-<li><p>将localhost映射为127.0.0.1，具体方法略</p>
-</li>
-<li><p>将mysql配置中host更改为127.0.0.1</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> mysql <span class="keyword">from</span> <span class="string">&#x27;mysql&#x27;</span></span><br><span class="line"><span class="keyword">let</span> connection = mysql.<span class="title function_">createConnection</span>(&#123;</span><br><span class="line">    host     : <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">    port     :  <span class="number">3306</span>,</span><br><span class="line">    user     : <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password : <span class="string">&#x27;030605&#x27;</span>,</span><br><span class="line">    database : <span class="string">&#x27;schema_userInfo&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line">connection.<span class="title function_">connect</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connection</span><br></pre></td></tr></table></figure></li>
-</ol>
-</li>
-</ul>
-<h1 id="dirname报错undefined"><a href="#dirname报错undefined" class="headerlink" title="__dirname报错undefined"></a>__dirname报错undefined</h1><ul>
-<li><p>报错内容</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">ReferenceError</span>: __filename is not defined <span class="keyword">in</span> <span class="variable constant_">ES</span> <span class="variable language_">module</span> scope</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>报错原因</p>
-<ul>
-<li>在node中使用ES Modules规范时，以下全局对象和变量将不可用<ul>
-<li>require</li>
-<li>module.exports</li>
-<li>exports</li>
-<li>__filename</li>
-<li>__dirname</li>
-<li>NODE_PATH</li>
-</ul>
-</li>
-<li>具体原因可以查看<a href="https://juejin.cn/post/7036744678749765640">这篇博客</a></li>
-</ul>
-</li>
-<li><p>解决方案</p>
-<ul>
-<li><p>如果要在ES Modules规范中使用__dirname</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// import.meta.url 返回模块的绝对的 `file:` URL。</span></span><br><span class="line"><span class="comment">// url模块中fileURLToPath()函数，返回完全解析的特定于平台的 Node.js 文件路径</span></span><br><span class="line"><span class="comment">// path模块中dirname()函数，返回路径的目录路径</span></span><br><span class="line"><span class="keyword">import</span> &#123; fileURLToPath &#125; <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; dirname &#125; <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> __filename = <span class="title function_">fileURLToPath</span>(<span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">url</span>);</span><br><span class="line"><span class="keyword">const</span> __dirname = <span class="title function_">dirname</span>(__filename);</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h1 id="重复设置请求头"><a href="#重复设置请求头" class="headerlink" title="重复设置请求头"></a>重复设置请求头</h1><ul>
-<li><p>报错内容</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Error</span> [<span class="variable constant_">ERR_HTTP_HEADERS_SENT</span>]: <span class="title class_">Cannot</span> set headers after they are sent to the client</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>报错原因</p>
-<ul>
-<li>res.send()调用了多次</li>
-</ul>
-</li>
-<li><p>解决方案</p>
-<ul>
-<li>res.send()后就return</li>
-<li>检查是否是异步的问题导致res.send()调用多次</li>
-</ul>
-</li>
-</ul>
-<h1 id="Uncaught-SyntaxError-Cannot-use-import-statement-outside-a-module"><a href="#Uncaught-SyntaxError-Cannot-use-import-statement-outside-a-module" class="headerlink" title="Uncaught SyntaxError Cannot use import statement outside a module"></a>Uncaught SyntaxError Cannot use import statement outside a module</h1><ul>
-<li><p>报错内容</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="title class_">Uncaught</span> <span class="title class_">SyntaxError</span> <span class="title class_">Cannot</span> use <span class="keyword">import</span> statement outside a <span class="variable language_">module</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>报错原因</p>
-<ul>
-<li>使用了es6的语法， 浏览器默认将它作为js解析会出现问题</li>
-</ul>
-</li>
-<li><p>解决方案</p>
-<ul>
-<li><p><code>script</code>标签默认为<code>type=&quot;text/javascript&quot;</code>，需要改为<code>type=&quot;module&quot;</code></p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;public/js/index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>node</tag>
-        <tag>mysql</tag>
-        <tag>js</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一些启动台图标的问题</title>
-    <url>/2023/01/16/tipsForMacOS/</url>
-    <content><![CDATA[<h1 id="1-删除启动台的无效图标"><a href="#1-删除启动台的无效图标" class="headerlink" title="1. 删除启动台的无效图标"></a>1. 删除启动台的无效图标</h1><ul>
-<li>安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留</li>
-<li>其中的APPNAME是想要删除的图标名字</li>
-</ul>
-<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">sqlite3 <span class="variable">$(find /private/var/folders -name com.apple.dock.launchpad 2&gt;/dev/null)</span>/db/db \ <span class="string">&quot;DELETE FROM apps WHERE title=&#x27;APPNAME&#x27;;&quot;</span>&amp;&amp;killall Dock</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>macOS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>demandAndBusinessModelInnovation</title>
-    <url>/2023/02/15/demandAndBusinessModelInnovation/</url>
-    <content><![CDATA[<h1 id="1-导论"><a href="#1-导论" class="headerlink" title="1 导论"></a>1 导论</h1><h2 id="1-1-什么是软件"><a href="#1-1-什么是软件" class="headerlink" title="1.1 什么是软件"></a>1.1 什么是软件</h2><ul>
+
+<!-- info end -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<!-- action button -->
+<div class="text-center">
+    <a href="mailto:592511932@qq.com" class="trm-btn">
+        Contact Me
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+<!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#1-导论"  data-scroll-to="#1-导论"><span class="toc-number">1.</span> <span class="toc-text">1 导论</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-1-什么是软件"  data-scroll-to="#1-1-什么是软件"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 什么是软件</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-2-问题域与解系统"  data-scroll-to="#1-2-问题域与解系统"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 问题域与解系统</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-3-需求的两个维度"  data-scroll-to="#1-3-需求的两个维度"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 需求的两个维度</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-4-需求的四个基本概念"  data-scroll-to="#1-4-需求的四个基本概念"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 需求的四个基本概念</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-5-需求的定义"  data-scroll-to="#1-5-需求的定义"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 需求的定义</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#1-6-计算器的问题域和解系统各是什么"  data-scroll-to="#1-6-计算器的问题域和解系统各是什么"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 计算器的问题域和解系统各是什么</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#2-商业模式画布"  data-scroll-to="#2-商业模式画布"><span class="toc-number">2.</span> <span class="toc-text">2 商业模式画布</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2-1-商业模式模型"  data-scroll-to="#2-1-商业模式模型"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 商业模式模型</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2-2-情感端"  data-scroll-to="#2-2-情感端"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 情感端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-2-1-客户细分Customer-Segments"  data-scroll-to="#2-2-1-客户细分Customer-Segments"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 客户细分Customer Segments</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-2-2-价值主张Value-Proposition"  data-scroll-to="#2-2-2-价值主张Value-Proposition"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 价值主张Value Proposition</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-2-3-渠道通路CHannels"  data-scroll-to="#2-2-3-渠道通路CHannels"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 渠道通路CHannels</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-2-4-客户关系-Customer-Relationship"  data-scroll-to="#2-2-4-客户关系-Customer-Relationship"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 客户关系 Customer Relationship</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-2-5-收入来源-Revenue-Streams"  data-scroll-to="#2-2-5-收入来源-Revenue-Streams"><span class="toc-number">2.2.5.</span> <span class="toc-text">2.2.5 收入来源 Revenue Streams</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2-3-理性端"  data-scroll-to="#2-3-理性端"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 理性端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-3-1-核心资源-Key-Resources"  data-scroll-to="#2-3-1-核心资源-Key-Resources"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 核心资源 Key Resources</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-3-2-关键业务-Key-Activities"  data-scroll-to="#2-3-2-关键业务-Key-Activities"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.3.2 关键业务 Key Activities</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-3-3-重要合作-Key-Partnership"  data-scroll-to="#2-3-3-重要合作-Key-Partnership"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3.3 重要合作 Key Partnership</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#2-3-4-成本结构-Cost-Structrue"  data-scroll-to="#2-3-4-成本结构-Cost-Structrue"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.3.4 成本结构 Cost Structrue</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2-4-重视模块之间的联系（以及联系的联系）"  data-scroll-to="#2-4-重视模块之间的联系（以及联系的联系）"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 重视模块之间的联系（以及联系的联系）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#2-5-完整商业模式举例：从iPod-x2F-iTunes商业模式到“网易云”"  data-scroll-to="#2-5-完整商业模式举例：从iPod-x2F-iTunes商业模式到“网易云”"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 完整商业模式举例：从iPod&#x2F;iTunes商业模式到“网易云”</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#3-商业模式类型"  data-scroll-to="#3-商业模式类型"><span class="toc-number">3.</span> <span class="toc-text">3 商业模式类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-1-分拆商业模式：商业版的“关注分离”"  data-scroll-to="#3-1-分拆商业模式：商业版的“关注分离”"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 分拆商业模式：商业版的“关注分离”</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-2-长尾商业模式"  data-scroll-to="#3-2-长尾商业模式"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 长尾商业模式</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-3-多边平台商业模式"  data-scroll-to="#3-3-多边平台商业模式"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 多边平台商业模式</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-4-免费的商业模式"  data-scroll-to="#3-4-免费的商业模式"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 免费的商业模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-4-1-基于广告的免费商业模式总结"  data-scroll-to="#3-4-1-基于广告的免费商业模式总结"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 基于广告的免费商业模式总结</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-4-2-免费增值的免费商业模式"  data-scroll-to="#3-4-2-免费增值的免费商业模式"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 免费增值的免费商业模式</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#3-4-3-诱饵-amp-陷阱模式总结"  data-scroll-to="#3-4-3-诱饵-amp-陷阱模式总结"><span class="toc-number">3.4.3.</span> <span class="toc-text">3.4.3 诱饵&amp;陷阱模式总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-5-开放的商业模式"  data-scroll-to="#3-5-开放的商业模式"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 开放的商业模式</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#3-6-互联网场景"  data-scroll-to="#3-6-互联网场景"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 互联网场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#4-商业模式设计"  data-scroll-to="#4-商业模式设计"><span class="toc-number">4.</span> <span class="toc-text">4 商业模式设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-1-客户洞察"  data-scroll-to="#4-1-客户洞察"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 客户洞察</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-2-构思"  data-scroll-to="#4-2-构思"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 构思</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-3-视觉化思考"  data-scroll-to="#4-3-视觉化思考"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 视觉化思考</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-4-模型构建"  data-scroll-to="#4-4-模型构建"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 模型构建</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-5-讲故事"  data-scroll-to="#4-5-讲故事"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 讲故事</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#4-6-场景"  data-scroll-to="#4-6-场景"><span class="toc-number">4.6.</span> <span class="toc-text">4.6 场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#5-商业模式战略"  data-scroll-to="#5-商业模式战略"><span class="toc-number">5.</span> <span class="toc-text">5 商业模式战略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#5-1-商业模式环境"  data-scroll-to="#5-1-商业模式环境"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 商业模式环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-1-1-市场影响力"  data-scroll-to="#5-1-1-市场影响力"><span class="toc-number">5.1.1.</span> <span class="toc-text">5.1.1 市场影响力</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-1-2-行业影响力"  data-scroll-to="#5-1-2-行业影响力"><span class="toc-number">5.1.2.</span> <span class="toc-text">5.1.2 行业影响力</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-1-3-关键趋势"  data-scroll-to="#5-1-3-关键趋势"><span class="toc-number">5.1.3.</span> <span class="toc-text">5.1.3 关键趋势</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-1-4-宏观经济影响"  data-scroll-to="#5-1-4-宏观经济影响"><span class="toc-number">5.1.4.</span> <span class="toc-text">5.1.4 宏观经济影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#5-2-评估商业模式"  data-scroll-to="#5-2-评估商业模式"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 评估商业模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-2-1-总体评估"  data-scroll-to="#5-2-1-总体评估"><span class="toc-number">5.2.1.</span> <span class="toc-text">5.2.1 总体评估</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#5-2-2-SWOT"  data-scroll-to="#5-2-2-SWOT"><span class="toc-number">5.2.2.</span> <span class="toc-text">5.2.2 SWOT</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#5-3-蓝海战略"  data-scroll-to="#5-3-蓝海战略"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 蓝海战略</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#5-4-商业模式管理"  data-scroll-to="#5-4-商业模式管理"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 商业模式管理</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#6-需求"  data-scroll-to="#6-需求"><span class="toc-number">6.</span> <span class="toc-text">6 需求</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-1-需求工程的基本活动"  data-scroll-to="#6-1-需求工程的基本活动"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 需求工程的基本活动</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-1-确定项目前景和范围"  data-scroll-to="#6-1-确定项目前景和范围"><span class="toc-number">6.2.</span> <span class="toc-text">6.1 确定项目前景和范围</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-1-1-目标模型"  data-scroll-to="#6-1-1-目标模型"><span class="toc-number">6.2.1.</span> <span class="toc-text">6.1.1 目标模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-2-涉众分析"  data-scroll-to="#6-2-涉众分析"><span class="toc-number">6.3.</span> <span class="toc-text">6.2 涉众分析</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-3-需求获取方法"  data-scroll-to="#6-3-需求获取方法"><span class="toc-number">6.4.</span> <span class="toc-text">6.3 需求获取方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-3-1-面谈"  data-scroll-to="#6-3-1-面谈"><span class="toc-number">6.4.1.</span> <span class="toc-text">6.3.1 面谈</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-3-2-原型"  data-scroll-to="#6-3-2-原型"><span class="toc-number">6.4.2.</span> <span class="toc-text">6.3.2 原型</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-3-3-观察"  data-scroll-to="#6-3-3-观察"><span class="toc-number">6.4.3.</span> <span class="toc-text">6.3.3 观察</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-4-需求分析"  data-scroll-to="#6-4-需求分析"><span class="toc-number">6.5.</span> <span class="toc-text">6.4 需求分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-4-1-概念类图"  data-scroll-to="#6-4-1-概念类图"><span class="toc-number">6.5.1.</span> <span class="toc-text">6.4.1 概念类图</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-4-2-顺序图"  data-scroll-to="#6-4-2-顺序图"><span class="toc-number">6.5.2.</span> <span class="toc-text">6.4.2 顺序图</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-4-3-状态图"  data-scroll-to="#6-4-3-状态图"><span class="toc-number">6.5.3.</span> <span class="toc-text">6.4.3 状态图</span></a></li></ol></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#6-5-需求验证与管理"  data-scroll-to="#6-5-需求验证与管理"><span class="toc-number">6.6.</span> <span class="toc-text">6.5 需求验证与管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-5-1-需求验证"  data-scroll-to="#6-5-1-需求验证"><span class="toc-number">6.6.1.</span> <span class="toc-text">6.5.1 需求验证</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-5-2-需求管理"  data-scroll-to="#6-5-2-需求管理"><span class="toc-number">6.6.2.</span> <span class="toc-text">6.5.2 需求管理</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#6-5-3-需求变更控制"  data-scroll-to="#6-5-3-需求变更控制"><span class="toc-number">6.6.3.</span> <span class="toc-text">6.5.3 需求变更控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#7-考试"  data-scroll-to="#7-考试"><span class="toc-number">7.</span> <span class="toc-text">7 考试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#7-1-商业模式部分期末考核（50分）"  data-scroll-to="#7-1-商业模式部分期末考核（50分）"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 商业模式部分期末考核（50分）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#7-2-需求部分期末考核（50分）"  data-scroll-to="#7-2-需求部分期末考核（50分）"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 需求部分期末考核（50分）</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            02/15
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            15:11
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="1-导论"><a href="#1-导论" class="headerlink" title="1 导论"></a>1 导论</h1><h2 id="1-1-什么是软件"><a href="#1-1-什么是软件" class="headerlink" title="1.1 什么是软件"></a>1.1 什么是软件</h2><ul>
 <li>从组成成分的角度看软件（“写的对”）<ul>
 <li>代码+文档</li>
 </ul>
@@ -1427,12 +1686,219 @@
 </ul>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>课程笔记</tag>
-      </tags>
-  </entry>
-</search>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2023/02/15/demandAndBusinessModelInnovation/" title="demandAndBusinessModelInnovation">http://liyafei.xyz/2023/02/15/demandAndBusinessModelInnovation/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/01/16/tipsForMacOS/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/01/16/tipsForMacOS/" class="trm-anima-link">
+                    一些启动台图标的问题
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/01/16</li>
+                <li>21:12</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator">·</span>
+            <span class="trm-accent-color">Effy</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator"> | </span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v1.2.7
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            The blog has been lovely to run <span id="since" class="trm-accent-color"></span> day
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        BirthDay = new Date("12/19/2022 17:00:00");
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        msPerDay = 24 * 60 * 60 * 1000
+        day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  <div id="trm-back-top" class="trm-back-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+  
+<div class="trm-search-popup">
+    <div class="trm-search-header">
+        <span class="trm-search-popup-btn-close">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <div class="form trm-search-form">
+        <input class="trm-search-input" type="text" placeholder="Searching...">
+    </div>
+    <div class="trm-search-result-container">
+
+    </div>
+</div>
+
+  <!-- Plugin -->
+
+
+
+    
+    
+
+    
+<script src="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=1.2.7"></script>
+    
+
+    
+        
+<script src="//cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=1.2.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+
+    <!-- 评论插件 -->
+    
+        
+        
+    
+
+
+
+<!-- 评论插件 -->
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=1.2.7"></script>
+
+</body>
+
+</html>

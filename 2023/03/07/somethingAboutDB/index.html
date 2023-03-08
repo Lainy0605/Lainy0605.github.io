@@ -7,18 +7,20 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="a simple bolg">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Effy&#39;s Page">
-<meta property="og:url" content="http://liyafei.xyz/categories/%E5%AD%A6%E4%B9%A0/index.html">
+<meta name="description" content="drop、delete和truncate区别 用法不同  drop（丢弃数据）：drop table 表名，直接删除整张表，在删除表的时候使用 truncate（清空数据）：truncate table 表名，只删除表中的数据，再插入数据的时候自增长id从1开始，在清空表中数据的时候使用 delete（删除数据）：delete from 表名 where 列名&#x3D;值，删除某一行的数据，如果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="somethingAboutDB">
+<meta property="og:url" content="http://liyafei.xyz/2023/03/07/somethingAboutDB/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="a simple bolg">
+<meta property="og:description" content="drop、delete和truncate区别 用法不同  drop（丢弃数据）：drop table 表名，直接删除整张表，在删除表的时候使用 truncate（清空数据）：truncate table 表名，只删除表中的数据，再插入数据的时候自增长id从1开始，在清空表中数据的时候使用 delete（删除数据）：delete from 表名 where 列名&#x3D;值，删除某一行的数据，如果">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-07T00:38:49.000Z">
+<meta property="article:modified_time" content="2023-03-07T06:18:19.550Z">
 <meta property="article:author" content="Effy">
 <meta name="twitter:card" content="summary">
 
 
-<title >Effy's Page</title>
+<title >somethingAboutDB</title>
 
 <!-- Favicon -->
 
@@ -225,7 +227,8 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
@@ -246,10 +249,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The Article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            远看山有色，<br>近听水无声。
+                            somethingAboutDB
                         </h1>
 
                         
@@ -259,7 +262,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        categories
+                                        2023
                                     </span
                                 ></li>
                             </ul>
@@ -291,7 +294,13 @@
 <div class="trm-main-card-frame trm-sidebar">
     <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
     
-        <!-- card header -->
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
 <div class="trm-mc-header">
     <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
     <h5 class="trm-name trm-mb-15">
@@ -381,6 +390,13 @@
 </div>
 <!-- action button end -->
 
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#drop、delete和truncate区别"  data-scroll-to="#drop、delete和truncate区别"><span class="toc-number">1.</span> <span class="toc-text">drop、delete和truncate区别</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#SQL语句分类"  data-scroll-to="#SQL语句分类"><span class="toc-number">2.</span> <span class="toc-text">SQL语句分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#数据定义语言（DDL）"  data-scroll-to="#数据定义语言（DDL）"><span class="toc-number">2.1.</span> <span class="toc-text">数据定义语言（DDL）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#数据操纵语言（DML）"  data-scroll-to="#数据操纵语言（DML）"><span class="toc-number">2.2.</span> <span class="toc-text">数据操纵语言（DML）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#事务控制语言（TCL）"  data-scroll-to="#事务控制语言（TCL）"><span class="toc-number">2.3.</span> <span class="toc-text">事务控制语言（TCL）</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#数据控制语言（DCL）"  data-scroll-to="#数据控制语言（DCL）"><span class="toc-number">2.4.</span> <span class="toc-text">数据控制语言（DCL）</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
     
     </div>
 </div>
@@ -391,125 +407,134 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-list"><li class="col-lg-4 trm-list-item " style="margin: 6px 0;"><a class="category-list-link" href="/categories/%E5%85%AB%E8%82%A1/">八股</a><span class="category-list-count">（1）</span></li><li class="col-lg-4 trm-list-item " style="margin: 6px 0;"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><span class="category-list-count">（3）</span></li><li class="col-lg-4 trm-list-item " style="margin: 6px 0;"><a class="category-list-link" href="/categories/%E7%94%9F%E6%B4%BB/">生活</a><span class="category-list-count">（3）</span></li></ul>
-                
-            </div>
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            03/07
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            08:38
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="drop、delete和truncate区别"><a href="#drop、delete和truncate区别" class="headerlink" title="drop、delete和truncate区别"></a>drop、delete和truncate区别</h1><ol>
+<li><p>用法不同</p>
+<ul>
+<li>drop（丢弃数据）：drop table 表名，直接删除整张表，在删除表的时候使用</li>
+<li>truncate（清空数据）：truncate table 表名，只删除表中的数据，再插入数据的时候自增长id从1开始，在清空表中数据的时候使用</li>
+<li>delete（删除数据）：delete from 表名 where 列名&#x3D;值，删除某一行的数据，如果不加where子句和truncate table 表名作用类似</li>
+</ul>
+<p>truncate和不带where子句的delete、以及drop都会删除表内的数据，但是truncate和delete只删除数据不删除表的定义，执行drop语句，此表的定义和结构也会删除，即drop之后对应的表不存在。</p>
+</li>
+</ol>
+<h1 id="SQL语句分类"><a href="#SQL语句分类" class="headerlink" title="SQL语句分类"></a>SQL语句分类</h1><h2 id="数据定义语言（DDL）"><a href="#数据定义语言（DDL）" class="headerlink" title="数据定义语言（DDL）"></a>数据定义语言（DDL）</h2><p>数据定义语言（Data Definition Language，DDL）是SQL语言集中负责数据结构定义与数据库对象定义的语言。</p>
+<p>DDL的主要功能是定义数据库对象，其核心指令包括CREATE、ALTER、DROP</p>
+<h2 id="数据操纵语言（DML）"><a href="#数据操纵语言（DML）" class="headerlink" title="数据操纵语言（DML）"></a>数据操纵语言（DML）</h2><h2 id="事务控制语言（TCL）"><a href="#事务控制语言（TCL）" class="headerlink" title="事务控制语言（TCL）"></a>事务控制语言（TCL）</h2><h2 id="数据控制语言（DCL）"><a href="#数据控制语言（DCL）" class="headerlink" title="数据控制语言（DCL）"></a>数据控制语言（DCL）</h2>
+</article>
+    
+    
 
-<!-- history -->
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2023/03/07/somethingAboutDB/" title="somethingAboutDB">http://liyafei.xyz/2023/03/07/somethingAboutDB/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
 
+</div>
 <div class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                学习
-            
-            <span data-number="01"></span>
+            Other Articles
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/08/baguForJava/" class="trm-cover-frame trm-anima-link">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/02/15/demandAndBusinessModelInnovation/" class="trm-anima-link">
-                                        需求和商业模式创新
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">02/15</li>
-                                        <li class="trm-accent-color">15:11</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E5%85%AB%E8%82%A1/">
+                    八股
+                </a>
             </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/01/16/tipsForMacOS/" class="trm-anima-link">
-                                        一些启动台图标的问题
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">01/16</li>
-                                        <li class="trm-accent-color">21:12</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2022/12/28/nodeError/" class="trm-anima-link">
-                                        关于node的一些报错
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">12/28</li>
-                                        <li class="trm-accent-color">12:37</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-            </div>
-            
+            <h5>
+                <a href="/2023/03/08/baguForJava/" class="trm-anima-link">
+                    Java并发编程
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/08</li>
+                <li>10:12</li>
+                
+                
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
-
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/02/15/demandAndBusinessModelInnovation/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E5%AD%A6%E4%B9%A0/">
+                    学习
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/02/15/demandAndBusinessModelInnovation/" class="trm-anima-link">
+                    需求和商业模式创新
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/02/15</li>
+                <li>15:11</li>
+                
+                
+            </ul>
+        </div>
     </div>
+</div>
+    
+</div>
 
-
+    
 
 
 
@@ -629,6 +654,9 @@
 
 
     <!-- 评论插件 -->
+    
+        
+        
     
 
 

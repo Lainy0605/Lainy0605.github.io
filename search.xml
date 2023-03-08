@@ -1626,7 +1626,7 @@
       </tags>
   </entry>
   <entry>
-    <title>somethingAboutDB</title>
+    <title>SQL</title>
     <url>/2023/03/07/somethingAboutDB/</url>
     <content><![CDATA[<h1 id="drop、delete和truncate区别"><a href="#drop、delete和truncate区别" class="headerlink" title="drop、delete和truncate区别"></a>drop、delete和truncate区别</h1><ol>
 <li><p>用法不同</p>
@@ -1641,5 +1641,11 @@
 <h1 id="SQL语句分类"><a href="#SQL语句分类" class="headerlink" title="SQL语句分类"></a>SQL语句分类</h1><h2 id="数据定义语言（DDL）"><a href="#数据定义语言（DDL）" class="headerlink" title="数据定义语言（DDL）"></a>数据定义语言（DDL）</h2><p>数据定义语言（Data Definition Language，DDL）是SQL语言集中负责数据结构定义与数据库对象定义的语言。</p>
 <p>DDL的主要功能是定义数据库对象，其核心指令包括CREATE、ALTER、DROP</p>
 <h2 id="数据操纵语言（DML）"><a href="#数据操纵语言（DML）" class="headerlink" title="数据操纵语言（DML）"></a>数据操纵语言（DML）</h2><h2 id="事务控制语言（TCL）"><a href="#事务控制语言（TCL）" class="headerlink" title="事务控制语言（TCL）"></a>事务控制语言（TCL）</h2><h2 id="数据控制语言（DCL）"><a href="#数据控制语言（DCL）" class="headerlink" title="数据控制语言（DCL）"></a>数据控制语言（DCL）</h2>]]></content>
+      <categories>
+        <category>八股</category>
+      </categories>
+      <tags>
+        <tag>SQL</tag>
+      </tags>
   </entry>
 </search>

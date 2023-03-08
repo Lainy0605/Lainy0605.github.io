@@ -47,7 +47,7 @@
   <entry>
     <title>关于node的一些报错</title>
     <url>/2022/12/28/nodeError/</url>
-    <content><![CDATA[<h1 id="Mysql认证失败"><a href="#Mysql认证失败" class="headerlink" title="Mysql认证失败"></a>Mysql认证失败</h1><ul>
+    <content><![CDATA[<h1 id="MySQL认证失败"><a href="#MySQL认证失败" class="headerlink" title="MySQL认证失败"></a>MySQL认证失败</h1><ul>
 <li><p>报错内容</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;code&quot;</span>:<span class="string">&quot;ER_NOT_SUPPORTED_AUTH_MODE&quot;</span>,<span class="string">&quot;errno&quot;</span>:<span class="number">1251</span>,<span class="string">&quot;sqlMessage&quot;</span>:<span class="string">&quot;Client does not support authentication protocol requested by server; consider upgrading MySQL client&quot;</span>,<span class="string">&quot;sqlState&quot;</span>:<span class="string">&quot;08004&quot;</span>,<span class="string">&quot;fatal&quot;</span>:<span class="literal">true</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -79,7 +79,7 @@
 <li><p>解决方案：交换顺序</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/captcha&#x27;</span>,<span class="keyword">function</span> (<span class="params">req,res</span>)&#123;</span><br><span class="line">    <span class="keyword">let</span> code = <span class="title function_">captcha</span>();</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">captcha</span> = code.<span class="property">text</span>;</span><br><span class="line">    res.<span class="title function_">type</span>(<span class="string">&quot;svg&quot;</span>).<span class="title function_">send</span>(code.<span class="property">data</span>);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h1 id="Mysql连接失败"><a href="#Mysql连接失败" class="headerlink" title="Mysql连接失败"></a>Mysql连接失败</h1><ul>
+<h1 id="MySQL连接失败"><a href="#MySQL连接失败" class="headerlink" title="MySQL连接失败"></a>MySQL连接失败</h1><ul>
 <li><p>报错内容</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Error: connect ECONNREFUSED ::<span class="number">1</span>:<span class="number">3306</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -160,8 +160,8 @@
       </categories>
       <tags>
         <tag>node</tag>
-        <tag>mysql</tag>
         <tag>js</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -1645,7 +1645,7 @@
         <category>八股</category>
       </categories>
       <tags>
-        <tag>SQL</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
 </search>

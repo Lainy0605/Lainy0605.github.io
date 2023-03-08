@@ -7,15 +7,15 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="删除启动台的无效图标问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留 解决方法：其中的APPNAME是想要删除的图标名字 1sqlite3 $(find &#x2F;private&#x2F;var&#x2F;folders -name com.apple.dock.launchpad 2&gt;&#x2F;dev&#x2F;null)&#x2F;db&#x2F;db \ &quot;DELETE FROM apps WH">
+<meta name="description" content="删除启动台的无效图标问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留 解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字 1sqlite3 $(find &#x2F;private&#x2F;var&#x2F;folders -name com.apple.dock.launchpad 2&gt;&#x2F;dev&#x2F;null)&#x2F;db&#x2F;db \ &quot;DE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一些启动台图标的问题">
 <meta property="og:url" content="http://liyafei.xyz/2023/01/16/tipsForMacOS/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="删除启动台的无效图标问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留 解决方法：其中的APPNAME是想要删除的图标名字 1sqlite3 $(find &#x2F;private&#x2F;var&#x2F;folders -name com.apple.dock.launchpad 2&gt;&#x2F;dev&#x2F;null)&#x2F;db&#x2F;db \ &quot;DELETE FROM apps WH">
+<meta property="og:description" content="删除启动台的无效图标问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留 解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字 1sqlite3 $(find &#x2F;private&#x2F;var&#x2F;folders -name com.apple.dock.launchpad 2&gt;&#x2F;dev&#x2F;null)&#x2F;db&#x2F;db \ &quot;DE">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-01-16T13:12:06.000Z">
-<meta property="article:modified_time" content="2023-03-08T09:09:03.181Z">
+<meta property="article:modified_time" content="2023-03-08T09:12:05.741Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="macOS">
 <meta name="twitter:card" content="summary">
@@ -431,7 +431,7 @@
 <div class="trm-card ">
     <article class="trm-publication">
     <h1 id="删除启动台的无效图标"><a href="#删除启动台的无效图标" class="headerlink" title="删除启动台的无效图标"></a>删除启动台的无效图标</h1><p>问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留</p>
-<p>解决方法：其中的APPNAME是想要删除的图标名字</p>
+<p>解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3 <span class="variable">$(find /private/var/folders -name com.apple.dock.launchpad 2&gt;/dev/null)</span>/db/db \ <span class="string">&quot;DELETE FROM apps WHERE title=&#x27;APPNAME&#x27;;&quot;</span>&amp;&amp;killall Dock</span><br></pre></td></tr></table></figure>
 
 </article>

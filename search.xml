@@ -1681,5 +1681,11 @@
     <title>baguForJavaConcurrent</title>
     <url>/2023/03/08/baguForJavaConcurrent/</url>
     <content><![CDATA[<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="ThreadLocal有什么用？"><a href="#ThreadLocal有什么用？" class="headerlink" title="ThreadLocal有什么用？"></a>ThreadLocal有什么用？</h2>]]></content>
+      <categories>
+        <category>八股</category>
+      </categories>
+      <tags>
+        <tag>Java并发</tag>
+      </tags>
   </entry>
 </search>

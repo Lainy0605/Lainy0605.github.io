@@ -1680,7 +1680,143 @@
   <entry>
     <title>baguForJavaConcurrent</title>
     <url>/2023/03/08/baguForJavaConcurrent/</url>
-    <content><![CDATA[<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="ThreadLocal有什么用？"><a href="#ThreadLocal有什么用？" class="headerlink" title="ThreadLocal有什么用？"></a>ThreadLocal有什么用？</h2>]]></content>
+    <content><![CDATA[<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><h2 id="ThreadLocal有什么用"><a href="#ThreadLocal有什么用" class="headerlink" title="ThreadLocal有什么用"></a>ThreadLocal有什么用</h2><ul>
+<li>实现每个线程都有自己的专属本地变量，让每个线程绑定自己的值</li>
+</ul>
+<h2 id="如何使用ThreadLocal"><a href="#如何使用ThreadLocal" class="headerlink" title="如何使用ThreadLocal"></a>如何使用ThreadLocal</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">main</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">            threadLocal.set(<span class="string">&quot;This is in main thread&quot;</span>);</span><br><span class="line">            System.out.println(<span class="string">&quot;Thread Name: &quot;</span> + Thread.currentThread().getName() + <span class="string">&quot;---&quot;</span> + threadLocal.get());</span><br><span class="line"></span><br><span class="line">            <span class="comment">//Thread A</span></span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>()&#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">                    threadLocal.set(<span class="string">&quot;This is in A thread&quot;</span>);</span><br><span class="line">                    System.out.println(<span class="string">&quot;Thread Name: &quot;</span> + Thread.currentThread().getName() + <span class="string">&quot;---&quot;</span> + threadLocal.get());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,<span class="string">&quot;A&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Thread B</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">                threadLocal.set(<span class="string">&quot;This is in B thread&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread Name: &quot;</span> + Thread.currentThread().getName() + <span class="string">&quot;---&quot;</span> + threadLocal.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;B&quot;</span>).start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Thread C</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="keyword">new</span> <span class="title class_">Runnable</span>()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>&#123;</span><br><span class="line">                threadLocal.set(<span class="string">&quot;This is in C thread&quot;</span>);</span><br><span class="line">                System.out.println(<span class="string">&quot;Thread Name: &quot;</span> + Thread.currentThread().getName() + <span class="string">&quot;---&quot;</span> + threadLocal.get());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;C&quot;</span>).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ThreadLocal原理"><a href="#ThreadLocal原理" class="headerlink" title="ThreadLocal原理"></a>ThreadLocal原理</h2><ul>
+<li><code>Thread</code>类的源码<ul>
+<li>持有<code>threadLocals</code>和<code>inheritableThreadLocals</code>两个变量，它们是<code>ThreadLocalMap</code>类型的</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Thread</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line">  <span class="comment">//用于维护该线程的threadLocal</span></span><br><span class="line">	ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">threadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  ThreadLocal.<span class="type">ThreadLocalMap</span> <span class="variable">inheritableThreadLocals</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ThreadLocal</code>类的<code>set()</code>方法<ul>
+<li>可以看出<code>ThreadLocal</code>类其实是对<code>ThreadLocalMap</code>的封装，传入的值最终会放在<code>Thread</code>类里的<code>threadLocals</code>这个变量里</li>
+<li><code>threadLocals</code>这个变量是<code>ThreadLocalMap</code>类型的，其中<code>ThreadLocalMap</code>又是<code>ThreadLocal</code>类的一个静态类（这里比较绕）</li>
+<li>最终<code>Thread</code>类的<code>threadLocals</code>里存放的是以<code>&lt;ThreadLocal, Object&gt;</code>的键值对</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">set</span><span class="params">(T value)</span>&#123;</span><br><span class="line">  <span class="comment">//获取当前线程</span></span><br><span class="line">  <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">  <span class="comment">//获取当前线程的threadlocals变量</span></span><br><span class="line">  <span class="type">ThreadLocalMap</span> <span class="variable">map</span> <span class="operator">=</span> getMap(t);</span><br><span class="line">  <span class="keyword">if</span>(map != <span class="literal">null</span>)</span><br><span class="line">    map.set(<span class="built_in">this</span>,value); <span class="comment">//存放进去，这里的this就是这个ThreadLocal对象</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    createMap(t,value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ThreadLocalMap <span class="title function_">getMap</span><span class="params">(Thread t)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个线程可以有多个<code>ThreadLocal</code>实例，声明多个<code>ThreadLocal</code>变量即可，它们都存放在<code>Tread</code>类的<code>threadLocals</code>变量里，并以<code>ThreadLocal</code>的实例为键名取出对应的副本值</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>ThreadLocal</code>实现了对私有变量的封装，我们可以不用直接对<code>Thread</code>的<code>ThreadLocalMap</code>进行操作，而只需像对待共享变量一样操作私有变量即可，因为封装在<code>ThreadLocal</code>里的方法会帮我们从对应的<code>Thread</code>类的<code>threadLocals</code>变量里获取或更改这个变量的值，其中<code>threadLocals</code>变量是<code>ThreadLocalMap</code>类型的，存放的是<code>&lt;ThreadLocal, Object&gt;</code>的键值对，<code>ThreadLocal</code>的实例以自身为键名访问线程的<code>treadLocals</code>变量以获得该私有变量在该线程下的副本值</p>
+<h2 id="ThreadLocal内存泄漏问题是怎么导致的"><a href="#ThreadLocal内存泄漏问题是怎么导致的" class="headerlink" title="ThreadLocal内存泄漏问题是怎么导致的"></a>ThreadLocal内存泄漏问题是怎么导致的</h2><ul>
+<li><code>ThreadLocalMap</code>中使用的key值为<code>ThreadLocal</code>的弱引用，而value是强引用</li>
+<li>如果<code>ThreadLocal</code>没有外部强引用的情况下，在垃圾回收的时候，key会被清理掉而value不会</li>
+<li><code>ThreadLocalMap</code>中会出现key为null的Entry，如果我们不做任何措施的话，value就无法被GC回收，因此会产生内存泄漏</li>
+<li><code>ThreadLocalMap</code>实现中考虑了该情况，在调用<code>set</code>、<code>get</code>、<code>remove</code>方法时会清理掉key为null的记录，但是用了玩<code>ThreadLocal</code>方法后最好手动调用<code>remove</code>方法</li>
+</ul>
+<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><h2 id="什么是线程池"><a href="#什么是线程池" class="headerlink" title="什么是线程池"></a>什么是线程池</h2><p>线程池是管理一系列线程的资源池。当有任务要处理时，直接从线程池获取线程来处理，处理完之后线程并不会立即被销毁，而是等待下一个任务</p>
+<h2 id="为什么要用线程池"><a href="#为什么要用线程池" class="headerlink" title="为什么要用线程池"></a>为什么要用线程池</h2><ul>
+<li><p>池化技术的思想主要是为了减少每次获取资源的消耗，提高对资源的利用率</p>
+</li>
+<li><p>线程池提供了一种限制和管理资源（包括执行一个任务）的方式，每个线程池还维护一些基本统计信息</p>
+</li>
+<li><p>使用线程池的好处：</p>
+<ul>
+<li><p>降低资源消耗</p>
+</li>
+<li><p>提高响应速度</p>
+</li>
+<li><p>提高线程的可管理性</p>
+</li>
+<li><p>提供更多更强大的功能</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何创建线程池"><a href="#如何创建线程池" class="headerlink" title="如何创建线程池"></a>如何创建线程池</h2><ol>
+<li>通过<code>ThreadPoolExecutor</code>构造函数来创建（推荐）</li>
+<li>通过Java内置<code>Executor</code>框架的工具类<code>Executors</code>来创建（不推荐）<ul>
+<li><strong><code>FixedThreadPool</code></strong> ： 该方法返回一个固定线程数量的线程池。该线程池中的线程数量始终不变。当有一个新的任务提交时，线程池中若有空闲线程，则立即执行。若没有，则新的任务会被暂存在一个任务队列中，待有线程空闲时，便处理在任务队列中的任务。</li>
+<li><strong><code>SingleThreadExecutor</code>：</strong> 该方法返回一个只有一个线程的线程池。若多余一个任务被提交到该线程池，任务会被保存在一个任务队列中，待线程空闲，按先入先出的顺序执行队列中的任务。</li>
+<li><strong><code>CachedThreadPool</code>：</strong> 该方法返回一个可根据实际情况调整线程数量的线程池。线程池的线程数量不确定，但若有空闲线程可以复用，则会优先使用可复用的线程。若所有线程均在工作，又有新的任务提交，则会创建新的线程处理任务。所有线程在当前任务执行完毕后，将返回线程池进行复用。</li>
+<li><strong><code>ScheduledThreadPool</code></strong> ：该返回一个用来在给定的延迟后运行任务或者定期执行任务的线程池</li>
+</ul>
+</li>
+</ol>
+<h2 id="为什么不推荐使用内置线程池"><a href="#为什么不推荐使用内置线程池" class="headerlink" title="为什么不推荐使用内置线程池"></a>为什么不推荐使用内置线程池</h2><p>《阿里巴巴Java开发手册》中不允许使用<code>Executors</code>创建，而是通过<code>ThreadPoolExecutor</code>构造函数的方式，这样让<strong>写的同学更加明确线程池的运行规则，规避资源耗尽的风险</strong></p>
+<p><code>Executors</code>返回的线程池对象的弊端如下：</p>
+<ul>
+<li><strong><code>FixedThreadPool</code> 和 <code>SingleThreadExecutor</code></strong> ： 使用的是无界的 <code>LinkedBlockingQueue</code>，任务队列最大长度为 <code>Integer.MAX_VALUE</code>,可能堆积大量的请求，从而导致 OOM。</li>
+<li><strong><code>CachedThreadPool</code></strong> ：使用的是同步队列 <code>SynchronousQueue</code>, 允许创建的线程数量为 <code>Integer.MAX_VALUE</code> ，可能会创建大量线程，从而导致 OOM。</li>
+<li><strong><code>ScheduledThreadPool</code> 和 <code>SingleThreadScheduledExecutor</code></strong> : 使用的无界的延迟阻塞队列<code>DelayedWorkQueue</code>，任务队列最大长度为 <code>Integer.MAX_VALUE</code>,可能堆积大量的请求，从而导致 OOM。</li>
+</ul>
+<h2 id="线程池常见参数有哪些"><a href="#线程池常见参数有哪些" class="headerlink" title="线程池常见参数有哪些"></a>线程池常见参数有哪些</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用给定的初始参数创建一个新的ThreadPoolExecutor。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ThreadPoolExecutor</span><span class="params">(<span class="type">int</span> corePoolSize,//线程池的核心线程数量</span></span><br><span class="line"><span class="params">                              <span class="type">int</span> maximumPoolSize,//线程池的最大线程数</span></span><br><span class="line"><span class="params">                              <span class="type">long</span> keepAliveTime,//当线程数大于核心线程数时，多余的空闲线程存活的最长时间</span></span><br><span class="line"><span class="params">                              TimeUnit unit,//时间单位</span></span><br><span class="line"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,//任务队列，用来储存等待执行任务的队列</span></span><br><span class="line"><span class="params">                              ThreadFactory threadFactory,//线程工厂，用来创建线程，一般默认即可</span></span><br><span class="line"><span class="params">                              RejectedExecutionHandler handler//拒绝策略，当提交的任务过多而不能及时处理时，我们可以定制策略来处理任务</span></span><br><span class="line"><span class="params">                               )</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt;= <span class="number">0</span> ||</span><br><span class="line">            maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">            keepAliveTime &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">        <span class="keyword">if</span> (workQueue == <span class="literal">null</span> || threadFactory == <span class="literal">null</span> || handler == <span class="literal">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();</span><br><span class="line">        <span class="built_in">this</span>.corePoolSize = corePoolSize;</span><br><span class="line">        <span class="built_in">this</span>.maximumPoolSize = maximumPoolSize;</span><br><span class="line">        <span class="built_in">this</span>.workQueue = workQueue;</span><br><span class="line">        <span class="built_in">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</span><br><span class="line">        <span class="built_in">this</span>.threadFactory = threadFactory;</span><br><span class="line">        <span class="built_in">this</span>.handler = handler;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3个最重要的参数<ul>
+<li>corePoolSize：任务队列未达到队列容量时，最大可以同时运行的线程数量</li>
+<li>maximumPoolSize：任务队列达到队列容量时，当前可以同时运行的线程数量变为最大线程数</li>
+<li>workQueue：新任务来的时候先判断当前运行的线程数量是否达到核心线程数，如果达到则新任务会被存放在队列中</li>
+</ul>
+</li>
+<li>其他常见参数<ul>
+<li>keepAliveTime：线程池中的线程数量大于corePoolSize的时候，如果没有新的任务提交，核心线程外的线程不会被立即销毁，待等待时间超过该参数后才会被回收销毁</li>
+<li>unit：keepAliveTime参数的时间单位</li>
+<li>threadFactory：executor创建新县城的时候用到</li>
+<li>handler：饱和策略</li>
+</ul>
+</li>
+</ul>
+<h2 id="线程池的饱和策略有哪些"><a href="#线程池的饱和策略有哪些" class="headerlink" title="线程池的饱和策略有哪些"></a>线程池的饱和策略有哪些</h2><p><img src="https://p0.meituan.net/travelcube/9ffb64cc4c64c0cb8d38dac01c89c905178456.png" loading="lazy"></p>
+<h2 id="线程池常用的阻塞队列有哪些"><a href="#线程池常用的阻塞队列有哪些" class="headerlink" title="线程池常用的阻塞队列有哪些"></a>线程池常用的阻塞队列有哪些</h2><p>新任务到达时会先判断当前运行的线程数量是否达到核心线程数，如果达到则新任务会被存放在队列中</p>
+<p>不同的线程池会选用不同的阻塞队列</p>
+<ul>
+<li>容量为Intger.MAX_VALUE的LinkedBlockingQueue（无界队列）：FixedThreadPool和SingleThreadExector。由于队列永远不会被放满，因此FixesThreadPool最多只能创建核心线程数的线程</li>
+<li>SychronousQueue(同步队列)：CachedThreadPool。SynchronousQueue没有容量，不存储新元素，目的是保证对于提交的任务，如果有空闲线程，则使用空闲线程来处理，否则就新建一个线程来处理任务，也就是说CachedThreadPool的最大线程数是Integer.MAX_VALUE，可以理解为线程数是可以无限扩展的，可能会创建大量线程，从而导致OOM</li>
+<li>DelayedWorkQueue（延迟阻塞队列）：ScheduledThreadPool和SIngleThreadScheduledExecutor。DelayedWorkQueue的内部元素并不是按照放入的时间排序，而是会按照延迟的时间长短对任务进行排序，内部采用的是堆的数据结构，可以保证每次出队的任务是当前队列中执行时间最靠前的。DelayedWorkQueue添加元素满了之后会自动扩容到原来容量的1&#x2F;2，即永远不会阻塞，最大扩容可达Integer.MAX_VALUE，所以最多只能创建核心线程数的线程</li>
+</ul>
+<p><img src="https://p0.meituan.net/travelcube/725a3db5114d95675f2098c12dc331c3316963.png" loading="lazy"></p>
+<h2 id="线程池处理任务的流程"><a href="#线程池处理任务的流程" class="headerlink" title="线程池处理任务的流程"></a>线程池处理任务的流程</h2><p><img src="https://p0.meituan.net/travelcube/31bad766983e212431077ca8da92762050214.png" loading="lazy"></p>
+<h2 id="如何给线程池命名"><a href="#如何给线程池命名" class="headerlink" title="如何给线程池命名"></a>如何给线程池命名</h2><p>给线程池命名有利于定位问题</p>
+<ol>
+<li><p>利用guava的ThreadFactoryBuilder</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">ThreadFactory</span> <span class="variable">threadFactory</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadFactoryBuilder</span>().setNameFormat(threadNamePrefix + <span class="string">&quot;-%d&quot;</span>).setDaemon(<span class="literal">true</span>).build();</span><br><span class="line"><span class="type">ExecutorService</span> <span class="variable">threadPool</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(corePoolSize,maximumPoolSize,KeepAliveTime,TimeUnit.MINUTES,workQueue,threadFactory);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自己实现ThreadFactory</p>
+</li>
+</ol>
+<h2 id="如何设定线程池的大小"><a href="#如何设定线程池的大小" class="headerlink" title="如何设定线程池的大小"></a>如何设定线程池的大小</h2><p>判断是CPU密集型任务（N+1）还是I&#x2F;O密集型任务（2N）</p>
+<p>线程数计算方法：N（CPU核数）* （线程运行总时间&#x2F;ST（线程计算时间））</p>
+<h2 id="如何动态修改线程池的参数"><a href="#如何动态修改线程池的参数" class="headerlink" title="如何动态修改线程池的参数"></a>如何动态修改线程池的参数</h2><p>配置三个核心参数：</p>
+<ul>
+<li><p>corePoolSize：调用setCorePoolSize()方法</p>
+<p><img src="https://p0.meituan.net/travelcube/9379fe1666818237f842138812bf63bd85645.png" loading="lazy"></p>
+</li>
+<li><p>maximumPoolSize：调用setMaximumPoolSize()方法</p>
+</li>
+<li><p>workQueue：美团通过自定义一个ResizableCapacityLinkedBlockIngQueue的队列，主要是为了吧LinkedBlockingQueue的capacity字段的final关键字去掉</p>
+</li>
+</ul>
+<h2 id="线程池被创建后里面有线程吗？"><a href="#线程池被创建后里面有线程吗？" class="headerlink" title="线程池被创建后里面有线程吗？"></a>线程池被创建后里面有线程吗？</h2><p>线程池被创建后如果没有任务过来，里面是不会有线程的</p>
+<p>如果需要预热的话可以调用下面两个方法：</p>
+<ul>
+<li><p><code>prestartAllCoreThreads</code>：全部启动	</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lnCqjsQ6QHfBqOxop3hDOhKCOm6v4MXYvdzS6VCjKicoib5eGJgeW9wPEnt9Zk1YEspKYaVPI5ZEqlibCWQ7Rofdw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" loading="lazy"></p>
+</li>
+<li><p><code>preastartCoreThread</code>：仅启动一个</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lnCqjsQ6QHfBqOxop3hDOhKCOm6v4MXYQUPFNiaw7bjF5RsHSkAib2HE9vlNq2R6dN4U5OicOcLJ29ZvotUm3jdGA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" loading="lazy"></p>
+</li>
+</ul>
+<h2 id="核心线程会被回收吗"><a href="#核心线程会被回收吗" class="headerlink" title="核心线程会被回收吗"></a>核心线程会被回收吗</h2><p>核心线程默认是不会被回收的，如果需要回收核心线程数，需要调用：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lnCqjsQ6QHfBqOxop3hDOhKCOm6v4MXYVTBfSHpeUKaRL64ZwrN6sAMMsPD3XvILspTG405TMIgPtTiaV84fexQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" loading="lazy"></p>
+<p>其中<code>allowCoreThreadTimeOut</code>该值默认为false</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/lnCqjsQ6QHfBqOxop3hDOhKCOm6v4MXYOedP5u7d1L7oQpsvCq73M9hII5zoZmEnxZpHgK396mytTY4qEkiaibaw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" loading="lazy"></p>
+<h1 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h1><h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li><a href="https://zhuanlan.zhihu.com/p/158033837">https://zhuanlan.zhihu.com/p/158033837</a></li>
+<li><a href="https://javaguide.cn/java/concurrent/java-concurrent-questions-03.html#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E6%B1%A0">https://javaguide.cn/java/concurrent/java-concurrent-questions-03.html#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E6%B1%A0</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NjU3NTkwMQ==&mid=2247505103&idx=1&sn=a041dbec689cec4f1bbc99220baa7219&source=41#wechat_redirect">https://mp.weixin.qq.com/s?__biz=Mzg3NjU3NTkwMQ==&amp;mid=2247505103&amp;idx=1&amp;sn=a041dbec689cec4f1bbc99220baa7219&amp;source=41#wechat_redirect</a></li>
+<li>《Java并发编程的艺术》</li>
+</ol>
+]]></content>
       <categories>
         <category>八股</category>
       </categories>

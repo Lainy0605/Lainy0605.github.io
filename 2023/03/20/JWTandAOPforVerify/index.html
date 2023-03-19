@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="定义@Authorized注解首先定义一个Authorized注解，用于后面对需要鉴权的方法添加该注解，Authorzied注解有Role类型的roles数组变量，表明能够调用被Authorized注解的方法的角色有哪些，其默认值如下 1234567891011@Retention(RetentionPolicy.RUNTIME)@Target(ElementType.METHOD)public">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义注解+AOP+JWT实现Token拦截验证">
+<meta property="og:url" content="http://liyafei.xyz/2023/03/20/JWTandAOPforVerify/index.html">
+<meta property="og:site_name" content="Effy&#39;s Page">
+<meta property="og:description" content="定义@Authorized注解首先定义一个Authorized注解，用于后面对需要鉴权的方法添加该注解，Authorzied注解有Role类型的roles数组变量，表明能够调用被Authorized注解的方法的角色有哪些，其默认值如下 1234567891011@Retention(RetentionPolicy.RUNTIME)@Target(ElementType.METHOD)public">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-19T16:58:05.000Z">
+<meta property="article:modified_time" content="2023-03-19T17:00:02.713Z">
+<meta property="article:author" content="Effy">
+<meta property="article:tag" content="AOP">
+<meta property="article:tag" content="JWT">
+<meta property="article:tag" content="鉴权">
+<meta name="twitter:card" content="summary">
+
+
+<title >自定义注解+AOP+JWT实现Token拦截验证</title>
+
+<!-- Favicon -->
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=1.2.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+
+
+    
+
+    
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"liyafei.xyz","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.svg","icon32":"/img/lyft.svg","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":false,"hidden":"failure.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+			<a href="/" class="trm-logo-frame trm-anima-link">
+				
+					<img src="/img/lyft.svg" alt="logo">
+				
+				
+					<div class="trm-logo-text">
+						WelcomeTo<span>Effy&#39;sPage</span>
+					</div>
+				
+			</a>
+			<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+
+			<!-- menu -->
+			<div class="trm-menu">
+				<nav>
+					<ul>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/" target="">
+								Home
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/archives/" target="">
+								archives
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/categories/" target="">
+								categories
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/tags/" target="">
+								tags
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/about/" target="">
+								About
+							</a>
+							
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+			<!-- menu end -->
+			
+			<!-- mode switcher place -->
+			
+			<div class="trm-mode-switcher-place">
+				<!-- <div class="trm-hidden-switcher"> -->
+					<div class="trm-mode-switcher">
+					  <i class="far fa-sun"></i>
+					  <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+					  <label class="trm-swich" for="trm-swich"></label>
+					  <i class="far fa-moon"></i>
+					</div>
+				  <!-- </div> -->
+			</div>
+			
+			<!-- mode switcher place end -->
+
+			
+				
+				<div id="trm-search-btn" class="trm-search-btn">
+					<i class="fas fa-search"></i>
+				</div>
+				 
+			 
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" src="/img/banner.png" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            自定义注解+AOP+JWT实现Token拦截验证
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
+    <h5 class="trm-name trm-mb-15">
+        Effy
+    </h5>
+    
+    <div class="trm-label">
+        我
+        <span class="trm-typed-text">
+            <!-- Words for theme.user.typedText -->
+        </span>
+    </div>
+    
+</div>
+<!-- card header end -->
+
+<!-- sidebar social -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+
+<div class="trm-social">
+    
+        <a href="https://github.com/Lainy0605" title="Github" rel="nofollow" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/effyspage" title="Gitee" rel="nofollow" target="_blank">
+            <i class="fab fa-github-alt"></i>
+        </a>
+    
+        <a href="https://music.163.com/#/user/home?id=610482486" title="NetEaseMusic" rel="nofollow" target="_blank">
+            <i class="fab fa-itunes"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/335136462?spm_id_from=333.1007.0.0" title="Bilibili" rel="nofollow" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
+    
+        <a href="https://steamcommunity.com/profiles/76561199081278457/" title="Steam" rel="nofollow" target="_blank">
+            <i class="fab fa-steam"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+
+<!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                age:
+            </div>
+            <div class="trm-label trm-label-light">
+                19
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                City:
+            </div>
+            <div class="trm-label trm-label-light">
+                Kunshan, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                school:
+            </div>
+            <div class="trm-label trm-label-light">
+                Nanjing University
+            </div>
+        </li>
+    
+</ul>
+
+<!-- info end -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<!-- action button -->
+<div class="text-center">
+    <a href="mailto:592511932@qq.com" class="trm-btn">
+        Contact Me
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+<!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#定义-Authorized注解"  data-scroll-to="#定义-Authorized注解"><span class="toc-number">1.</span> <span class="toc-text">定义@Authorized注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Retention注解"  data-scroll-to="#Retention注解"><span class="toc-number">1.1.</span> <span class="toc-text">@Retention注解</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Target"  data-scroll-to="#Target"><span class="toc-number">1.2.</span> <span class="toc-text">@Target</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现JwtConfig类"  data-scroll-to="#实现JwtConfig类"><span class="toc-number">2.</span> <span class="toc-text">实现JwtConfig类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现增强类"  data-scroll-to="#实现增强类"><span class="toc-number">3.</span> <span class="toc-text">实现增强类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#添加登录方法"  data-scroll-to="#添加登录方法"><span class="toc-number">4.</span> <span class="toc-text">添加登录方法</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#JWT验证流程总结"  data-scroll-to="#JWT验证流程总结"><span class="toc-number">5.</span> <span class="toc-text">JWT验证流程总结</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#JoinPoint常用方法"  data-scroll-to="#JoinPoint常用方法"><span class="toc-number">6.</span> <span class="toc-text">JoinPoint常用方法</span></a></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            03/20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            00:58
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="定义-Authorized注解"><a href="#定义-Authorized注解" class="headerlink" title="定义@Authorized注解"></a>定义@Authorized注解</h1><p>首先定义一个<code>Authorized</code>注解，用于后面对需要鉴权的方法添加该注解，<code>Authorzied</code>注解有<code>Role</code>类型的<code>roles</code>数组变量，表明能够调用被<code>Authorized</code>注解的方法的角色有哪些，其默认值如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Authorized&#123;</span><br><span class="line">  Role[] roles() <span class="keyword">default</span>&#123;</span><br><span class="line">    Role.ADMIN, </span><br><span class="line">    Role.SALE_STAFF, </span><br><span class="line">    Role.INVENTORY_MANAGER,</span><br><span class="line">    Role.FINANCIAL_STAFF, </span><br><span class="line">    Role.HR, Role.GM</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>元注解：注解的注解，如<code>@Retention</code>和<code>@Target</code></li>
+</ul>
+<h2 id="Retention注解"><a href="#Retention注解" class="headerlink" title="@Retention注解"></a><code>@Retention</code>注解</h2><ul>
+<li><p>生命周期：用来定义该注解在哪个级别可用，可选的有<strong>源代码中(SOURCE)<strong>、</strong>类文件中(CLASS)<strong>或者</strong>运行时(RUNTIME)</strong></p>
+</li>
+<li><p>从<code>@Retention</code>注解源码可以看到拥有一个<code>RetentionPolicy</code>类型的变量<code>value</code></p>
+</li>
+<li><p>&#96;&#96;&#96;java<br>package java.lang.annotation;</p>
+<p>&#x2F;**</p>
+<ul>
+<li>Indicates how long annotations with the annotated interface are to</li>
+<li>be retained.  If no Retention annotation is present on</li>
+<li>an annotation interface declaration, the retention policy defaults to</li>
+<li>{@code RetentionPolicy.CLASS}.</li>
+<li></li>
+<li><p>A Retention meta-annotation has effect only if the</li>
+<li>meta-annotated interface is used directly for annotation.  It has no</li>
+<li>effect if the meta-annotated interface is used as a member interface in</li>
+<li>another annotation interface.</li>
+<li></li>
+<li>@author  Joshua Bloch</li>
+<li>@since 1.5</li>
+<li>@jls 9.6.4.2 @Retention<br> <em>&#x2F;<br>@Documented<br>@Retention(RetentionPolicy.RUNTIME)<br>@Target(ElementType.ANNOTATION_TYPE)<br>public @interface Retention {<br> &#x2F;</em>*<ul>
+<li>Returns the retention policy.</li>
+<li>@return the retention policy<br>  *&#x2F;<br> RetentionPolicy value();<br>}<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- RetentionPolicy源码如下，可以看到它是个枚举类型，有**源代码中(SOURCE)**、**类文件中(CLASS)**或者**运行时(RUNTIME)**，对应的生命周期长度为RUNTIME&gt;CLASS&gt;SOURCE</span><br><span class="line"></span><br><span class="line">  1. 一般如果需要在运行时去动态获取注解信息，用生命周期最长的 RUNTIME 标注</span><br><span class="line">  2. 如果要在编译时进行一些预处理操作，比如生成一些辅助代码（如 ButterKnife），就用 CLASS注解</span><br><span class="line">  3. 如果只是做一些检查性的操作，就用SOURCE标注，比如源码中的 **@Override、@SuppressWarnings、@Native、@Generated** 等</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  package java.lang.annotation;</span><br><span class="line">  </span><br><span class="line">  /**</span><br><span class="line">   * Annotation retention policy.  The constants of this enumerated class</span><br><span class="line">   * describe the various policies for retaining annotations.  They are used</span><br><span class="line">   * in conjunction with the &#123;@link Retention&#125; meta-annotation interface to</span><br><span class="line">   * specify how long annotations are to be retained.</span><br><span class="line">   *</span><br><span class="line">   * @author  Joshua Bloch</span><br><span class="line">   * @since 1.5</span><br><span class="line">   */</span><br><span class="line">  public enum RetentionPolicy &#123;</span><br><span class="line">      /**</span><br><span class="line">       * Annotations are to be discarded by the compiler.</span><br><span class="line">       */</span><br><span class="line">      SOURCE,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Annotations are to be recorded in the class file by the compiler</span><br><span class="line">       * but need not be retained by the VM at run time.  This is the default</span><br><span class="line">       * behavior.</span><br><span class="line">       */</span><br><span class="line">      CLASS,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Annotations are to be recorded in the class file by the compiler and</span><br><span class="line">       * retained by the VM at run time, so they may be read reflectively.</span><br><span class="line">       *</span><br><span class="line">       * @see java.lang.reflect.AnnotatedElement</span><br><span class="line">       */</span><br><span class="line">      RUNTIME</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Target"><a href="#Target" class="headerlink" title="@Target"></a><code>@Target</code></h2><ul>
+<li><p>注解目标：用来定义你的注解将应用于什么地方(例如是一个方法或者一个域)</p>
+</li>
+<li><p>从<code>@Target</code>注解源码可以看到拥有一个<code>ElementType</code>类型的数组变量<code>value</code></p>
+</li>
+<li><p>&#96;&#96;&#96;java<br>@Documented<br>@Retention(RetentionPolicy.RUNTIME)<br>@Target(ElementType.ANNOTATION_TYPE)<br>public @interface Target {<br>&#x2F;**<br> * Returns an array of the kinds of elements an annotation interface<br> * can be applied to.<br> * @return an array of the kinds of elements an annotation interface<br> * can be applied to<br> *&#x2F;<br>ElementType[] value();<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- `ElementType`源码如下，可以看到它是个枚举类型</span><br><span class="line"></span><br><span class="line">- ```java</span><br><span class="line">  public enum ElementType &#123;</span><br><span class="line">      /** Class, interface (including annotation interface), enum, or record</span><br><span class="line">       * declaration */</span><br><span class="line">      TYPE,</span><br><span class="line">  </span><br><span class="line">      /** Field declaration (includes enum constants) */</span><br><span class="line">      FIELD,</span><br><span class="line">  </span><br><span class="line">      /** Method declaration */</span><br><span class="line">      METHOD,</span><br><span class="line">  </span><br><span class="line">      /** Formal parameter declaration */</span><br><span class="line">      PARAMETER,</span><br><span class="line">  </span><br><span class="line">      /** Constructor declaration */</span><br><span class="line">      CONSTRUCTOR,</span><br><span class="line">  </span><br><span class="line">      /** Local variable declaration */</span><br><span class="line">      LOCAL_VARIABLE,</span><br><span class="line">  </span><br><span class="line">      /** Annotation interface declaration (Formerly known as an annotation type.) */</span><br><span class="line">      ANNOTATION_TYPE,</span><br><span class="line">  </span><br><span class="line">      /** Package declaration */</span><br><span class="line">      PACKAGE,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Type parameter declaration</span><br><span class="line">       *</span><br><span class="line">       * @since 1.8</span><br><span class="line">       */</span><br><span class="line">      TYPE_PARAMETER,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Use of a type</span><br><span class="line">       *</span><br><span class="line">       * @since 1.8</span><br><span class="line">       */</span><br><span class="line">      TYPE_USE,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Module declaration.</span><br><span class="line">       *</span><br><span class="line">       * @since 9</span><br><span class="line">       */</span><br><span class="line">      MODULE,</span><br><span class="line">  </span><br><span class="line">      /**</span><br><span class="line">       * Record component</span><br><span class="line">       *</span><br><span class="line">       * @jls 8.10.3 Record Members</span><br><span class="line">       * @jls 9.7.4 Where Annotations May Appear</span><br><span class="line">       *</span><br><span class="line">       * @since 16</span><br><span class="line">       */</span><br><span class="line">      RECORD_COMPONENT;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="实现JwtConfig类"><a href="#实现JwtConfig类" class="headerlink" title="实现JwtConfig类"></a>实现JwtConfig类</h1><p><code>JwtCOnfig</code>类用来签发Jwt和解析Jwt，它的源码如下：</p>
+<ul>
+<li><code>UserService.login</code>登录和数据库校验成功后调用<code>createJwt()</code>，并把这个JWT返回给前端，以后前端每次请求都需要带上这个JWT</li>
+<li>切面获取前端发来的http请求，调用<code>parseJwt</code>解析JWT，验证是否拥有对应方法的权限</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JwtConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String secret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">long</span> expire;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Key key;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jwt.secret&#125;&quot;)</span> <span class="comment">//value在application.yml中配置</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setJwtSecret</span><span class="params">(String jwtSecret)</span> &#123; <span class="comment">//通过set让static方法读取配置文件中的值</span></span><br><span class="line">        JwtConfig.secret = jwtSecret;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;jwt.expire&#125;&quot;)</span> <span class="comment">//value在application.yml中配置</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setExpire</span><span class="params">(<span class="type">long</span> expire)</span> &#123; <span class="comment">//通过set让static方法读取配置文件中的值</span></span><br><span class="line">        JwtConfig.expire = expire;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//签发Jwt</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">createJWT</span><span class="params">(UserPO userPO)</span> &#123;</span><br><span class="line">        <span class="type">Date</span> <span class="variable">date</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>();</span><br><span class="line">        <span class="type">Date</span> <span class="variable">expireDate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(date.getTime() + expire);</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">jwt</span> <span class="operator">=</span> JWT.create()</span><br><span class="line">                <span class="comment">//可以将基本信息放到claims中</span></span><br><span class="line">                .withClaim(<span class="string">&quot;name&quot;</span>, userPO.getName())</span><br><span class="line">                <span class="comment">//name</span></span><br><span class="line">                .withClaim(<span class="string">&quot;role&quot;</span>, userPO.getRole().name())</span><br><span class="line">                <span class="comment">//超时设置,设置过期的日期</span></span><br><span class="line">                .withExpiresAt(expireDate)</span><br><span class="line">                <span class="comment">//签发时间</span></span><br><span class="line">                .withIssuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>())</span><br><span class="line">                <span class="comment">//SECRET加密</span></span><br><span class="line">                .sign(Algorithm.HMAC256(secret));</span><br><span class="line">        <span class="keyword">return</span> jwt;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解析Jwt</span></span><br><span class="line">    <span class="keyword">public</span> Map&lt;String, Claim&gt; <span class="title function_">parseJwt</span><span class="params">(String token)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">JWTVerifier</span> <span class="variable">verifier</span> <span class="operator">=</span> JWT.require(Algorithm.HMAC256(secret)).build();</span><br><span class="line">            <span class="type">DecodedJWT</span> <span class="variable">jwt</span> <span class="operator">=</span> verifier.verify(token);</span><br><span class="line">            <span class="keyword">return</span> jwt.getClaims();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (TokenExpiredException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MyServiceException</span>(<span class="string">&quot;A0230&quot;</span>, <span class="string">&quot;用户登陆已过期&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (JWTVerificationException | IllegalArgumentException e) &#123; <span class="comment">//解析错误 或者 token写错</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MyServiceException</span>(<span class="string">&quot;A0200&quot;</span>, <span class="string">&quot;登陆失败&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现增强类"><a href="#实现增强类" class="headerlink" title="实现增强类"></a>实现增强类</h1><p>新建一个<code>AuthAspect</code>切面，用于增强需要鉴权的方法，其定义如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Order(1)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthAspect</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserService userService;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">final</span> JwtConfig jwtConfig;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AuthAspect</span><span class="params">(UserService userService, JwtConfig jwtConfig)</span>&#123;</span><br><span class="line">         <span class="built_in">this</span>.userService = userService;</span><br><span class="line">        <span class="built_in">this</span>.jwtConfig = jwtConfig;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="meta">@Before(value = &quot;execution(public * com.nju.edu.erp.web.controller.*.*(..)) &amp;&amp; @annotation(authorized)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">authCheck</span><span class="params">(JoinPoint joinPoint, Authorized authorized)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>AuthAspect</code>类有三个注解</p>
+<ul>
+<li><code>@Aspect</code>：把当前类标识为一个切面供容器读取</li>
+<li><code>@Configuration</code>：表明它是一个配置类</li>
+<li><code>@Order(1)</code>：用于有多个增强类对同一个方法进行增强的时候表明其优先级，越小优先级越高</li>
+</ul>
+</li>
+<li><p>AuthAspect类除去构造方法外只有一个<code>authChech()</code>方法，它有一个@Before注解</p>
+<ul>
+<li><code>@Before</code>：标识一个前置增强方法，相当于BeforeAdvice的功能</li>
+<li>这个注解的值是检查所有<code>com.nju.edu.erp.web.controller</code>包下所有类public并且被Authorized注解所标注的方法</li>
+</ul>
+</li>
+<li><p><code>authCheck()</code>方法代码如下，主要操作包括：</p>
+</li>
+<li><p>&#96;&#96;&#96;java<br>@Before(value &#x3D; “execution(public * com.nju.edu.erp.web.controller.<em>.</em>(..)) &amp;&amp; @annotation(authorized)”)<br>public void authCheck(JoinPoint joinPoint, Authorized authorized) {<br>try {<br>    &#x2F;&#x2F;1.获取当前http请求<br>    HttpServletRequest httpServletRequest &#x3D; ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();<br>    &#x2F;&#x2F;2.获得Authorized标头，没有则抛出异常<br>    String token &#x3D; Optional.ofNullable(httpServletRequest.getHeader(“Authorization”)).<br>            orElseThrow(() -&gt; new MyServiceException(“A0002”, “用户未获得第三方登录授权”));<br>    &#x2F;&#x2F;3.auth方法调用jwtConfig.parseJwt解析出UserVO信息<br>    UserVO user &#x3D; userService.auth(token);<br><br>    &#x2F;&#x2F;4.判断切面方法是否包含当前token对应的角色<br>    if (!Arrays.stream(authorized.roles()).collect(Collectors.toList()).contains(user.getRole())) {<br>        &#x2F;&#x2F;5.如果不在就抛出访问未授权的异常<br>        throw new MyServiceException(“A0003”, “访问未授权”);<br>    }<br>}catch (MyServiceException e) {<br>    throw new MyServiceException(“A0004”, “认证失败”);<br>}<br>}</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 需要鉴权的接口添加@Authorized注解</span><br><span class="line"></span><br><span class="line">controller层对前端来的路由添加`Authorized`注解进行鉴权，如：</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">@GetMapping(&quot;/create&quot;)</span><br><span class="line">@Authorized(roles = &#123;Role.ADMIN, Role.GM, Role.INVENTORY_MANAGER&#125;)</span><br><span class="line">public Response createCategory(@RequestParam(value = &quot;parentId&quot;) int parentId,</span><br><span class="line">                           @RequestParam(value = &quot;name&quot;) String name) &#123;</span><br><span class="line">    return Response.buildSuccess(categoryService.createCategory(parentId, name));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="添加登录方法"><a href="#添加登录方法" class="headerlink" title="添加登录方法"></a>添加登录方法</h1><p><code>UserService.login</code>登录功能，后端从数据库根据用户名和邮箱进行验证，验证成功调用<code>jwtConfig.createJWT</code>生成JWT，并把这个JWT返回给前端，以后前端每次请求都需要带上这个JWT</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> JwtConfig jwtConfig;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserServiceImpl</span><span class="params">(UserDao userDao, JwtConfig jwtConfig)</span>;</span><br><span class="line">  </span><br><span class="line">  	<span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Map&lt;String, String&gt; <span class="title function_">login</span><span class="params">(UserVO userVO)</span> &#123;</span><br><span class="line">        <span class="type">UserPO</span> <span class="variable">userPO</span> <span class="operator">=</span> userDao.findByNameAndPassword(userVO.getName(), userVO.getPassword());</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == userPO) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">MyServiceException</span>(<span class="string">&quot;A0000&quot;</span>, <span class="string">&quot;用户名或密码错误&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Map&lt;String, String&gt; authToken = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> jwtConfig.createJWT(userPO);</span><br><span class="line">        authToken.put(<span class="string">&quot;token&quot;</span>, token);</span><br><span class="line">        <span class="keyword">return</span> authToken;</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">  	<span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">updatePassword</span><span class="params">(UserVO userVO,String newPassword)</span>;</span><br><span class="line">  </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> UserVO <span class="title function_">auth</span><span class="params">(String token)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="JWT验证流程总结"><a href="#JWT验证流程总结" class="headerlink" title="JWT验证流程总结"></a>JWT验证流程总结</h1><ol>
+<li>调用<code>UserService.login</code>登录功能，后端从数据库根据用户名和邮箱进行验证，验证成功调用<code>jwtConfig.createJWT</code>生成JWT，并把这个JWT返回给前端，以后前端每次请求都需要带上这个JWT</li>
+<li>controller层对前端来的路由添加<code>@Authorized</code>注解进行鉴权</li>
+<li><code>AuthAspect</code>类对<code>Authorized</code>注解进行增强，<code>@Order</code>注解用于有多个增强类对同一个方法进行增强的时候表明其优先级，越小优先级越高</li>
+<li>添加<code>Before</code>方法，用于拦截controller包中所有public并且有<code>@Authorized</code>注解的方法</li>
+<li>拦截http请求并获得<code>Authorized</code>标头，调用<code>jwtConfig.parseJwt</code>解析出<code>UserVO</code>信息，判断该<code>UserVO</code>的角色是否在<code>Authorized</code>注解的roles集合中，如果不在就抛出访问未授权的异常</li>
+</ol>
+<h1 id="JoinPoint常用方法"><a href="#JoinPoint常用方法" class="headerlink" title="JoinPoint常用方法"></a>JoinPoint常用方法</h1><ul>
+<li>Object[] getArgs：获取目标方法的参数数组</li>
+<li>Signature getSignature：获取目标方法的签名</li>
+<li>Object getTarget：获取被织入增强处理的目标对象</li>
+<li>Object getThis：获取AOP框架为目标对象生成的代理对象</li>
+</ul>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2023/03/20/JWTandAOPforVerify/" title="自定义注解+AOP+JWT实现Token拦截验证">http://liyafei.xyz/2023/03/20/JWTandAOPforVerify/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/10/array2List/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/Java/">
+                    Java
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/10/array2List/" class="trm-anima-link">
+                    Java的Array和List之间的转换
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/10</li>
+                <li>14:13</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator">·</span>
+            <span class="trm-accent-color">Effy</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator"> | </span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v1.2.7
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            The blog has been lovely to run <span id="since" class="trm-accent-color"></span> day
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        BirthDay = new Date("12/19/2022 17:00:00");
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        msPerDay = 24 * 60 * 60 * 1000
+        day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  <div id="trm-back-top" class="trm-back-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+  
+<div class="trm-search-popup">
+    <div class="trm-search-header">
+        <span class="trm-search-popup-btn-close">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <div class="form trm-search-form">
+        <input class="trm-search-input" type="text" placeholder="Searching...">
+    </div>
+    <div class="trm-search-result-container">
+
+    </div>
+</div>
+
+  <!-- Plugin -->
+
+
+
+    
+    
+
+    
+<script src="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=1.2.7"></script>
+    
+
+    
+        
+<script src="//cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=1.2.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+
+    <!-- 评论插件 -->
+    
+        
+        
+    
+
+
+
+<!-- 评论插件 -->
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=1.2.7"></script>
+
+</body>
+
+</html>

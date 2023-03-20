@@ -1983,4 +1983,31 @@
         <tag>鉴权</tag>
       </tags>
   </entry>
+  <entry>
+    <title>questionsAboutProject</title>
+    <url>/2023/03/20/questionsAboutProject/</url>
+    <content><![CDATA[<h1 id="JWT验证流程总结"><a href="#JWT验证流程总结" class="headerlink" title="JWT验证流程总结"></a>JWT验证流程总结</h1><ol>
+<li>调用<code>UserService.login</code>登录功能，后端从数据库根据用户名和邮箱进行验证，验证成功调用<code>jwtConfig.createJWT</code>生成JWT，并把这个JWT返回给前端，以后前端每次请求都需要带上这个JWT</li>
+<li>controller层对前端来的路由添加<code>@Authorized</code>注解进行鉴权</li>
+<li><code>AuthAspect</code>类对<code>Authorized</code>注解进行增强，<code>@Order</code>注解用于有多个增强类对同一个方法进行增强的时候表明其优先级，越小优先级越高</li>
+<li>添加<code>Before</code>方法，用于拦截controller包中所有public并且有<code>@Authorized</code>注解的方法</li>
+<li>拦截http请求并获得<code>Authorized</code>标头，调用<code>jwtConfig.parseJwt</code>解析出<code>UserVO</code>信息，判断该<code>UserVO</code>的角色是否在<code>Authorized</code>注解的roles集合中，如果不在就抛出访问未授权的异常</li>
+</ol>
+<h1 id="项目的并发性怎么样？"><a href="#项目的并发性怎么样？" class="headerlink" title="项目的并发性怎么样？"></a>项目的并发性怎么样？</h1><p>通过在Service层使用Transaction注解和synchronized关键字保证了一定的并发性。一开始想的是直接将<code>@Transcational</code>注解和<code>synchronized</code>一起使用，但是后来验证发现还是线程不安全的，最后找到原因是<strong>加锁的范围没有包括到整个事务</strong>导致的，会出现<code>synchronized</code>代码块执行完但是事务还没有提交，新的线程又进入到<code>synchronized</code>代码块，读取到的数据是还没有提交的旧数据这样的情况。最后是通过对service层的方法添加一个代理方法，对这个代理方法加<code>synchronized</code>关键字，方法内部直接调用<code>service</code>的方法，这样就把锁加到了整个事务上。由此保证了单机下的多线程，但如果是分布式的话后面还的考虑加一些分布式锁</p>
+<h1 id="用到了哪些设计模式？"><a href="#用到了哪些设计模式？" class="headerlink" title="用到了哪些设计模式？"></a>用到了哪些设计模式？</h1><h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>总经理角色可以制定促销策略，针对不同级别的客户制定促销策略，包括赠品、价格折让或者赠送代金券，这部分我把这三种促销策略抽象成促销这个类，它具体的实现类有赠品、打折和代金券三种，不同级别的客户在一次购买金额达到触发条件后会自动进行判断，PromitionService层根据客户对应的级别和购买金额发放对应的促销策略，客户并不需要关心具体是哪种促销策略，只需要选择他能使用的促销策略就行</p>
+<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>因为每个单据的创建都要设置大量的单据信息，如果把这些创建单据的代码放在业务代码主体中，会降低代码的可读性，所以我把单据的创建都交给工厂来做了，但是由于不同的单据它需要设置的信息基本不相同，所以我没有用抽象工厂，只是用了简单工厂模式，比如对于工资单这个单据，业务代码中只需要给工厂穿进一个staffDao，然后就不需要关心单据的具体创建过程，大大简化了SalarySheetService.makeSalarySheet方法，他只需要获取对应的员工信息，传给工厂，获得单据，存起来，如果有异常，就处理异常，并向前端返回，业务逻辑很清晰</p>
+<h1 id="测试部分怎么写的？"><a href="#测试部分怎么写的？" class="headerlink" title="测试部分怎么写的？"></a>测试部分怎么写的？</h1><p>测试部分主要分为单元测试和集成测试</p>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><p>单元测试部分主要对工资单、员工打卡和用户模块进行测试，比如员工打卡模块，这个Service主要有ClockIn、GetAllInformation和GetMyInformation这三个方法，分别是当日打卡、人力部门查看打卡情况、员工查看今日打卡情况，所以主要测试这三个方法，比如打卡方法，测试打卡前后的员工打卡状态是否更改了，当月打卡次数是不是增加了，因为会用到员工的Dao层，所以先创建一个桩程序，来模拟Dao层返回的信息</p>
+<h2 id="集成测试"><a href="#集成测试" class="headerlink" title="集成测试"></a>集成测试</h2><p>集成测试主要对财务人员部分的付款单和客户这两个模块的整体进行测试，财务人员制定付款单，包括单据编号，操作员，金额，银行账户以及所付款的客户ID，付款单审批成功后会把客户的应收金额减去单据的金额，表明公司向客户付过这些款了，主要测试单据金额大于公司应付的情况、银行账户错误等，这些情况都应该抛出异常。这部分需要实现的桩程序主要有银行账户Dao、客户Dao和付款单Dao</p>
+<h1 id="有哪些可以优化的地方"><a href="#有哪些可以优化的地方" class="headerlink" title="有哪些可以优化的地方"></a>有哪些可以优化的地方</h1><h2 id="事务优化"><a href="#事务优化" class="headerlink" title="事务优化"></a>事务优化</h2><p>在创建出库单中，主要是基于Mysql的事务进行的，而基于MySQL事务的创建出库单操作的主要瓶颈是网络延迟和GC（Java垃圾回收机制）。执行一条update语句更新库存情况首先要拿到MySQL的行级锁rowLock，所以要尽量降低update对rowLock的持有时间。</p>
+<p>一个简单的优化方式是在创建出库单时，从原来的先update库存再创建单据，优化成先创建单据再update库存，这样一来持有Mysql行级锁的时间会比原来少很多</p>
+<h2 id="Redis缓存优化"><a href="#Redis缓存优化" class="headerlink" title="Redis缓存优化"></a>Redis缓存优化</h2><p> 由于员工打卡信息不需要经常变动，但前端接口需要保证员工打卡信息及时显示到前端页面上的，所以对数据库中这个字段的查询会比较频繁，可以采用Redis缓存的方式来减轻DB的压力，选取Bitmap数据接口存储员工打卡信息。内部的key是员工id+年月的形式，执行打卡时去相应的key中把天数对应的bit为置为1就行了</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>项目</tag>
+      </tags>
+  </entry>
 </search>

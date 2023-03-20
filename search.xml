@@ -1973,7 +1973,9 @@
 <li>Object getTarget：获取被织入增强处理的目标对象</li>
 <li>Object getThis：获取AOP框架为目标对象生成的代理对象</li>
 </ul>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1>]]></content>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://www.jianshu.com/p/655145478c22">自定义注解+AOP+JWT实现Token拦截验证</a></p>
+<p><a href="https://blog.csdn.net/weixin_44299027/article/details/105918873">@Retention的作用和@Target注解的说明以及使用方法</a></p>
+]]></content>
       <categories>
         <category>Java</category>
       </categories>
@@ -2002,6 +2004,8 @@
 <h1 id="有哪些可以优化的地方"><a href="#有哪些可以优化的地方" class="headerlink" title="有哪些可以优化的地方"></a>有哪些可以优化的地方</h1><h2 id="事务优化"><a href="#事务优化" class="headerlink" title="事务优化"></a>事务优化</h2><p>在创建出库单中，主要是基于Mysql的事务进行的，而基于MySQL事务的创建出库单操作的主要瓶颈是网络延迟和GC（Java垃圾回收机制）。执行一条update语句更新库存情况首先要拿到MySQL的行级锁rowLock，所以要尽量降低update对rowLock的持有时间。</p>
 <p>一个简单的优化方式是在创建出库单时，从原来的先update库存再创建单据，优化成先创建单据再update库存，这样一来持有Mysql行级锁的时间会比原来少很多</p>
 <h2 id="Redis缓存优化"><a href="#Redis缓存优化" class="headerlink" title="Redis缓存优化"></a>Redis缓存优化</h2><p> 由于员工打卡信息不需要经常变动，但前端接口需要保证员工打卡信息及时显示到前端页面上的，所以对数据库中这个字段的查询会比较频繁，可以采用Redis缓存的方式来减轻DB的压力，选取Bitmap数据接口存储员工打卡信息。内部的key是员工id+年月的形式，执行打卡时去相应的key中把天数对应的bit为置为1就行了</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><a href="https://zhuanlan.zhihu.com/p/56961571">Synchronized锁在Spring事务管理下，为啥还线程不安全？</a></p>
+<p><a href="http://tycoding.cn/2018/10/15/ssm/seckill">SpringBoot实现Java高并发秒杀系统之并发优化（四）</a></p>
 ]]></content>
       <categories>
         <category>Java</category>

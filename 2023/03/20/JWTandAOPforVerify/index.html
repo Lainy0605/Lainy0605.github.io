@@ -15,7 +15,7 @@
 <meta property="og:description" content="定义@Authorized注解首先定义一个Authorized注解，用于后面对需要鉴权的方法添加该注解，Authorzied注解有Role类型的roles数组变量，表明能够调用被Authorized注解的方法的角色有哪些，其默认值如下 1234567891011@Retention(RetentionPolicy.RUNTIME)@Target(ElementType.METHOD)public">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-03-19T16:58:05.000Z">
-<meta property="article:modified_time" content="2023-03-19T17:06:11.555Z">
+<meta property="article:modified_time" content="2023-03-20T04:44:54.954Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="AOP">
 <meta property="article:tag" content="JWT">
@@ -396,7 +396,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#定义-Authorized注解"  data-scroll-to="#定义-Authorized注解"><span class="toc-number">1.</span> <span class="toc-text">定义@Authorized注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Retention注解"  data-scroll-to="#Retention注解"><span class="toc-number">1.1.</span> <span class="toc-text">@Retention注解</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Target"  data-scroll-to="#Target"><span class="toc-number">1.2.</span> <span class="toc-text">@Target</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现JwtConfig类"  data-scroll-to="#实现JwtConfig类"><span class="toc-number">2.</span> <span class="toc-text">实现JwtConfig类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现增强类"  data-scroll-to="#实现增强类"><span class="toc-number">3.</span> <span class="toc-text">实现增强类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#需要鉴权的接口添加-Authorized注解"  data-scroll-to="#需要鉴权的接口添加-Authorized注解"><span class="toc-number">4.</span> <span class="toc-text">需要鉴权的接口添加@Authorized注解</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#添加登录方法"  data-scroll-to="#添加登录方法"><span class="toc-number">5.</span> <span class="toc-text">添加登录方法</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#自定义注解-AOP-JWT验证流程总结"  data-scroll-to="#自定义注解-AOP-JWT验证流程总结"><span class="toc-number">6.</span> <span class="toc-text">自定义注解+AOP+JWT验证流程总结</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#JoinPoint常用方法"  data-scroll-to="#JoinPoint常用方法"><span class="toc-number">7.</span> <span class="toc-text">JoinPoint常用方法</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#定义-Authorized注解"  data-scroll-to="#定义-Authorized注解"><span class="toc-number">1.</span> <span class="toc-text">定义@Authorized注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Retention注解"  data-scroll-to="#Retention注解"><span class="toc-number">1.1.</span> <span class="toc-text">@Retention注解</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Target"  data-scroll-to="#Target"><span class="toc-number">1.2.</span> <span class="toc-text">@Target</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现JwtConfig类"  data-scroll-to="#实现JwtConfig类"><span class="toc-number">2.</span> <span class="toc-text">实现JwtConfig类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#实现增强类"  data-scroll-to="#实现增强类"><span class="toc-number">3.</span> <span class="toc-text">实现增强类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#需要鉴权的接口添加-Authorized注解"  data-scroll-to="#需要鉴权的接口添加-Authorized注解"><span class="toc-number">4.</span> <span class="toc-text">需要鉴权的接口添加@Authorized注解</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#添加登录方法"  data-scroll-to="#添加登录方法"><span class="toc-number">5.</span> <span class="toc-text">添加登录方法</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#自定义注解-AOP-JWT验证流程总结"  data-scroll-to="#自定义注解-AOP-JWT验证流程总结"><span class="toc-number">6.</span> <span class="toc-text">自定义注解+AOP+JWT验证流程总结</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#JoinPoint常用方法"  data-scroll-to="#JoinPoint常用方法"><span class="toc-number">7.</span> <span class="toc-text">JoinPoint常用方法</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#参考文献"  data-scroll-to="#参考文献"><span class="toc-number">8.</span> <span class="toc-text">参考文献</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -511,7 +511,7 @@
 <li>Object getTarget：获取被织入增强处理的目标对象</li>
 <li>Object getThis：获取AOP框架为目标对象生成的代理对象</li>
 </ul>
-
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1>
 </article>
     
     
@@ -557,7 +557,7 @@
             </div>
             <h5>
                 <a href="/2023/03/20/questionsAboutProject/" class="trm-anima-link">
-                    questionsAboutProject
+                    ERP管理系统问题总结
                 </a>
             </h5>
             <div class="trm-divider trm-mb-20 trm-mt-20"></div>

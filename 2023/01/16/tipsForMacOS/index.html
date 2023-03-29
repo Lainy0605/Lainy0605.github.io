@@ -15,7 +15,7 @@
 <meta property="og:description" content="删除启动台的无效图标问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留 解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字 1sqlite3 $(find &#x2F;private&#x2F;var&#x2F;folders -name com.apple.dock.launchpad 2&gt;&#x2F;dev&#x2F;null)&#x2F;db&#x2F;db \ &quot;DE">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-01-16T13:12:06.000Z">
-<meta property="article:modified_time" content="2023-03-08T09:12:05.741Z">
+<meta property="article:modified_time" content="2023-03-29T13:45:31.627Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="macOS">
 <meta name="twitter:card" content="summary">
@@ -394,7 +394,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#删除启动台的无效图标"  data-scroll-to="#删除启动台的无效图标"><span class="toc-number">1.</span> <span class="toc-text">删除启动台的无效图标</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#删除启动台的无效图标"  data-scroll-to="#删除启动台的无效图标"><span class="toc-number">1.</span> <span class="toc-text">删除启动台的无效图标</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#触控板死亡"  data-scroll-to="#触控板死亡"><span class="toc-number">2.</span> <span class="toc-text">触控板死亡</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -433,6 +433,16 @@
     <h1 id="删除启动台的无效图标"><a href="#删除启动台的无效图标" class="headerlink" title="删除启动台的无效图标"></a>删除启动台的无效图标</h1><p>问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留</p>
 <p>解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlite3 <span class="variable">$(find /private/var/folders -name com.apple.dock.launchpad 2&gt;/dev/null)</span>/db/db \ <span class="string">&quot;DELETE FROM apps WHERE title=&#x27;APPNAME&#x27;;&quot;</span>&amp;&amp;killall Dock</span><br></pre></td></tr></table></figure>
+
+<h1 id="触控板死亡"><a href="#触控板死亡" class="headerlink" title="触控板死亡"></a>触控板死亡</h1><p>问题描述：触控板突然仿佛猝死一般，只能进行基本的单指操作，多指操作失灵</p>
+<p>解决方法：</p>
+<ol>
+<li>COMMAND + 空格 打开聚焦搜索</li>
+<li>输入活动监视器</li>
+<li>找到程序坞进程</li>
+<li>强制退出程序坞进程</li>
+</ol>
+<p>原因：TBF</p>
 
 </article>
     

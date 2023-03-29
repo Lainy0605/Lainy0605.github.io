@@ -170,6 +170,16 @@
     <content><![CDATA[<h1 id="删除启动台的无效图标"><a href="#删除启动台的无效图标" class="headerlink" title="删除启动台的无效图标"></a>删除启动台的无效图标</h1><p>问题描述：安装adobe产品的过程中启动台会添加一大堆图标，卸载后发现启动台会有无效图标残留</p>
 <p>解决方法：terminal中输入以下指令，其中的APPNAME是想要删除的图标的名字</p>
 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">sqlite3 <span class="variable">$(find /private/var/folders -name com.apple.dock.launchpad 2&gt;/dev/null)</span>/db/db \ <span class="string">&quot;DELETE FROM apps WHERE title=&#x27;APPNAME&#x27;;&quot;</span>&amp;&amp;killall Dock</span><br></pre></td></tr></table></figure>
+
+<h1 id="触控板死亡"><a href="#触控板死亡" class="headerlink" title="触控板死亡"></a>触控板死亡</h1><p>问题描述：触控板突然仿佛猝死一般，只能进行基本的单指操作，多指操作失灵</p>
+<p>解决方法：</p>
+<ol>
+<li>COMMAND + 空格 打开聚焦搜索</li>
+<li>输入活动监视器</li>
+<li>找到程序坞进程</li>
+<li>强制退出程序坞进程</li>
+</ol>
+<p>原因：TBF</p>
 ]]></content>
       <categories>
         <category>学习</category>
@@ -2043,7 +2053,7 @@
       </tags>
   </entry>
   <entry>
-    <title>招银网络科技一面</title>
+    <title>面经总结</title>
     <url>/2023/03/23/zhaoyinInterviewOne/</url>
     <content><![CDATA[<h1 id="线程生命周期及转换"><a href="#线程生命周期及转换" class="headerlink" title="线程生命周期及转换"></a>线程生命周期及转换</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><ul>
 <li><code>NEW</code>：<code>new</code>一个线程后，线程进入该状态</li>
@@ -2089,6 +2099,8 @@
 <li>singletonFactories：缓存的是一个ObjectFactory，主要用来去生成原始对象进行了AOP之后得到的代理对象，在每个Bean的生成过程中，都会提前暴露一个工厂，这个工厂可能用到，也可能用不到，如果没有出现循环依赖依赖本bean，那么这个工厂无用，本bean按照自己的生命周期执行，执行完后直接把本bean放入singletonObjects中即可，如果出现了循环依赖依赖了本bean，则另外那个bean执行ObjectFactory提交得到一个AOP之后的代理对象(如果有AOP的话，如果无需AOP，则直接得到一个原始对象)。</li>
 <li>其实还要一个缓存，就是earlyProxyReferences，它用来记录某个原始对象是否进行过AOP了。</li>
 </ol>
+<h2 id="为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？"><a href="#为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？" class="headerlink" title="为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？"></a>为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？</h2><p>如果使用二级缓存解决循环依赖，即所有的Bean在实例化后就要完成AOP代理，违背了Spring设计原则。Spring在设计之初就是通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理</p>
+<p><strong>这个工厂的目的在于延迟对实例化阶段生成的对象的代理，只有真正发生循环依赖的时候，才去提前生成代理对象，否则只会创建一个工厂并将其放入到三级缓存中，但是不会去通过这个工厂去真正创建对象</strong></p>
 <h1 id="SpringBoot两种代理方式各自的缺陷"><a href="#SpringBoot两种代理方式各自的缺陷" class="headerlink" title="SpringBoot两种代理方式各自的缺陷"></a>SpringBoot两种代理方式各自的缺陷</h1><h2 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h2><ul>
 <li>不支持代理没有实现接口的类</li>
 </ul>
@@ -2144,6 +2156,7 @@
 <li><strong>Hash索引不能利用部分索引键查询</strong>。 对于联合索引，Hash索引在计算Hash值的时候是联合索引键合并后再一起计算Hash值，而不是单独计算Hash值，所以通过联合索引的前面一个或几个索引键进行查询的时候，Hash索引也无法被利用</li>
 <li><strong>Hash索引无法被用来避免数据的排序操作</strong>。由于Hash索引中存放的是经过Hash计算之后的Hash值，而Hash值的大小关系并不一定和Hash运算前的键值完全一样，所以数据库无法利用索引的数据来避免任何排序运算</li>
 </ol>
-<h1 id="JDBC分库分页"><a href="#JDBC分库分页" class="headerlink" title="JDBC分库分页"></a>JDBC分库分页</h1><h1 id="使用Redis实现分布式锁"><a href="#使用Redis实现分布式锁" class="headerlink" title="使用Redis实现分布式锁"></a>使用Redis实现分布式锁</h1>]]></content>
+<h1 id="JDBC分库分页"><a href="#JDBC分库分页" class="headerlink" title="JDBC分库分页"></a>JDBC分库分页</h1><h1 id="使用Redis实现分布式锁"><a href="#使用Redis实现分布式锁" class="headerlink" title="使用Redis实现分布式锁"></a>使用Redis实现分布式锁</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="https://blog.csdn.net/mocas_wang/article/details/118407222">Spring中的循环依赖解决详解</a></p>
+]]></content>
   </entry>
 </search>

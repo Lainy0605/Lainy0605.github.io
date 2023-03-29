@@ -2014,4 +2014,136 @@
         <tag>项目</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Java中的移位运算</title>
+    <url>/2023/03/29/shiftOperands/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java中的移位操作主要包括三种：&lt;&lt;(左移)、&gt;&gt;（有符号右移）、&gt;&gt;&gt;（无符号右移）。这三种移位操作都只能作用于<code>long</code>、<code>int</code>、<code>short</code>、<code>byte</code>、<code>char</code>这四种基本的整型类型上。通常情况下，移位操作比普通运算的效率更高。</p>
+<h1 id="左移-lt-lt"><a href="#左移-lt-lt" class="headerlink" title="左移 &lt;&lt;"></a>左移 &lt;&lt;</h1><p>左移运算是将数据的二进制数向左移动若干位，高位丢弃，低位补零，如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">a &lt;&lt;= <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//向左移动10位，高位丢弃，低位补零：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111100 00000000</span></span><br><span class="line"><span class="comment">//结果是a = -1024</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="有符号右移-gt-gt"><a href="#有符号右移-gt-gt" class="headerlink" title="有符号右移 &gt;&gt;"></a>有符号右移 &gt;&gt;</h1><p>有符号右移是将数据的二进制数向右移动若干位，低位丢弃，高位补符号位，如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">8</span>;</span><br><span class="line">a &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// a的二进制数：</span></span><br><span class="line"><span class="comment">//00000000 00000000 00000000 00001000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补0</span></span><br><span class="line"><span class="comment">//00000000 00000000 00000000 00000001</span></span><br><span class="line"><span class="comment">//结果是a = 1</span></span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span>-<span class="number">8</span>;</span><br><span class="line">b &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// b的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补1</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//结果是b = -1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="无符号右移-gt-gt-gt"><a href="#无符号右移-gt-gt-gt" class="headerlink" title="无符号右移 &gt;&gt;&gt;"></a>无符号右移 &gt;&gt;&gt;</h1><p>无符号右移是将数据的二进制数向右移动若干位，低位丢弃，高位补0，如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span>-<span class="number">8</span>;</span><br><span class="line">b &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// b的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补0</span></span><br><span class="line"><span class="comment">//00011111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//结果是b = 536870911</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现正数的&gt;&gt;和&gt;&gt;&gt;是等价的</p>
+<h1 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h1><h3 id="对-short、byte、char-的移位操作"><a href="#对-short、byte、char-的移位操作" class="headerlink" title="对 short、byte、char 的移位操作"></a>对 short、byte、char 的移位操作</h3><p>java对short、byte和char的移位操作，首先会将其补成32位的int型，再对其进行移位操作，最后低位截取对应的位数，比如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">2</span>;</span><br><span class="line">System.out.println(a &gt;&gt;&gt; <span class="number">1</span>);</span><br><span class="line"><span class="comment">//首先将8位的a转成32位</span></span><br><span class="line"><span class="comment">//11111110 -&gt; 11111111 11111111 11111111 11111110</span></span><br><span class="line"><span class="comment">//对这32位int进行移位，此时是无符号右移1位，高位补0</span></span><br><span class="line"><span class="comment">//01111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//注意此时并没有赋值号，因此直接输出该32位的结果</span></span><br><span class="line"><span class="comment">//输出结果为：2147483647</span></span><br><span class="line">System.out.println(a &gt;&gt;= <span class="number">1</span>);</span><br><span class="line"><span class="comment">//此时有赋值号，将移位后的结果截取低8位，即11111111</span></span><br><span class="line"><span class="comment">//输出结果为：-1</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，如果输出a &gt;&gt; 3，此时不会对结果进行截取。只有a &gt;&gt;&#x3D; 3，即对a赋值的时候才会进行低位截取，比如此时a是byte类型，在java中占8位，就对移位后的结果取低8位赋给a</p>
+<h3 id="移位的位数超过数值所占有的位数"><a href="#移位的位数超过数值所占有的位数" class="headerlink" title="移位的位数超过数值所占有的位数"></a>移位的位数超过数值所占有的位数</h3><p>对于要移动的位数i，如果i超过了该类型数值所占位数j，则取i%j的结果作为最终要移动的位数，其中short、byte和char类型总是会先转化为32位int，比如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">8</span>);</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">32</span>);</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">33</span>);</span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>移位运算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>招银网络科技一面</title>
+    <url>/2023/03/23/zhaoyinInterviewOne/</url>
+    <content><![CDATA[<h1 id="线程生命周期及转换"><a href="#线程生命周期及转换" class="headerlink" title="线程生命周期及转换"></a>线程生命周期及转换</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><ul>
+<li><code>NEW</code>：<code>new</code>一个线程后，线程进入该状态</li>
+<li><code>RUNNABLE</code>：线程调用<code>start()</code>方法后进入<code>RUNNABLE</code>状态</li>
+<li><code>WAITING</code>：线程等待某个事件的发生&#x2F;等待其他线程的通知（同步）</li>
+<li><code>TIMED_WAITING</code>：线程等待某个事件一段时间，超过该时间后，自动回到<code>RUNNABLE</code>状态</li>
+<li><code>BLOCKED</code>：线程等待获取某个资源的锁（互斥）</li>
+<li><code>TERMINATED</code>：线程执行完成后进入终止状态</li>
+</ul>
+<p><img src="https://oss.javaguide.cn/github/javaguide/java/concurrent/640.png" loading="lazy"></p>
+<h2 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h2><ul>
+<li>新建一个线程<code>new Thread()</code>后，线程进入<code>NEW</code>状态</li>
+<li>线程对象创建成功后，调用该线程的<code>Thread.start()</code>，线程从<code>NEW</code>进入<code>RUNNABLE</code>状态</li>
+<li><code>RUNNABLE</code>线程遇到以下方法时，会进入<code>WATING</code>状态<ul>
+<li><code>Object.wait()</code>：等待某个对象，<code>JVM</code>把该线程放入<strong>锁等待队列</strong></li>
+<li><code>Thread.join()</code>：主线程等待子线程结束，<code>JVM</code>把该线程放入<strong>锁等待队列</strong></li>
+<li><code>LockSupport.park()</code>：AQS框架中，阻塞一个线程时调用该方法</li>
+</ul>
+</li>
+<li><code>WAITING</code>线程遇到以下方法时，会回到<code>RUNNABLE</code>状态<ul>
+<li><code>Object.notify()</code>：唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li><code>Object.notifyAll()</code>：唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li>等待<code>join()</code>的线程执行完毕，唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li><code>LockSupport.unpark(t)</code>：唤醒指定的线程</li>
+<li>注：在调用<code>notify</code>或者<code>notifyAll</code>方法后，等待线程不会立刻从<strong>等待队列</strong>返回，而是<strong>从等待队列移动到同步队列</strong>，竞争对象监视器</li>
+</ul>
+</li>
+<li><code>RUNNABLE</code>线程遇到以下方法时，会进入<code>BLOCKED</code>状态<ul>
+<li>获取同步锁失败，<code>JVM</code>还会把该线程放入<strong>锁同步队列</strong></li>
+<li>发出<code>I/O</code>请求</li>
+</ul>
+</li>
+<li><code>BLOCKED</code>线程遇到以下情况时，会回到<code>RUNNABLE</code>状态<ul>
+<li>同步锁被释放时，<strong>锁同步队列</strong>会出队所有线程</li>
+<li><code>I/O</code>处理完毕</li>
+</ul>
+</li>
+<li>线程执行结束或者因异常意外终止都会使线程进入<code>TERMINATED</code>状态</li>
+</ul>
+<h2 id="WAITING和BLOCKED状态的区别"><a href="#WAITING和BLOCKED状态的区别" class="headerlink" title="WAITING和BLOCKED状态的区别"></a>WAITING和BLOCKED状态的区别</h2><h1 id="SPRINGBOOT使用三级缓存解决循环依赖"><a href="#SPRINGBOOT使用三级缓存解决循环依赖" class="headerlink" title="SPRINGBOOT使用三级缓存解决循环依赖"></a>SPRINGBOOT使用三级缓存解决循环依赖</h1><ol>
+<li>singletonObjects：缓存某个beanName对应的经过了完整生命周期的bean</li>
+<li>earlySingletonObjects：缓存提前拿原始对象进行了AOP之后得到的代理对象，原始对象还没有进行属性注入和后续的BeanPostProcessor等生命周期</li>
+<li>singletonFactories：缓存的是一个ObjectFactory，主要用来去生成原始对象进行了AOP之后得到的代理对象，在每个Bean的生成过程中，都会提前暴露一个工厂，这个工厂可能用到，也可能用不到，如果没有出现循环依赖依赖本bean，那么这个工厂无用，本bean按照自己的生命周期执行，执行完后直接把本bean放入singletonObjects中即可，如果出现了循环依赖依赖了本bean，则另外那个bean执行ObjectFactory提交得到一个AOP之后的代理对象(如果有AOP的话，如果无需AOP，则直接得到一个原始对象)。</li>
+<li>其实还要一个缓存，就是earlyProxyReferences，它用来记录某个原始对象是否进行过AOP了。</li>
+</ol>
+<h1 id="SpringBoot两种代理方式各自的缺陷"><a href="#SpringBoot两种代理方式各自的缺陷" class="headerlink" title="SpringBoot两种代理方式各自的缺陷"></a>SpringBoot两种代理方式各自的缺陷</h1><h2 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h2><ul>
+<li>不支持代理没有实现接口的类</li>
+</ul>
+<h2 id="CGLIB"><a href="#CGLIB" class="headerlink" title="CGLIB"></a>CGLIB</h2><ul>
+<li>不支持代理被声明为<code>final</code>的类</li>
+</ul>
+<h1 id="MySQL联合索引"><a href="#MySQL联合索引" class="headerlink" title="MySQL联合索引"></a>MySQL联合索引</h1><ul>
+<li>假设当前数据库建立联合索引<code>(name,age,class)</code>，索引页内部<strong>先按照name排序、name相同时再按age排序、age相同时再按class排序</strong>，即<code>name</code>全局有序，<code>age</code>和<code>class</code>局部有序</li>
+<li>联合索引命中<ul>
+<li><code>where name=‘effy’ and age=19 and class=2</code>，那么使用联合索引进行二分查找，先查找到<code>name=‘effy&#39;</code>，再查询<code>age=19</code>，再<code>class=2</code></li>
+<li><code>where age=19 and class = 2 and name=‘effy’</code>, 数据库会自动优化查询条件顺序，因此联合索引同样命中</li>
+</ul>
+</li>
+<li>联合索引部分命中<ul>
+<li><code>where name &gt; &#39;effy&#39; and name &lt; &#39;lyf&#39; </code>，只有<code>name</code>字段使用到联合索引</li>
+<li><code>where name &gt; &#39;effy&#39; and name &lt; &#39;lyf&#39; and age=19</code>，此时只有<code>name</code>字段使用到联合索引，<code>age</code>字段是不会使用的。因为先按照<code>name</code>条件查出来的数据中age不是有序的，比如先按照name条件查出来三条数据<code>(effy,19)</code>，<code>(effy,20)</code>，<code>(lyf,19)</code>,此时age并不有序，因此只能对其进行扫描</li>
+<li><code>where name &gt;= &#39;effy&#39; and age=19</code>，<code>name</code>和<code>age</code>都使用到联合索引，因为<code>name=‘effy&#39;时</code>，命中<code>age=19</code>，此时继续对age进行二分查找，从<code>name = &#39;effy&#39; and age=19</code>的第一条数据往后扫描，而不是从<code>name=effy</code>的第一条数据开始</li>
+<li><code>where name BETWEEN &#39;effy&#39; and &#39;lyf&#39; and age=19</code>，同上</li>
+<li><code>where name LIKE &#39;e%&#39; and age=19</code>，同上上</li>
+</ul>
+</li>
+<li>联合索引失效情况<ul>
+<li><code>where name=&#39;effy&#39; or age=19</code>，由于是<code>or</code>连接，联合索引失效</li>
+<li><code>where age=19 and class=2</code>，因为联合索引首先按照<code>name</code>进行排序，但查询条件中不存在<code>name</code>字段，所以索引失效</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>联合索引的最左匹配原则，在遇到范围查询（如 &gt;、&lt;）的时候，就会停止匹配，范围查询的字段可以用到联合索引，但是范围查询字段后的字段无法用到联合索引。（但对于 &gt;&#x3D;、&lt;&#x3D;、BETWEEN、LIKE前缀匹配的范围查询，并不会停止匹配）</strong></p>
+<h2 id="联合索引和单列索引查找区别"><a href="#联合索引和单列索引查找区别" class="headerlink" title="联合索引和单列索引查找区别"></a>联合索引和单列索引查找区别</h2><ul>
+<li>现有查询条件<code>name=‘effy’ and age=19 and class=2</code><ul>
+<li>分别对name、age和class建立单列索引<ul>
+<li>当有多个索引命中后，优化器选择最高效的索引。比如是<code>name</code>索引，那么先按照<code>name</code>索引查出所有<code>name=‘effy’</code>的主键，再到主键索引进行回表操作，查出所有数据，再对这些数据进行扫描，丢弃不满足<code>age=19</code>或者<code>class=2</code>的数据</li>
+</ul>
+</li>
+<li>对name，age，class建立联合索引<ul>
+<li>直接扫描该联合索引的b+树，首先二分查找找到name&#x3D;’effy‘，然后二分查找找到age&#x3D;19，再二分查找找到class&#x3D;2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么推荐使用自增id而不推荐使用uid或者身份证号等"><a href="#为什么推荐使用自增id而不推荐使用uid或者身份证号等" class="headerlink" title="为什么推荐使用自增id而不推荐使用uid或者身份证号等"></a>为什么推荐使用自增id而不推荐使用uid或者身份证号等</h2><p>B+Tree是自底向上插入的，我们优先会将数据插入到叶子节点中，然后整个树会根据底部的叶子节点进行分裂或者合并</p>
+<ul>
+<li>当我们使用的是自增id，叶子节点链表会根据当前最后一条的位置，将最新的一条数据顺序的插入到最后</li>
+<li>但是当插入一个uid时，mysql根本不知道他该插入到哪个位置，需要从头开始寻找插入的位置。但是当中间需要插入的页满了时，会造成页的分裂和合并，极大地影响了效率</li>
+</ul>
+<h2 id="为什么叶子结点存放的是主键id而不是数据"><a href="#为什么叶子结点存放的是主键id而不是数据" class="headerlink" title="为什么叶子结点存放的是主键id而不是数据"></a>为什么叶子结点存放的是主键id而不是数据</h2><ul>
+<li><strong>节省存储空间</strong>。叶子结点存数据会导致一份数据存了多份，空间占用翻倍。</li>
+<li><strong>维护一致性</strong>。都通过主键索引来找到最终的数据，避免维护多份数据导致不一致的情况</li>
+</ul>
+<h2 id="Hash索引的缺点"><a href="#Hash索引的缺点" class="headerlink" title="Hash索引的缺点"></a>Hash索引的缺点</h2><ol>
+<li><strong>Hash索引仅仅能满足等值查询，不能使用范围查询</strong>。<strong>由于Hash索引存放的是进行Hash运算之后的Hash值</strong> ，经过相应的Hash算法处理之后的Hash值的大小关系，并不能保证和Hash运算前完全一样</li>
+<li><strong>Hash索引不能利用部分索引键查询</strong>。 对于联合索引，Hash索引在计算Hash值的时候是联合索引键合并后再一起计算Hash值，而不是单独计算Hash值，所以通过联合索引的前面一个或几个索引键进行查询的时候，Hash索引也无法被利用</li>
+<li><strong>Hash索引无法被用来避免数据的排序操作</strong>。由于Hash索引中存放的是经过Hash计算之后的Hash值，而Hash值的大小关系并不一定和Hash运算前的键值完全一样，所以数据库无法利用索引的数据来避免任何排序运算</li>
+</ol>
+<h1 id="JDBC分库分页"><a href="#JDBC分库分页" class="headerlink" title="JDBC分库分页"></a>JDBC分库分页</h1><h1 id="使用Redis实现分布式锁"><a href="#使用Redis实现分布式锁" class="headerlink" title="使用Redis实现分布式锁"></a>使用Redis实现分布式锁</h1>]]></content>
+  </entry>
 </search>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="线程生命周期及转换生命周期 NEW：new一个线程后，线程进入该状态 RUNNABLE：线程调用start()方法后进入RUNNABLE状态 WAITING：线程等待某个事件的发生&#x2F;等待其他线程的通知（同步） TIMED_WAITING：线程等待某个事件一段时间，超过该时间后，自动回到RUNNABLE状态 BLOCKED：线程等待获取某个资源的锁（互斥） TERMINATED：线程执行完">
+<meta property="og:type" content="article">
+<meta property="og:title" content="招银网络科技一面">
+<meta property="og:url" content="http://liyafei.xyz/2023/03/23/zhaoyinInterviewOne/index.html">
+<meta property="og:site_name" content="Effy&#39;s Page">
+<meta property="og:description" content="线程生命周期及转换生命周期 NEW：new一个线程后，线程进入该状态 RUNNABLE：线程调用start()方法后进入RUNNABLE状态 WAITING：线程等待某个事件的发生&#x2F;等待其他线程的通知（同步） TIMED_WAITING：线程等待某个事件一段时间，超过该时间后，自动回到RUNNABLE状态 BLOCKED：线程等待获取某个资源的锁（互斥） TERMINATED：线程执行完">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/java/concurrent/640.png">
+<meta property="article:published_time" content="2023-03-23T02:07:16.000Z">
+<meta property="article:modified_time" content="2023-03-29T04:23:32.108Z">
+<meta property="article:author" content="Effy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss.javaguide.cn/github/javaguide/java/concurrent/640.png">
+
+
+<title >招银网络科技一面</title>
+
+<!-- Favicon -->
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/lyft.svg?v=1.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=1.2.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+
+
+    
+
+    
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"liyafei.xyz","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.svg","icon32":"/img/lyft.svg","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":false,"hidden":"failure.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+			<a href="/" class="trm-logo-frame trm-anima-link">
+				
+					<img src="/img/lyft.svg" alt="logo">
+				
+				
+					<div class="trm-logo-text">
+						WelcomeTo<span>Effy&#39;sPage</span>
+					</div>
+				
+			</a>
+			<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+
+			<!-- menu -->
+			<div class="trm-menu">
+				<nav>
+					<ul>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/" target="">
+								Home
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/archives/" target="">
+								archives
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/categories/" target="">
+								categories
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/tags/" target="">
+								tags
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/about/" target="">
+								About
+							</a>
+							
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+			<!-- menu end -->
+			
+			<!-- mode switcher place -->
+			
+			<div class="trm-mode-switcher-place">
+				<!-- <div class="trm-hidden-switcher"> -->
+					<div class="trm-mode-switcher">
+					  <i class="far fa-sun"></i>
+					  <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+					  <label class="trm-swich" for="trm-swich"></label>
+					  <i class="far fa-moon"></i>
+					</div>
+				  <!-- </div> -->
+			</div>
+			
+			<!-- mode switcher place end -->
+
+			
+				
+				<div id="trm-search-btn" class="trm-search-btn">
+					<i class="fas fa-search"></i>
+				</div>
+				 
+			 
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" src="/img/banner.png" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            招银网络科技一面
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
+    <h5 class="trm-name trm-mb-15">
+        Effy
+    </h5>
+    
+    <div class="trm-label">
+        我
+        <span class="trm-typed-text">
+            <!-- Words for theme.user.typedText -->
+        </span>
+    </div>
+    
+</div>
+<!-- card header end -->
+
+<!-- sidebar social -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+
+<div class="trm-social">
+    
+        <a href="https://github.com/Lainy0605" title="Github" rel="nofollow" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/effyspage" title="Gitee" rel="nofollow" target="_blank">
+            <i class="fab fa-github-alt"></i>
+        </a>
+    
+        <a href="https://music.163.com/#/user/home?id=610482486" title="NetEaseMusic" rel="nofollow" target="_blank">
+            <i class="fab fa-itunes"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/335136462?spm_id_from=333.1007.0.0" title="Bilibili" rel="nofollow" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
+    
+        <a href="https://steamcommunity.com/profiles/76561199081278457/" title="Steam" rel="nofollow" target="_blank">
+            <i class="fab fa-steam"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+
+<!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                age:
+            </div>
+            <div class="trm-label trm-label-light">
+                19
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                City:
+            </div>
+            <div class="trm-label trm-label-light">
+                Kunshan, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                school:
+            </div>
+            <div class="trm-label trm-label-light">
+                Nanjing University
+            </div>
+        </li>
+    
+</ul>
+
+<!-- info end -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<!-- action button -->
+<div class="text-center">
+    <a href="mailto:592511932@qq.com" class="trm-btn">
+        Contact Me
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+<!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#线程生命周期及转换"  data-scroll-to="#线程生命周期及转换"><span class="toc-number">1.</span> <span class="toc-text">线程生命周期及转换</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#生命周期"  data-scroll-to="#生命周期"><span class="toc-number">1.1.</span> <span class="toc-text">生命周期</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#状态转换"  data-scroll-to="#状态转换"><span class="toc-number">1.2.</span> <span class="toc-text">状态转换</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#WAITING和BLOCKED状态的区别"  data-scroll-to="#WAITING和BLOCKED状态的区别"><span class="toc-number">1.3.</span> <span class="toc-text">WAITING和BLOCKED状态的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#SPRINGBOOT使用三级缓存解决循环依赖"  data-scroll-to="#SPRINGBOOT使用三级缓存解决循环依赖"><span class="toc-number">2.</span> <span class="toc-text">SPRINGBOOT使用三级缓存解决循环依赖</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#SpringBoot两种代理方式各自的缺陷"  data-scroll-to="#SpringBoot两种代理方式各自的缺陷"><span class="toc-number">3.</span> <span class="toc-text">SpringBoot两种代理方式各自的缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#JDK动态代理"  data-scroll-to="#JDK动态代理"><span class="toc-number">3.1.</span> <span class="toc-text">JDK动态代理</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#CGLIB"  data-scroll-to="#CGLIB"><span class="toc-number">3.2.</span> <span class="toc-text">CGLIB</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#MySQL联合索引"  data-scroll-to="#MySQL联合索引"><span class="toc-number">4.</span> <span class="toc-text">MySQL联合索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#总结"  data-scroll-to="#总结"><span class="toc-number">4.1.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#联合索引和单列索引查找区别"  data-scroll-to="#联合索引和单列索引查找区别"><span class="toc-number">4.2.</span> <span class="toc-text">联合索引和单列索引查找区别</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#为什么推荐使用自增id而不推荐使用uid或者身份证号等"  data-scroll-to="#为什么推荐使用自增id而不推荐使用uid或者身份证号等"><span class="toc-number">4.3.</span> <span class="toc-text">为什么推荐使用自增id而不推荐使用uid或者身份证号等</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#为什么叶子结点存放的是主键id而不是数据"  data-scroll-to="#为什么叶子结点存放的是主键id而不是数据"><span class="toc-number">4.4.</span> <span class="toc-text">为什么叶子结点存放的是主键id而不是数据</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Hash索引的缺点"  data-scroll-to="#Hash索引的缺点"><span class="toc-number">4.5.</span> <span class="toc-text">Hash索引的缺点</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#JDBC分库分页"  data-scroll-to="#JDBC分库分页"><span class="toc-number">5.</span> <span class="toc-text">JDBC分库分页</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#使用Redis实现分布式锁"  data-scroll-to="#使用Redis实现分布式锁"><span class="toc-number">6.</span> <span class="toc-text">使用Redis实现分布式锁</span></a></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            03/23
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            10:07
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="线程生命周期及转换"><a href="#线程生命周期及转换" class="headerlink" title="线程生命周期及转换"></a>线程生命周期及转换</h1><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><ul>
+<li><code>NEW</code>：<code>new</code>一个线程后，线程进入该状态</li>
+<li><code>RUNNABLE</code>：线程调用<code>start()</code>方法后进入<code>RUNNABLE</code>状态</li>
+<li><code>WAITING</code>：线程等待某个事件的发生&#x2F;等待其他线程的通知（同步）</li>
+<li><code>TIMED_WAITING</code>：线程等待某个事件一段时间，超过该时间后，自动回到<code>RUNNABLE</code>状态</li>
+<li><code>BLOCKED</code>：线程等待获取某个资源的锁（互斥）</li>
+<li><code>TERMINATED</code>：线程执行完成后进入终止状态</li>
+</ul>
+<p><img src="https://oss.javaguide.cn/github/javaguide/java/concurrent/640.png" loading="lazy"></p>
+<h2 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h2><ul>
+<li>新建一个线程<code>new Thread()</code>后，线程进入<code>NEW</code>状态</li>
+<li>线程对象创建成功后，调用该线程的<code>Thread.start()</code>，线程从<code>NEW</code>进入<code>RUNNABLE</code>状态</li>
+<li><code>RUNNABLE</code>线程遇到以下方法时，会进入<code>WATING</code>状态<ul>
+<li><code>Object.wait()</code>：等待某个对象，<code>JVM</code>把该线程放入<strong>锁等待队列</strong></li>
+<li><code>Thread.join()</code>：主线程等待子线程结束，<code>JVM</code>把该线程放入<strong>锁等待队列</strong></li>
+<li><code>LockSupport.park()</code>：AQS框架中，阻塞一个线程时调用该方法</li>
+</ul>
+</li>
+<li><code>WAITING</code>线程遇到以下方法时，会回到<code>RUNNABLE</code>状态<ul>
+<li><code>Object.notify()</code>：唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li><code>Object.notifyAll()</code>：唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li>等待<code>join()</code>的线程执行完毕，唤醒<strong>锁等待队列</strong>的线程，出队的线程回到就绪状态</li>
+<li><code>LockSupport.unpark(t)</code>：唤醒指定的线程</li>
+<li>注：在调用<code>notify</code>或者<code>notifyAll</code>方法后，等待线程不会立刻从<strong>等待队列</strong>返回，而是<strong>从等待队列移动到同步队列</strong>，竞争对象监视器</li>
+</ul>
+</li>
+<li><code>RUNNABLE</code>线程遇到以下方法时，会进入<code>BLOCKED</code>状态<ul>
+<li>获取同步锁失败，<code>JVM</code>还会把该线程放入<strong>锁同步队列</strong></li>
+<li>发出<code>I/O</code>请求</li>
+</ul>
+</li>
+<li><code>BLOCKED</code>线程遇到以下情况时，会回到<code>RUNNABLE</code>状态<ul>
+<li>同步锁被释放时，<strong>锁同步队列</strong>会出队所有线程</li>
+<li><code>I/O</code>处理完毕</li>
+</ul>
+</li>
+<li>线程执行结束或者因异常意外终止都会使线程进入<code>TERMINATED</code>状态</li>
+</ul>
+<h2 id="WAITING和BLOCKED状态的区别"><a href="#WAITING和BLOCKED状态的区别" class="headerlink" title="WAITING和BLOCKED状态的区别"></a>WAITING和BLOCKED状态的区别</h2><h1 id="SPRINGBOOT使用三级缓存解决循环依赖"><a href="#SPRINGBOOT使用三级缓存解决循环依赖" class="headerlink" title="SPRINGBOOT使用三级缓存解决循环依赖"></a>SPRINGBOOT使用三级缓存解决循环依赖</h1><ol>
+<li>singletonObjects：缓存某个beanName对应的经过了完整生命周期的bean</li>
+<li>earlySingletonObjects：缓存提前拿原始对象进行了AOP之后得到的代理对象，原始对象还没有进行属性注入和后续的BeanPostProcessor等生命周期</li>
+<li>singletonFactories：缓存的是一个ObjectFactory，主要用来去生成原始对象进行了AOP之后得到的代理对象，在每个Bean的生成过程中，都会提前暴露一个工厂，这个工厂可能用到，也可能用不到，如果没有出现循环依赖依赖本bean，那么这个工厂无用，本bean按照自己的生命周期执行，执行完后直接把本bean放入singletonObjects中即可，如果出现了循环依赖依赖了本bean，则另外那个bean执行ObjectFactory提交得到一个AOP之后的代理对象(如果有AOP的话，如果无需AOP，则直接得到一个原始对象)。</li>
+<li>其实还要一个缓存，就是earlyProxyReferences，它用来记录某个原始对象是否进行过AOP了。</li>
+</ol>
+<h1 id="SpringBoot两种代理方式各自的缺陷"><a href="#SpringBoot两种代理方式各自的缺陷" class="headerlink" title="SpringBoot两种代理方式各自的缺陷"></a>SpringBoot两种代理方式各自的缺陷</h1><h2 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h2><ul>
+<li>不支持代理没有实现接口的类</li>
+</ul>
+<h2 id="CGLIB"><a href="#CGLIB" class="headerlink" title="CGLIB"></a>CGLIB</h2><ul>
+<li>不支持代理被声明为<code>final</code>的类</li>
+</ul>
+<h1 id="MySQL联合索引"><a href="#MySQL联合索引" class="headerlink" title="MySQL联合索引"></a>MySQL联合索引</h1><ul>
+<li>假设当前数据库建立联合索引<code>(name,age,class)</code>，索引页内部<strong>先按照name排序、name相同时再按age排序、age相同时再按class排序</strong>，即<code>name</code>全局有序，<code>age</code>和<code>class</code>局部有序</li>
+<li>联合索引命中<ul>
+<li><code>where name=‘effy’ and age=19 and class=2</code>，那么使用联合索引进行二分查找，先查找到<code>name=‘effy&#39;</code>，再查询<code>age=19</code>，再<code>class=2</code></li>
+<li><code>where age=19 and class = 2 and name=‘effy’</code>, 数据库会自动优化查询条件顺序，因此联合索引同样命中</li>
+</ul>
+</li>
+<li>联合索引部分命中<ul>
+<li><code>where name &gt; &#39;effy&#39; and name &lt; &#39;lyf&#39; </code>，只有<code>name</code>字段使用到联合索引</li>
+<li><code>where name &gt; &#39;effy&#39; and name &lt; &#39;lyf&#39; and age=19</code>，此时只有<code>name</code>字段使用到联合索引，<code>age</code>字段是不会使用的。因为先按照<code>name</code>条件查出来的数据中age不是有序的，比如先按照name条件查出来三条数据<code>(effy,19)</code>，<code>(effy,20)</code>，<code>(lyf,19)</code>,此时age并不有序，因此只能对其进行扫描</li>
+<li><code>where name &gt;= &#39;effy&#39; and age=19</code>，<code>name</code>和<code>age</code>都使用到联合索引，因为<code>name=‘effy&#39;时</code>，命中<code>age=19</code>，此时继续对age进行二分查找，从<code>name = &#39;effy&#39; and age=19</code>的第一条数据往后扫描，而不是从<code>name=effy</code>的第一条数据开始</li>
+<li><code>where name BETWEEN &#39;effy&#39; and &#39;lyf&#39; and age=19</code>，同上</li>
+<li><code>where name LIKE &#39;e%&#39; and age=19</code>，同上上</li>
+</ul>
+</li>
+<li>联合索引失效情况<ul>
+<li><code>where name=&#39;effy&#39; or age=19</code>，由于是<code>or</code>连接，联合索引失效</li>
+<li><code>where age=19 and class=2</code>，因为联合索引首先按照<code>name</code>进行排序，但查询条件中不存在<code>name</code>字段，所以索引失效</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>联合索引的最左匹配原则，在遇到范围查询（如 &gt;、&lt;）的时候，就会停止匹配，范围查询的字段可以用到联合索引，但是范围查询字段后的字段无法用到联合索引。（但对于 &gt;&#x3D;、&lt;&#x3D;、BETWEEN、LIKE前缀匹配的范围查询，并不会停止匹配）</strong></p>
+<h2 id="联合索引和单列索引查找区别"><a href="#联合索引和单列索引查找区别" class="headerlink" title="联合索引和单列索引查找区别"></a>联合索引和单列索引查找区别</h2><ul>
+<li>现有查询条件<code>name=‘effy’ and age=19 and class=2</code><ul>
+<li>分别对name、age和class建立单列索引<ul>
+<li>当有多个索引命中后，优化器选择最高效的索引。比如是<code>name</code>索引，那么先按照<code>name</code>索引查出所有<code>name=‘effy’</code>的主键，再到主键索引进行回表操作，查出所有数据，再对这些数据进行扫描，丢弃不满足<code>age=19</code>或者<code>class=2</code>的数据</li>
+</ul>
+</li>
+<li>对name，age，class建立联合索引<ul>
+<li>直接扫描该联合索引的b+树，首先二分查找找到name&#x3D;’effy‘，然后二分查找找到age&#x3D;19，再二分查找找到class&#x3D;2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么推荐使用自增id而不推荐使用uid或者身份证号等"><a href="#为什么推荐使用自增id而不推荐使用uid或者身份证号等" class="headerlink" title="为什么推荐使用自增id而不推荐使用uid或者身份证号等"></a>为什么推荐使用自增id而不推荐使用uid或者身份证号等</h2><p>B+Tree是自底向上插入的，我们优先会将数据插入到叶子节点中，然后整个树会根据底部的叶子节点进行分裂或者合并</p>
+<ul>
+<li>当我们使用的是自增id，叶子节点链表会根据当前最后一条的位置，将最新的一条数据顺序的插入到最后</li>
+<li>但是当插入一个uid时，mysql根本不知道他该插入到哪个位置，需要从头开始寻找插入的位置。但是当中间需要插入的页满了时，会造成页的分裂和合并，极大地影响了效率</li>
+</ul>
+<h2 id="为什么叶子结点存放的是主键id而不是数据"><a href="#为什么叶子结点存放的是主键id而不是数据" class="headerlink" title="为什么叶子结点存放的是主键id而不是数据"></a>为什么叶子结点存放的是主键id而不是数据</h2><ul>
+<li><strong>节省存储空间</strong>。叶子结点存数据会导致一份数据存了多份，空间占用翻倍。</li>
+<li><strong>维护一致性</strong>。都通过主键索引来找到最终的数据，避免维护多份数据导致不一致的情况</li>
+</ul>
+<h2 id="Hash索引的缺点"><a href="#Hash索引的缺点" class="headerlink" title="Hash索引的缺点"></a>Hash索引的缺点</h2><ol>
+<li><strong>Hash索引仅仅能满足等值查询，不能使用范围查询</strong>。<strong>由于Hash索引存放的是进行Hash运算之后的Hash值</strong> ，经过相应的Hash算法处理之后的Hash值的大小关系，并不能保证和Hash运算前完全一样</li>
+<li><strong>Hash索引不能利用部分索引键查询</strong>。 对于联合索引，Hash索引在计算Hash值的时候是联合索引键合并后再一起计算Hash值，而不是单独计算Hash值，所以通过联合索引的前面一个或几个索引键进行查询的时候，Hash索引也无法被利用</li>
+<li><strong>Hash索引无法被用来避免数据的排序操作</strong>。由于Hash索引中存放的是经过Hash计算之后的Hash值，而Hash值的大小关系并不一定和Hash运算前的键值完全一样，所以数据库无法利用索引的数据来避免任何排序运算</li>
+</ol>
+<h1 id="JDBC分库分页"><a href="#JDBC分库分页" class="headerlink" title="JDBC分库分页"></a>JDBC分库分页</h1><h1 id="使用Redis实现分布式锁"><a href="#使用Redis实现分布式锁" class="headerlink" title="使用Redis实现分布式锁"></a>使用Redis实现分布式锁</h1>
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2023/03/23/zhaoyinInterviewOne/" title="招银网络科技一面">http://liyafei.xyz/2023/03/23/zhaoyinInterviewOne/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/29/shiftOperands/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/Java/">
+                    Java
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/29/shiftOperands/" class="trm-anima-link">
+                    Java中的移位运算
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/29</li>
+                <li>14:11</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/20/questionsAboutProject/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/Java/">
+                    Java
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/20/questionsAboutProject/" class="trm-anima-link">
+                    ERP管理系统问题总结
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/20</li>
+                <li>12:39</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2023</span>
+            <span class="footer-separator">·</span>
+            <span class="trm-accent-color">Effy</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator"> | </span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v1.2.7
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            The blog has been lovely to run <span id="since" class="trm-accent-color"></span> day
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        BirthDay = new Date("12/19/2022 17:00:00");
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        msPerDay = 24 * 60 * 60 * 1000
+        day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  <div id="trm-back-top" class="trm-back-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+  
+<div class="trm-search-popup">
+    <div class="trm-search-header">
+        <span class="trm-search-popup-btn-close">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <div class="form trm-search-form">
+        <input class="trm-search-input" type="text" placeholder="Searching...">
+    </div>
+    <div class="trm-search-result-container">
+
+    </div>
+</div>
+
+  <!-- Plugin -->
+
+
+
+    
+    
+
+    
+<script src="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=1.2.7"></script>
+    
+
+    
+        
+<script src="//cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=1.2.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+
+    <!-- 评论插件 -->
+    
+        
+        
+    
+
+
+
+<!-- 评论插件 -->
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=1.2.7"></script>
+
+</body>
+
+</html>

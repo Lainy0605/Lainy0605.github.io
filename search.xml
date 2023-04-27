@@ -2573,15 +2573,15 @@
 ]]></content>
   </entry>
   <entry>
-    <title>快速排序</title>
+    <title>排序算法之一————快速排序</title>
     <url>/2023/04/27/sort/Quicksort/</url>
     <content><![CDATA[<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>采用分治的思想，步骤可以概括为：</p>
 <ol>
-<li>选取基准值pivot</li>
-<li>将小于pivot的数放在左边，大于pivot的数放在右边</li>
+<li>选取基准值pivot(一般默认选开始的位置)</li>
+<li>将小于pivot的数放在左边，大于pivot的数放在右边(挖坑填补法)</li>
 <li>对pivot左边和右边的序列分别递归执行步骤1、2</li>
 </ol>
-<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Quicksort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line">        quicksort(array,<span class="number">0</span>,array.length-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span>[] array,<span class="type">int</span> start, <span class="type">int</span> end)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> start;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> end;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pivot</span> <span class="operator">=</span> array[start];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(left &lt; right)&#123;</span><br><span class="line">            <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">                <span class="keyword">while</span>(right &gt; left &amp;&amp; array[right] &gt;= pivot) &#123;</span><br><span class="line">                    right--;</span><br><span class="line">                &#125;</span><br><span class="line">                array[left] = array[right];</span><br><span class="line"></span><br><span class="line">                <span class="keyword">while</span>(left &lt; right &amp;&amp; array[left] &lt;= pivot) &#123;</span><br><span class="line">                    left++;</span><br><span class="line">                &#125;</span><br><span class="line">                array[right] = array[left];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            array[right] = pivot;</span><br><span class="line"></span><br><span class="line">            quicksort(array, start,left - <span class="number">1</span>);</span><br><span class="line">            quicksort(array, right + <span class="number">1</span>, end);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Quicksort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line">        quicksort(array,<span class="number">0</span>,array.length-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">quicksort</span><span class="params">(<span class="type">int</span>[] array,<span class="type">int</span> start, <span class="type">int</span> end)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> start;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> end;</span><br><span class="line">        <span class="type">int</span> <span class="variable">pivot</span> <span class="operator">=</span> array[start];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(left &lt; right)&#123;</span><br><span class="line">            <span class="keyword">while</span>(left &lt; right)&#123;</span><br><span class="line">                <span class="comment">//从右边找小于pivot的数</span></span><br><span class="line">                <span class="keyword">while</span>(right &gt; left &amp;&amp; array[right] &gt;= pivot) &#123;</span><br><span class="line">                    right--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//找到交换，right位置的数填到left，right挖坑</span></span><br><span class="line">                array[left] = array[right];</span><br><span class="line"></span><br><span class="line">                <span class="comment">//从左边找大于pivot的数</span></span><br><span class="line">                <span class="keyword">while</span>(left &lt; right &amp;&amp; array[left] &lt;= pivot) &#123;</span><br><span class="line">                    left++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//找到交换，left位置的数填到right，left挖坑</span></span><br><span class="line">                array[right] = array[left];</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//此时left = right，最后一个坑填pivot</span></span><br><span class="line">            array[right] = pivot;</span><br><span class="line"></span><br><span class="line">            quicksort(array, start,left - <span class="number">1</span>);</span><br><span class="line">            quicksort(array, right + <span class="number">1</span>, end);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>初始main第4行调用quicksort(array, 0, 9);<ul>
@@ -2615,10 +2615,9 @@
 <li>最差情况O(n<sup>2</sup>)：当每次选择的基准值都是待排序列的最值时，相当于直接插入排序，总共需要递归O(n)次，每层花费时间O(n)，即O(n<sup>2</sup>);</li>
 <li>平均情况O(nlogn)</li>
 </ul>
-<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>每次会使用额外的一个空间用于保存pivot的值，总共会递归调用2 * logn次，因此空间复杂度为1 * 2 * logn，即O(logn)；</p>
-<p>概括来讲快排的每层都只使用了常数空间，因此空间复杂度等于递归调用的深度即O(logn);</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>概括来讲快排的每层都只使用了常数空间(一个空间用于保存pivot的值），因此空间复杂度等于递归调用的深度即最好为O(logn)，最差为O(n);</p>
 <h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><ul>
-<li>不稳定：待排序列为[6,1,3,7,<strong>3**](注意原来不加粗3在加粗3的左边)，经过一次排序后(以6为pivot)，序列变成[<strong>3</strong>,1,3,6,7]，最终排序结果为[1,<strong>3</strong>,3,6,7]，可以发现不加粗3到了加粗3的右边，相等元素之间相对位置发生了变化，因此快排是</strong>不稳定的**</li>
+<li>不稳定：待排序列为[6,1,3,7,<strong>3</strong>](注意原来不加粗3在加粗3的左边)，经过一次排序后(以6为pivot)，序列变成[<strong>3</strong>,1,3,6,7]，最终排序结果为[1,<strong>3</strong>,3,6,7]，可以发现不加粗3到了加粗3的右边，相等元素之间相对位置发生了变化，因此快排是<strong>不稳定的</strong></li>
 </ul>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
 <thead>
@@ -2632,7 +2631,7 @@
 <tbody><tr>
 <td>快速排序</td>
 <td>最好为O(nlogn)，最差为O(n<sup>2</sup>)，平均为O(nlogn)</td>
-<td>O(logn)</td>
+<td>最好为O(logn)，最差为O(n)</td>
 <td>不稳定</td>
 </tr>
 </tbody></table>
@@ -2642,6 +2641,45 @@
       </categories>
       <tags>
         <tag>排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>排序算法之二————归并排序</title>
+    <url>/2023/04/27/sort/Mergesort/</url>
+    <content><![CDATA[<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>采用分治的思想，步骤可以概括为：</p>
+<ol>
+<li>先将待排序列分成左右两块</li>
+<li>递归对左右两块排序</li>
+<li>将左右两块合并</li>
+</ol>
+<p><img src="/./mergesort.png" loading="lazy"></p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Mergesort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line">        sort(array);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            System.out.println(array[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="comment">//temp用于保存临时合并结果</span></span><br><span class="line">        <span class="type">int</span>[] temp = <span class="keyword">new</span> <span class="title class_">int</span>[array.length];</span><br><span class="line">        sort(array,<span class="number">0</span>,array.length-<span class="number">1</span>,temp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sort</span><span class="params">(<span class="type">int</span>[] array,<span class="type">int</span> start,<span class="type">int</span> end,<span class="type">int</span>[] temp)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(start &lt; end)&#123;</span><br><span class="line">          	<span class="comment">//先分</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> (end - start) / <span class="number">2</span> + start;</span><br><span class="line">            <span class="comment">//递归排序</span></span><br><span class="line">            sort(array,start,mid,temp);</span><br><span class="line">            sort(array,mid + <span class="number">1</span>,end,temp);</span><br><span class="line">            <span class="comment">//再合</span></span><br><span class="line">            merge(array,start,end,temp);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">merge</span><span class="params">(<span class="type">int</span>[] array,<span class="type">int</span> start,<span class="type">int</span> end,<span class="type">int</span>[] temp)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> (end - start) / <span class="number">2</span> + start;</span><br><span class="line">        <span class="comment">//左半边指针</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> start;</span><br><span class="line">        <span class="comment">//右半边指针</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> mid + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//temp指针</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">t</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt;= mid &amp;&amp; j &lt;= end)&#123;</span><br><span class="line">            <span class="keyword">if</span>(array[i] &lt;= array[j])&#123;</span><br><span class="line">                temp[t++] = array[i++];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                temp[t++] = array[j++];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//把左半边剩余的放到temp中</span></span><br><span class="line">        <span class="keyword">while</span>(i &lt;= mid)&#123;</span><br><span class="line">            temp[t++] = array[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//把右半边剩余的放到temp中</span></span><br><span class="line">        <span class="keyword">while</span>(j &lt;= end)&#123;</span><br><span class="line">            temp[t++] = array[j++];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        t = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//将temp移到原数组</span></span><br><span class="line">        <span class="keyword">while</span>(start &lt;= end)&#123;</span><br><span class="line">            array[start++] = temp[t++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h1><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>无论好坏的情况下合并的时间复杂度都为O(n)（因为对两个待排序列都需要遍历一遍），递归调用深度为O(logn)，因此总的时间复杂度为O(nlogn);</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>空间开销主要有两部分，一部分是辅助存储数组n，一部分是递归栈logn，因此总的空间复杂度为O(n + logn)，即O(n)</p>
+<h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><p>归并排序具有稳定性，第33行比较条件为array[i] &lt;&#x3D; array[j]保证了相同元素的相对位置不会发生变化，比如待排序列为[3,2,**2**,1](此时加粗2在不加粗2的右边);归并一层：[3,2,**2**,1]-&gt;[3,2],[<strong>2</strong>,1]-&gt;[2,3],[1,<strong>2</strong>]-&gt;[1,2,<strong>2</strong>,3], 可以发现两个2的相对位置没有发生变化</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>归并排序</td>
+<td>总为O(nlogn)</td>
+<td>O(n)</td>
+<td>稳定</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
       </tags>
   </entry>
 </search>

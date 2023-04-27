@@ -2573,7 +2573,7 @@
 ]]></content>
   </entry>
   <entry>
-    <title>排序算法之一————快速排序</title>
+    <title>排序算法之一———快速排序</title>
     <url>/2023/04/27/sort/Quicksort/</url>
     <content><![CDATA[<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>采用分治的思想，步骤可以概括为：</p>
 <ol>
@@ -2644,7 +2644,7 @@
       </tags>
   </entry>
   <entry>
-    <title>排序算法之二————归并排序</title>
+    <title>排序算法之二———归并排序</title>
     <url>/2023/04/27/sort/Mergesort/</url>
     <content><![CDATA[<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>采用分治的思想，步骤可以概括为：</p>
 <ol>

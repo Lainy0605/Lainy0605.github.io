@@ -7,21 +7,21 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="算法思想代码实现复杂度时间复杂度空间复杂度稳定性总结">
+<meta name="description" content="算法思想希尔排序是第一批突破O(n2)的排序算法之一，它是针对直接插入排序的改进，属于插入排序。从插入排序的特点中可以看出如果待排序列元素较少或者待排序列有序度较高，那么排序的速度会较快，因此希尔排序的思想是将待排序列按照增量(gap&#x3D;array.length&#x2F;2)分组进行组内直接插入排序（每组元素减少），然后不断缩小这个增量(gap&#x2F;&#x3D;2)继续组内直接插入">
 <meta property="og:type" content="article">
-<meta property="og:title" content="排序算法之三——希尔排序">
+<meta property="og:title" content="排序算法之三————希尔排序">
 <meta property="og:url" content="http://liyafei.xyz/2023/04/27/sort/Shellsort/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="算法思想代码实现复杂度时间复杂度空间复杂度稳定性总结">
+<meta property="og:description" content="算法思想希尔排序是第一批突破O(n2)的排序算法之一，它是针对直接插入排序的改进，属于插入排序。从插入排序的特点中可以看出如果待排序列元素较少或者待排序列有序度较高，那么排序的速度会较快，因此希尔排序的思想是将待排序列按照增量(gap&#x3D;array.length&#x2F;2)分组进行组内直接插入排序（每组元素减少），然后不断缩小这个增量(gap&#x2F;&#x3D;2)继续组内直接插入">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-04-27T09:55:27.000Z">
-<meta property="article:modified_time" content="2023-04-27T09:57:21.509Z">
+<meta property="article:modified_time" content="2023-05-10T02:43:20.798Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="排序算法">
 <meta name="twitter:card" content="summary">
 
 
-<title >排序算法之三——希尔排序</title>
+<title >排序算法之三————希尔排序</title>
 
 <!-- Favicon -->
 
@@ -253,7 +253,7 @@
                             NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            排序算法之三——希尔排序
+                            排序算法之三————希尔排序
                         </h1>
 
                         
@@ -430,7 +430,40 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><h1 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h1><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1>
+    <h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>希尔排序是第一批突破O(n<sup>2</sup>)的排序算法之一，它是针对直接插入排序的改进，属于插入排序。从插入排序的特点中可以看出如果待排序列元素较少或者待排序列有序度较高，那么排序的速度会较快，因此希尔排序的思想是将待排序列按照增量(gap&#x3D;array.length&#x2F;2)分组进行组内直接插入排序（每组元素减少），然后不断缩小这个增量(gap&#x2F;&#x3D;2)继续组内直接插入排序（每组元素增加但待排序列的有序度变高），当gap为1排序后待排序列变为有序，因此希尔排序又称缩小增量排序。</p>
+<p>举一个最简单的例子，待排序列为4，3，2，1：</p>
+<ol>
+<li>初始gap为array.length&#x2F;2为2，即4，2为一组，3，1为一组</li>
+<li>组内进行直接插入排序，可以交换或者移动，排序后的序列为2，1，4，3</li>
+<li>gap&#x2F;&#x3D;2后gap为1，整个序列都为一组，-&gt;1, 2, 4, 3 -&gt; 1, 2, 4, 3 -&gt; 1, 2, 3, 4</li>
+<li>gap&#x2F;&#x3D;2后gap为0，排序结束</li>
+</ol>
+<p>分析可以看出元素1回到头处比较和移动都为两次，而直接插入排序比较和移动都需要三次，究其原因是直接插入排序的增量都为1，而希尔排序的增量是跳跃式的，相应地也减少了比较和移动的次数</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Shellsort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line"></span><br><span class="line">        shellsort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j : array) &#123;</span><br><span class="line">            System.out.println(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">shellsort</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="comment">//gap从array.length/2开始，gap/=2</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">gap</span> <span class="operator">=</span> array.length/<span class="number">2</span>; gap&gt;<span class="number">0</span>; gap/=<span class="number">2</span>)&#123;</span><br><span class="line">          	<span class="comment">//从索引为gap的元素开始遍历</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i=gap; i&lt;array.length; i++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i;</span><br><span class="line">                <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> array[j];</span><br><span class="line">              	<span class="comment">//同组所有比temp大的元素向右移动</span></span><br><span class="line">              	<span class="comment">//比如5, 2, 4, 3, 6, 1;此时i为5，j也为5，temp为1，gap为2</span></span><br><span class="line">                <span class="comment">//-&gt;5, 2, 4, 3, 6, 3; j为3</span></span><br><span class="line">                <span class="comment">//-&gt;5, 2, 4, 2, 6, 3; j为1</span></span><br><span class="line">                <span class="keyword">while</span>(j - gap &gt;= <span class="number">0</span> &amp;&amp; temp &lt; array[j-gap]) &#123;</span><br><span class="line">                    array[j] = array[j - gap];</span><br><span class="line">                    j -= gap;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//留下的空位放temp</span></span><br><span class="line">                <span class="comment">//-&gt;5, 1, 4, 2, 6, 3; array[j] = temp -&gt; array[1] = 1;</span></span><br><span class="line">                array[j] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h1><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>希尔排序的时间复杂度根据步长序列的不同而不同，总的来说希尔排序的时间复杂度小于O(n<sup>2</sup>)，但没有快速排序(平均为O(nlogn))快；</p>
+<p>最好的步长序列为从第0项开始，偶数来自9×4$^i$−9×2$^{i}$+1和奇数来自2$^{i+2}$×(2$^{i+2}$−3)+1这两个算式，此时最好的最差时间复杂度为O(nlog<sup>2</sup>n);</p>
+<p>通常使用的$\frac{n}{2^i}$，最差时间复杂度为O(n<sup>2</sup>);</p>
+<p>最好时间复杂度为O(n)</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>O(1)，额外一个空间用于存放temp值</p>
+<h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><p>当待排序列为2，2*，1，4，gap为2时，排序后为1，2*，2，4，两个2的相对顺序改变，因此希尔排序不稳定</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>希尔排序</td>
+<td>最好为O(n)，最差和平均根据步长序列不同而不同，最好的最坏复杂度为O(nlog<sup>2</sup>n)</td>
+<td>O(1)</td>
+<td>稳定</td>
+</tr>
+</tbody></table>
+
 </article>
     
     
@@ -442,7 +475,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/04/27/sort/Shellsort/" title="排序算法之三——希尔排序">http://liyafei.xyz/2023/04/27/sort/Shellsort/</a>
+        <a href="http://liyafei.xyz/2023/04/27/sort/Shellsort/" title="排序算法之三————希尔排序">http://liyafei.xyz/2023/04/27/sort/Shellsort/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>

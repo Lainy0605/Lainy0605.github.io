@@ -2733,8 +2733,43 @@
       </tags>
   </entry>
   <entry>
+    <title>插入排序之二分插入排序</title>
+    <url>/2023/05/10/sort/BinaryInsertsort/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>插入排序的基本方法是：每步将一个待排序的元素，插入到前面已经排好序的一组元素的适当位置上去，直到元素全部插入为止。</p>
+<p>插入排序主要有直接插入排序、二分插入排序、希尔排序，本章主要介绍二分插入排序。</p>
+<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>在直接插入排序的基础上改进，将顺序比较改进为二分比较，如序列为1，4，7，2，8，此时遍历至i&#x3D;3，即待排元素为2，直接插入是从已排序列向前逐一比较，2和7比较，2和7交换；2和4比较，2和4交换；二分插入是和已排序列的中间元素元素比较，2和4比较，2和1比较，最终2应该放在索引为1的位置，即元素4所在位置，然后将元素4，7向右移动一位，将2插入索引为1的位置</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BinaryInsertsort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line"></span><br><span class="line">        binaryInsertsort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j : array) &#123;</span><br><span class="line">            System.out.println(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">binaryInsertsort</span><span class="params">(<span class="type">int</span>[] array)</span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> array[i];</span><br><span class="line">            <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> i-<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">mid</span> <span class="operator">=</span> (right - left) / <span class="number">2</span> + left;</span><br><span class="line">                <span class="keyword">if</span>(array[mid] == temp)&#123;</span><br><span class="line">                    left = mid + <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span>(array[mid] &lt; temp)&#123;</span><br><span class="line">                    left = mid + <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span>(array[mid] &gt; temp)&#123;</span><br><span class="line">                    right = mid - <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> i;k&gt;left;k--)&#123;</span><br><span class="line">                array[k] = array[k-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            array[left] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h1><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>二分插入排序的比较次数少于直接插入排序，但移动次数和直接插入排序相同，平均为O(n<sup>2</sup>)</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>O(1)，使用了一个额外空间存放temp值</p>
+<h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><p>根据<code>array[mid] == temp</code>执行<code>left = mid + 1</code>可以看出插入位置为相等元素的右边，因此稳定</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二分插入排序</td>
+<td>平均为O(n<sup>2</sup>)，优于直接插入排序</td>
+<td>O(1)</td>
+<td>稳定</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>插入排序之直接插入排序</title>
-    <url>/2023/05/10/sort/Insertsort/</url>
+    <url>/2023/05/10/sort/DirectInsertsort/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>插入排序的基本方法是：每步将一个待排序的元素，插入到前面已经排好序的一组元素的适当位置上去，直到元素全部插入为止。</p>
 <p>插入排序主要有直接插入排序、二分插入排序、希尔排序，本章主要介绍直接插入排序。</p>
 <h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>将带排序元素插入到有序序列的对应位置</p>

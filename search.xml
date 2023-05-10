@@ -2686,10 +2686,12 @@
       </tags>
   </entry>
   <entry>
-    <title>排序算法之三———希尔排序</title>
+    <title>插入排序之希尔排序</title>
     <url>/2023/04/27/sort/Shellsort/</url>
-    <content><![CDATA[<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>希尔排序是第一批突破O(n<sup>2</sup>)的排序算法之一，它是针对直接插入排序的改进，属于插入排序。</p>
-<p>从插入排序的特点中可以看出如果<strong>待排序列元素较少</strong>或者<strong>待排序列有序度较高</strong>，那么排序的速度会较快，因此希尔排序的思想是将待排序列按照增量分组（每组元素减少），组内直接插入排序，然后不断缩小这个增量继续排序（每组元素增加但待排序列的有序度变高），当gap为1排序后序列有序，因此希尔排序又称缩小增量排序</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>插入排序的基本方法是：每步将一个待排序的元素，插入到前面已经排好序的一组元素的适当位置上去，直到元素全部插入为止。</p>
+<p>插入排序主要有直接插入排序、二分插入排序、希尔排序，本章主要介绍希尔排序。</p>
+<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>希尔排序是第一批突破O(n<sup>2</sup>)的排序算法之一，它是针对直接插入排序的改进，属于插入排序。</p>
+<p>从插入排序的特点中可以看出如果<strong>待排序列元素较少</strong>或者<strong>待排序列有序度较高</strong>，那么排序的速度会较快，因此希尔排序的思想是将待排序列按照增量分组（每组元素减少），组内直接插入排序，然后不断缩小这个增量继续排序（每组元素增加但待排序列的有序度变高），当gap为1排序后序列有序，因此希尔排序又称缩小增量排序。</p>
 <p>举一个最简单的例子，待排序列为4，3，2，1：</p>
 <ol>
 <li>初始gap为array.length&#x2F;2为2，即4，2为一组，3，1为一组</li>
@@ -2718,6 +2720,41 @@
 <tbody><tr>
 <td>希尔排序</td>
 <td>最好为O(n)，最差和平均根据步长序列不同而不同，最好的最坏复杂度为O(nlog<sup>2</sup>n)</td>
+<td>O(1)</td>
+<td>稳定</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>插入排序之直接插入排序</title>
+    <url>/2023/05/10/sort/Insertsort/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>插入排序的基本方法是：每步将一个待排序的元素，插入到前面已经排好序的一组元素的适当位置上去，直到元素全部插入为止。</p>
+<p>插入排序主要有直接插入排序、二分插入排序、希尔排序，本章主要介绍直接插入排序。</p>
+<h1 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h1><p>将带排序元素插入到有序序列的对应位置</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Insertsort</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">5</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">7</span>,<span class="number">9</span>,<span class="number">3</span>&#125;;</span><br><span class="line"></span><br><span class="line">        insertsort(array);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j : array) &#123;</span><br><span class="line">            System.out.println(j);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">insertsort</span><span class="params">(<span class="type">int</span>[] array)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;array.length;i++)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i;</span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> array[j];</span><br><span class="line">            <span class="keyword">while</span>(j-<span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; temp &lt; array[j-<span class="number">1</span>])&#123;</span><br><span class="line">                array[j] = array[j-<span class="number">1</span>];</span><br><span class="line">                j--;</span><br><span class="line">            &#125;</span><br><span class="line">            array[j] = temp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h1><h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>最好O(n)，最差O(n<sup>2</sup>)，平均O(n<sup>2</sup>)</p>
+<h2 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h2><p>O(1)</p>
+<h1 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h1><p>相同大小元素之间的相对位置并不会改变，稳定</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>时间复杂度</th>
+<th>空间复杂度</th>
+<th>稳定性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>直接插入排序</td>
+<td>最好O(n)，最差O(n<sup>2</sup>)，平均O(n<sup>2</sup>)</td>
 <td>O(1)</td>
 <td>稳定</td>
 </tr>

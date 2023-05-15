@@ -2806,6 +2806,8 @@
     <title>How to compile JDK in M1 MacBook——在M1上编译JDK</title>
     <url>/2023/05/15/InsideTheJVM/insideTheJVMOne/</url>
     <content><![CDATA[<h1 id="Introdution"><a href="#Introdution" class="headerlink" title="Introdution"></a>Introdution</h1><p>最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间</p>
+<span id="more"></span>
+
 <h1 id="System-Environment"><a href="#System-Environment" class="headerlink" title="System Environment"></a>System Environment</h1><table>
 <thead>
 <tr>
@@ -2843,18 +2845,13 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openjdk</span><br><span class="line">├── ADDITIONAL_LICENSE_INFO</span><br><span class="line">├── ASSEMBLY_EXCEPTION</span><br><span class="line">├── CONTRIBUTING.md</span><br><span class="line">├── LICENSE</span><br><span class="line">├── Makefile</span><br><span class="line">├── README.md</span><br><span class="line">├── bin</span><br><span class="line">├── build</span><br><span class="line">├── configure</span><br><span class="line">├── doc</span><br><span class="line">├── make</span><br><span class="line">├── src</span><br><span class="line">└── <span class="built_in">test</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h1 id="bash-configure"><a href="#bash-configure" class="headerlink" title="bash configure"></a>bash configure</h1><ol>
-<li>Execute <code>bash configure</code> in the root directory of the jdk you just get, you will get the error message like this If all goes well:</li>
-</ol>
-<p>   The reason is clearly clarifed in this <a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">question</a>:</p>
-<blockquote>
-<p>Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</p>
-</blockquote>
-<p>   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction <code>brew install cask adoptopenjdk16</code></p>
-<ol start="2">
-<li><p>Rerun <code>bash configure</code>, then you will get a new error like this:</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">X <span class="string">&#x27;sprintf&#x27;</span> is deprecated: This <span class="keyword">function</span> is provided <span class="keyword">for</span> compatibility reasons only. Due to security concerns inherent <span class="keyword">in</span> the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</span><br></pre></td></tr></table></figure>
+<li><p>Execute <code>bash configure</code> in the root directory of the jdk you just get, you will get the error message like this If all goes well</p>
+</li>
+<li><pre><code class="bash">configure: The tested number of bits in the target (64) differs from the number of bits expected to be found in the target (32) configure: error: Cannot continue.
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">   The reason is clearly clarifed in this [question](https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook):</span><br><span class="line"></span><br><span class="line">   &gt; Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</span><br><span class="line"></span><br><span class="line">   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction `brew install cask adoptopenjdk16`</span><br><span class="line"></span><br><span class="line">3. Rerun `bash configure`, then you will get a new error like this:</span><br><span class="line"></span><br><span class="line">   ```bash</span><br><span class="line">   X &#x27;sprintf&#x27; is deprecated: This function is provided for compatibility reasons only. Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</span><br></pre></td></tr></table></figure>
 
-<p>As you can see from the message, sprintf is considered insecurity, but we can miss it by adding a parameter <code>--disable warnings as errors</code>, so rerun <code>bash configure --disable warnings as errors</code></p>
+As you can see from the message, sprintf is considered insecurity, but we can miss it by adding a parameter `--disable warnings as errors`, so rerun `bash configure --disable warnings as errors`
+</code></pre>
 </li>
 <li><p>If you are fortunate enough, you will see success message:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Configuration summary:</span><br><span class="line"></span><br><span class="line">* Name:           macosx-aarch64-server-release</span><br><span class="line">* Debug level:    release</span><br><span class="line">* HS debug level: product</span><br><span class="line">* JVM variants:   server</span><br><span class="line">* JVM features:   server: <span class="string">&#x27;cds compiler1 compiler2 dtrace epsilongc g1gc jfr jni-check jvmci jvmti management nmt parallelgc serialgc services shenandoahgc vm-structs zgc&#x27;</span></span><br><span class="line">* OpenJDK target: OS: macosx, CPU architecture: aarch64, address length: 64</span><br><span class="line">* Version string: 17-internal+0-adhoc.effy.openjdkbackup (17-internal)</span><br><span class="line"></span><br><span class="line">Tools summary:</span><br><span class="line"></span><br><span class="line">* Boot JDK:       openjdk version <span class="string">&quot;16.0.2&quot;</span> 2021-07-20 OpenJDK Runtime Environment Zulu16.32+15-CA (build 16.0.2+7) OpenJDK 64-Bit Server VM Zulu16.32+15-CA (build 16.0.2+7, mixed mode) (at /Users/effy/Library/Java/JavaVirtualMachines/azul-16.0.2/Contents/Home)</span><br><span class="line">* Toolchain:      clang (clang/LLVM from Xcode 14.3)</span><br><span class="line">* C Compiler:     Version 14.0.3 (at /usr/bin/clang)</span><br><span class="line">* C++ Compiler:   Version 14.0.3 (at /usr/bin/clang++)</span><br><span class="line"></span><br><span class="line">Build performance summary:</span><br><span class="line"></span><br><span class="line">* Cores to use:   8</span><br><span class="line">* Memory <span class="built_in">limit</span>:   16384 MB</span><br></pre></td></tr></table></figure></li>

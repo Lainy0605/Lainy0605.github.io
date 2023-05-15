@@ -2803,7 +2803,7 @@
       </tags>
   </entry>
   <entry>
-    <title>How to compile JDK in M1 MacBook——在M1上编译JDk</title>
+    <title>How to compile JDK in M1 MacBook——在M1上编译JDK</title>
     <url>/2023/05/15/%20InsideTheJVM/insideTheJVMOne/</url>
     <content><![CDATA[<h1 id="Introdution"><a href="#Introdution" class="headerlink" title="Introdution"></a>Introdution</h1><p>最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间</p>
 <h1 id="System-Environment"><a href="#System-Environment" class="headerlink" title="System Environment"></a>System Environment</h1><table>
@@ -2830,8 +2830,8 @@
 <td>If you have installed homebrew before, then homebrew will automatically install it for you, and if not, please refer to <a href="https://mac.install.guide/commandlinetools/index.html">this article</a>.</td>
 </tr>
 <tr>
-<td>homebrew</td>
-<td></td>
+<td>Homebrew</td>
+<td><img src='https://img.shields.io/badge/Version-3.6.8-green'  loading="lazy"/></td>
 </tr>
 </tbody></table>
 <h1 id="Get-JDK-source-Code"><a href="#Get-JDK-source-Code" class="headerlink" title="Get JDK source Code"></a>Get JDK source Code</h1><ol>
@@ -2901,6 +2901,9 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">  <span class="comment"># Fix linker warning.</span></span><br><span class="line">  <span class="comment"># Code taken from make/autoconf/flags-cflags.m4 and adapted.</span></span><br><span class="line">-  JVM_BASIC_ASFLAGS+=<span class="string">&quot;-DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span></span><br><span class="line"><span class="string">+  JVM_BASIC_ASFLAGS+=&quot;</span> -DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span><br><span class="line">      -mmacosx-version-min=<span class="variable">$MACOSX_VERSION_MIN</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">  if test -n &quot;</span><span class="variable">$MACOSX_VERSION_MAX</span><span class="string">&quot;; then</span></span><br><span class="line"><span class="string">-      JVM_BASIC_ASFLAGS+=&quot;</span><span class="variable">$OS_CFLAGS</span> \</span><br><span class="line">+      JVM_BASIC_ASFLAGS+=<span class="string">&quot; <span class="variable">$OS_CFLAGS</span> \</span></span><br><span class="line"><span class="string">          -DMAC_OS_X_VERSION_MAX_ALLOWED=<span class="variable">$MACOSX_VERSION_MAX_NODOTS</span>&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>]]></content>
+      <categories>
+        <category>Books</category>
+      </categories>
       <tags>
         <tag>深入理解Java虚拟机</tag>
       </tags>

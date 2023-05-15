@@ -7,24 +7,26 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 System Environment   Platform     OS        Xcode    Xcode Comand Line Tools If you have’s install">
+<meta name="description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间 System Environment   Workspace Specs     OS    Chip    Xcode    Xcode Comand Line Tools I">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深入理解Java虚拟机（一）">
+<meta property="og:title" content="How to compile JDK in M1 MacBook——在M1上编译JDk">
 <meta property="og:url" content="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 System Environment   Platform     OS        Xcode    Xcode Comand Line Tools If you have’s install">
+<meta property="og:description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间 System Environment   Workspace Specs     OS    Chip    Xcode    Xcode Comand Line Tools I">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey">
-<meta property="og:image" content="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange">
+<meta property="og:image" content="https://img.shields.io/badge/Apple-MacBook%20Pro%2014%202021-lightgrey?&logo=apple&logoColor=white">
+<meta property="og:image" content="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange?&logo=apple&logoColor=white">
+<meta property="og:image" content="https://img.shields.io/badge/Aarch__64-M1%20Pro-9cf">
 <meta property="og:image" content="https://img.shields.io/badge/Xcode-14.3-blue?logo=xcode">
 <meta property="article:published_time" content="2023-05-15T12:17:21.000Z">
-<meta property="article:modified_time" content="2023-05-15T14:13:35.271Z">
+<meta property="article:modified_time" content="2023-05-15T16:01:27.499Z">
 <meta property="article:author" content="Effy">
+<meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey">
+<meta name="twitter:image" content="https://img.shields.io/badge/Apple-MacBook%20Pro%2014%202021-lightgrey?&logo=apple&logoColor=white">
 
 
-<title >深入理解Java虚拟机（一）</title>
+<title >How to compile JDK in M1 MacBook——在M1上编译JDk</title>
 
 <!-- Favicon -->
 
@@ -256,7 +258,7 @@
                             NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            深入理解Java虚拟机（一）
+                            How to compile JDK in M1 MacBook——在M1上编译JDk
                         </h1>
 
                         
@@ -397,7 +399,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#前言"  data-scroll-to="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Introdution"  data-scroll-to="#Introdution"><span class="toc-number">1.</span> <span class="toc-text">Introdution</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Get-JDK-source-Code"  data-scroll-to="#Get-JDK-source-Code"><span class="toc-number">3.</span> <span class="toc-text">Get JDK source Code</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#bash-configure"  data-scroll-to="#bash-configure"><span class="toc-number">4.</span> <span class="toc-text">bash configure</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#make-images"  data-scroll-to="#make-images"><span class="toc-number">5.</span> <span class="toc-text">make images</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Reference"  data-scroll-to="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -433,21 +435,21 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴</p>
+    <h1 id="Introdution"><a href="#Introdution" class="headerlink" title="Introdution"></a>Introdution</h1><p>最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间</p>
 <h1 id="System-Environment"><a href="#System-Environment" class="headerlink" title="System Environment"></a>System Environment</h1><table>
 <thead>
 <tr>
-<th>Platform</th>
-<th><img src="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey"  loading="lazy"/></th>
+<th>Workspace Specs</th>
+<th><img src="https://img.shields.io/badge/Apple-MacBook%20Pro%2014%202021-lightgrey?&logo=apple&logoColor=white"  loading="lazy"/></th>
 </tr>
 </thead>
 <tbody><tr>
 <td>OS</td>
-<td><img src='https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange' loading="lazy"/></td>
+<td><img src='https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange?&logo=apple&logoColor=white' loading="lazy"/></td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>Chip</td>
+<td><img src='https://img.shields.io/badge/Aarch__64-M1%20Pro-9cf'  loading="lazy"/></td>
 </tr>
 <tr>
 <td>Xcode</td>
@@ -455,10 +457,80 @@
 </tr>
 <tr>
 <td>Xcode Comand Line Tools</td>
-<td>If you have’s install it yet, please refer to <a target="_blank" rel="noopener" href="https://mac.install.guide/commandlinetools/index.html">this article</a>.</td>
+<td>If you have installed homebrew before, then homebrew will automatically install it for you, and if not, please refer to <a target="_blank" rel="noopener" href="https://mac.install.guide/commandlinetools/index.html">this article</a>.</td>
+</tr>
+<tr>
+<td>homebrew</td>
+<td></td>
 </tr>
 </tbody></table>
-
+<h1 id="Get-JDK-source-Code"><a href="#Get-JDK-source-Code" class="headerlink" title="Get JDK source Code"></a>Get JDK source Code</h1><ol>
+<li><p>First, we need to download the source code of openJDK12 from <a target="_blank" rel="noopener" href="https://hg.openjdk.java.net/jdk/jdk12/">the openJDK’s official website</a></p>
+</li>
+<li><p>If the JDK’s version that we want to compile is N , then we need to prepare another JDK whose version has to be N-1 at least. That’s because part of JDK is written by Java, so we need another available JDK in compile time when we compile it,  and such another JDK is officially called ‘<strong>Bootstrap JDK</strong>‘.  So we need to install openJDK 11 with instruction <code>brew install cask adoptopenjdk11</code> had we install homebrew before.</p>
+</li>
+<li><p>The directory structure is as follows:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">openjdk</span><br><span class="line">├── ADDITIONAL_LICENSE_INFO</span><br><span class="line">├── ASSEMBLY_EXCEPTION</span><br><span class="line">├── CONTRIBUTING.md</span><br><span class="line">├── LICENSE</span><br><span class="line">├── Makefile</span><br><span class="line">├── README.md</span><br><span class="line">├── bin</span><br><span class="line">├── build</span><br><span class="line">├── configure</span><br><span class="line">├── doc</span><br><span class="line">├── make</span><br><span class="line">├── src</span><br><span class="line">└── <span class="built_in">test</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="bash-configure"><a href="#bash-configure" class="headerlink" title="bash configure"></a>bash configure</h1><ol>
+<li>Execute <code>bash configure</code> in the root directory of the jdk you just get, you will get the error message like this If all goes well:</li>
+</ol>
+<blockquote>
+<p>configure: The tested number of bits in the target (64) differs from the number of bits expected to be found in the target (32) configure: error: Cannot continue.</p>
+</blockquote>
+<p>   The reason is clearly clarifed in this <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">question</a>:</p>
+<blockquote>
+<p>Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</p>
+</blockquote>
+<p>   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction <code>brew install cask adoptopenjdk16</code></p>
+<ol start="2">
+<li><p>Rerun <code>bash configure</code>, then you will a new error like this:</p>
+<blockquote>
+<p>X ‘sprintf’ is deprecated: This function is provided for compatibility reasons only. Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</p>
+</blockquote>
+<p>As you can see from the message, sprintf is considered insecurity, but we can miss it by adding a parameter <code>--disable warnings as errors</code>, so rerun <code>bash configure --disable warnings as errors</code></p>
+</li>
+<li><p>If you are fortunate enough, you will see success message:</p>
+<blockquote>
+<p>Configuration summary:</p>
+<ul>
+<li>Name:           macosx-aarch64-server-release</li>
+<li>Debug level:    release</li>
+<li>HS debug level: product</li>
+<li>JVM variants:   server</li>
+<li>JVM features:   server: ‘cds compiler1 compiler2 dtrace epsilongc g1gc jfr jni-check jvmci jvmti management nmt parallelgc serialgc services shenandoahgc vm-structs zgc’</li>
+<li>OpenJDK target: OS: macosx, CPU architecture: aarch64, address length: 64</li>
+<li>Version string: 17-internal+0-adhoc.effy.openjdkbackup (17-internal)</li>
+</ul>
+<p>Tools summary:</p>
+<ul>
+<li>Boot JDK:       openjdk version “16.0.2” 2021-07-20 OpenJDK Runtime Environment Zulu16.32+15-CA (build 16.0.2+7) OpenJDK 64-Bit Server VM Zulu16.32+15-CA (build 16.0.2+7, mixed mode) (at &#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Java&#x2F;JavaVirtualMachines&#x2F;azul-16.0.2&#x2F;Contents&#x2F;Home)</li>
+<li>Toolchain:      clang (clang&#x2F;LLVM from Xcode 14.3)</li>
+<li>C Compiler:     Version 14.0.3 (at &#x2F;usr&#x2F;bin&#x2F;clang)</li>
+<li>C++ Compiler:   Version 14.0.3 (at &#x2F;usr&#x2F;bin&#x2F;clang++)</li>
+</ul>
+<p>Build performance summary:</p>
+<ul>
+<li>Cores to use:   8</li>
+<li>Memory limit:   16384 MB</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h1 id="make-images"><a href="#make-images" class="headerlink" title="make images"></a>make images</h1><ol>
+<li><p>Excute <code>make images</code>, then you’ll get an error like this:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">=== Output from failing command(s) repeated here ===</span><br><span class="line">* For target support_interim-jmods_support__create_java.base.jmod_exec:</span><br><span class="line">#</span><br><span class="line"># A fatal error has been detected by the Java Runtime Environment:</span><br><span class="line">#</span><br><span class="line">#  Internal Error (assembler_aarch64.hpp:248), pid=56946, tid=9987</span><br><span class="line">#  guarantee(val &lt; (1ULL &lt;&lt; nbits)) failed: Field too big for insn</span><br><span class="line">#</span><br><span class="line"># JRE version:  (17.0.3) (build )</span><br><span class="line"># Java VM: OpenJDK 64-Bit Server VM (17.0.3+0-jvmci-22.1-b05, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, serial gc, bsd-aarch64)</span><br><span class="line"># No core dump will be written. Core dumps have been disabled. To enable core dumping, try &quot;ulimit -c unlimited&quot; before starting Java again</span><br><span class="line">#</span><br><span class="line"># An error report file with more information is saved as:</span><br><span class="line"># /opt/labs-openjdk-17/make/hs_err_pid56946.log</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line">* For target support_interim-jmods_support__create_java.logging.jmod_exec:</span><br><span class="line">#</span><br><span class="line"># A fatal error has been detected by the Java Runtime Environment:</span><br><span class="line">#</span><br><span class="line">#  Internal Error (assembler_aarch64.hpp:248), pid=56929, tid=10243</span><br><span class="line">#  guarantee(val &lt; (1ULL &lt;&lt; nbits)) failed: Field too big for insn</span><br><span class="line">#</span><br><span class="line"># JRE version:  (17.0.3) (build )</span><br><span class="line"># Java VM: OpenJDK 64-Bit Server VM (17.0.3+0-jvmci-22.1-b05, mixed mode, emulated-client, sharing, tiered, compressed oops, compressed class ptrs, serial gc, bsd-aarch64)</span><br><span class="line"># No core dump will be written. Core dumps have been disabled. To enable core dumping, try &quot;ulimit -c unlimited&quot; before starting Java again</span><br><span class="line">#</span><br><span class="line"># An error report file with more information is saved as:</span><br><span class="line"># /opt/labs-openjdk-17/make/hs_err_pid56929.log</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line"></span><br><span class="line">* All command lines available in /opt/labs-openjdk-17/build/labsjdk/make-support/failure-logs.</span><br><span class="line">=== End of repeated output ===</span><br><span class="line"></span><br><span class="line">No indication of failed target found.</span><br><span class="line">Hint: Try searching the build log for &#x27;] Error&#x27;.</span><br><span class="line">Hint: See doc/building.html#troubleshooting for assistance.</span><br><span class="line"></span><br><span class="line">gmake[3]: Leaving directory &#x27;/opt/labs-openjdk-17&#x27;</span><br><span class="line">make[2]: *** [/opt/labs-openjdk-17/make/Init.gmk:315: main] Error 2</span><br><span class="line">make[2]: Leaving directory &#x27;/opt/labs-openjdk-17&#x27;</span><br><span class="line">make[1]: *** [/opt/labs-openjdk-17/make/Init.gmk:186: graal-builder-image] Error 2</span><br><span class="line">make[1]: Leaving directory &#x27;/opt/labs-openjdk-17&#x27;</span><br><span class="line">make: *** [labs17.makefile:27: /opt/labs-17/bin/java] Error 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>You need to do like this<a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3"> issue</a> does, and add some codes in <code>src/hotspot/cpu/aarch64/immediate_aarch64.cpp</code>. </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">uint64_t</span> <span class="title">replicate</span><span class="params">(<span class="type">uint64_t</span> bits, <span class="type">int</span> nbits, <span class="type">int</span> count)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">+  <span class="built_in">assert</span>(count &gt; <span class="number">0</span>, <span class="string">&quot;must be&quot;</span>);</span><br><span class="line">+  <span class="built_in">assert</span>(nbits &gt; <span class="number">0</span>, <span class="string">&quot;must be&quot;</span>);</span><br><span class="line">+  <span class="built_in">assert</span>(count * nbits &lt;= <span class="number">64</span>, <span class="string">&quot;must be&quot;</span>);</span><br><span class="line">+</span><br><span class="line">+  <span class="comment">// Special case nbits == 64 since the shift below with that nbits value</span></span><br><span class="line">+  <span class="comment">// would result in undefined behavior.</span></span><br><span class="line">+  <span class="keyword">if</span> (nbits == <span class="number">64</span>) &#123;</span><br><span class="line">+    <span class="keyword">return</span> bits;</span><br><span class="line">+  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">uint64_t</span> result = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// nbits may be 64 in which case we want mask to be -1</span></span><br><span class="line">  <span class="type">uint64_t</span> mask = <span class="built_in">ones</span>(nbits);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; count ; i++) &#123;</span><br><span class="line">    result &lt;&lt;= nbits;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Rerun <code>make images</code>, you will get the last error:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Compiling 56 files <span class="keyword">for</span> java.sql.rowset</span><br><span class="line">Compiling 82 files <span class="keyword">for</span> jdk.jlink</span><br><span class="line">Compiling 95 files <span class="keyword">for</span> jdk.jshell</span><br><span class="line">error: invalid integral value <span class="string">&#x27;16-DMAC_OS_X_VERSION_MIN_REQUIRED=10120&#x27;</span> <span class="keyword">in</span> <span class="string">&#x27;-mstack-alignment=16-DMAC_OS_X_VERSION_MIN_REQUIRED=10120&#x27;</span></span><br><span class="line">make[3]: *** [/Users/jdk/build/macosx-x86_64-server-fastdebug/hotspot/variant-server/libjvm/objs/bsd_x86_64.o] Error 1</span><br><span class="line">make[3]: *** Waiting <span class="keyword">for</span> unfinished <span class="built_in">jobs</span>....</span><br><span class="line">Compiling 229 files <span class="keyword">for</span> jdk.javadoc</span><br><span class="line">make[2]: *** [hotspot-server-libs] Error 2</span><br><span class="line">make[2]: *** Waiting <span class="keyword">for</span> unfinished <span class="built_in">jobs</span>....</span><br><span class="line">Compiling 2736 files <span class="keyword">for</span> java.desktop</span><br><span class="line"></span><br><span class="line">ERROR: Build failed <span class="keyword">for</span> target <span class="string">&#x27;images&#x27;</span> <span class="keyword">in</span> configuration <span class="string">&#x27;macosx-x86_64-server-fastdebug&#x27;</span> (<span class="built_in">exit</span> code 2)</span><br><span class="line">Stopping sjavac server</span><br><span class="line"></span><br><span class="line">make[1]: *** [main] Error 2</span><br><span class="line">=== Output from failing <span class="built_in">command</span>(s) repeated here ===</span><br><span class="line">make: *** [images] Error 2</span><br><span class="line">* For target hotspot_variant-server_libjvm_objs_bsd_x86_64.o:</span><br><span class="line">error: invalid integral value <span class="string">&#x27;16-DMAC_OS_X_VERSION_MIN_REQUIRED=10120&#x27;</span> <span class="keyword">in</span> <span class="string">&#x27;-mstack-alignment=16-DMAC_OS_X_VERSION_MIN_REQUIRED=10120&#x27;</span></span><br><span class="line"></span><br><span class="line">* All <span class="built_in">command</span> lines available <span class="keyword">in</span> /Users/jdk/build/macosx-x86_64-server-fastdebug/make-support/failure-logs.</span><br><span class="line">=== End of repeated output ===</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Fortunatelly, you just need to do like this <a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">issue</a>, add two ‘spaces’ in <code>make/autoconf/flags-other.m4</code>, it’s quite weird right？</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment"># Fix linker warning.</span></span><br><span class="line">  <span class="comment"># Code taken from make/autoconf/flags-cflags.m4 and adapted.</span></span><br><span class="line">-  JVM_BASIC_ASFLAGS+=<span class="string">&quot;-DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span></span><br><span class="line"><span class="string">+  JVM_BASIC_ASFLAGS+=&quot;</span> -DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span><br><span class="line">      -mmacosx-version-min=<span class="variable">$MACOSX_VERSION_MIN</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">  if test -n &quot;</span><span class="variable">$MACOSX_VERSION_MAX</span><span class="string">&quot;; then</span></span><br><span class="line"><span class="string">-      JVM_BASIC_ASFLAGS+=&quot;</span><span class="variable">$OS_CFLAGS</span> \</span><br><span class="line">+      JVM_BASIC_ASFLAGS+=<span class="string">&quot; <span class="variable">$OS_CFLAGS</span> \</span></span><br><span class="line"><span class="string">          -DMAC_OS_X_VERSION_MAX_ALLOWED=<span class="variable">$MACOSX_VERSION_MAX_NODOTS</span>&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>
 </article>
     
     
@@ -470,7 +542,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/" title="深入理解Java虚拟机（一）">http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/</a>
+        <a href="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/" title="How to compile JDK in M1 MacBook——在M1上编译JDk">http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>

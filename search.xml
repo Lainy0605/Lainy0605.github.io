@@ -2802,4 +2802,11 @@
         <tag>排序算法</tag>
       </tags>
   </entry>
+  <entry>
+    <title>深入理解Java虚拟机（一）</title>
+    <url>/2023/05/15/%20InsideTheJVM/insideTheJVMOne/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴</p>
+<h1 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h1><p><a href="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange">https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange</a></p>
+]]></content>
+  </entry>
 </search>

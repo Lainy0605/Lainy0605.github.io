@@ -2845,9 +2845,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">openjdk</span><br><span class="line">├── ADDITIONAL_LICENSE_INFO</span><br><span class="line">├── ASSEMBLY_EXCEPTION</span><br><span class="line">├── CONTRIBUTING.md</span><br><span class="line">├── LICENSE</span><br><span class="line">├── Makefile</span><br><span class="line">├── README.md</span><br><span class="line">├── bin</span><br><span class="line">├── build</span><br><span class="line">├── configure</span><br><span class="line">├── doc</span><br><span class="line">├── make</span><br><span class="line">├── src</span><br><span class="line">└── <span class="built_in">test</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 <h1 id="Configure"><a href="#Configure" class="headerlink" title="Configure"></a>Configure</h1><ol>
-<li><p>you will get the error message like this If all goes well:</p>
-</li>
-<li><p>Execute <code>bash configure</code> in the root directory of the JDK you just get, </p>
+<li><p>Execute <code>bash configure</code> in the root directory of the JDK you just get, you will get the error message like this If all goes well:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">configure: The tested number of bits <span class="keyword">in</span> the target (64) differs from the number of bits expected to be found <span class="keyword">in</span> the target (32) configure: error: Cannot <span class="built_in">continue</span>.</span><br></pre></td></tr></table></figure>
 
 <p>The reason is clearly clarifed in this <a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">question</a>:</p>
@@ -2880,7 +2878,7 @@
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">1</a>: how-to-compile-openjdk-11-on-an-m1-macbook</p>
 <p><a href="https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3">2</a>: hotspot arm64 bug exposed by latest clang</p>
 <p><a href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">3</a>: Build failure with Xcode 13.0 after JDK-8264848</p>
-<p>4:深入理解Java虚拟机（第三版），周志明</p>
+<p>4: 深入理解Java虚拟机（第三版），周志明</p>
 ]]></content>
       <categories>
         <category>Books</category>

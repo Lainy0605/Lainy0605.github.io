@@ -2853,7 +2853,7 @@
 </blockquote>
 <p>   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction <code>brew install cask adoptopenjdk16</code></p>
 <ol start="2">
-<li><p>Rerun <code>bash configure</code>, then you will a new error like this:</p>
+<li><p>Rerun <code>bash configure</code>, then you will get a new error like this:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">X <span class="string">&#x27;sprintf&#x27;</span> is deprecated: This <span class="keyword">function</span> is provided <span class="keyword">for</span> compatibility reasons only. Due to security concerns inherent <span class="keyword">in</span> the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</span><br></pre></td></tr></table></figure>
 
 <p>As you can see from the message, sprintf is considered insecurity, but we can miss it by adding a parameter <code>--disable warnings as errors</code>, so rerun <code>bash configure --disable warnings as errors</code></p>

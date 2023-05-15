@@ -7,19 +7,21 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 系统环境macOS">
+<meta name="description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 System Environment   Platform     OS        Xcode    Xcode Comand Line Tools If you have’s install">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深入理解Java虚拟机（一）">
 <meta property="og:url" content="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 系统环境macOS">
+<meta property="og:description" content="前言最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴 System Environment   Platform     OS        Xcode    Xcode Comand Line Tools If you have’s install">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey">
 <meta property="og:image" content="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange">
+<meta property="og:image" content="https://img.shields.io/badge/Xcode-14.3-blue?logo=xcode">
 <meta property="article:published_time" content="2023-05-15T12:17:21.000Z">
-<meta property="article:modified_time" content="2023-05-15T13:43:17.075Z">
+<meta property="article:modified_time" content="2023-05-15T14:13:35.271Z">
 <meta property="article:author" content="Effy">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange">
+<meta name="twitter:image" content="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey">
 
 
 <title >深入理解Java虚拟机（一）</title>
@@ -395,7 +397,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#前言"  data-scroll-to="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#系统环境"  data-scroll-to="#系统环境"><span class="toc-number">2.</span> <span class="toc-text">系统环境</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#前言"  data-scroll-to="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -432,8 +434,30 @@
 <div class="trm-card ">
     <article class="trm-publication">
     <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近开始看深入理解Java虚拟机，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，所以这算是一个踩坑贴</p>
-<h1 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h1><p><a target="_blank" rel="noopener" href="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange">macOS</a></p>
-<img src='https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange'  loading="lazy"/>
+<h1 id="System-Environment"><a href="#System-Environment" class="headerlink" title="System Environment"></a>System Environment</h1><table>
+<thead>
+<tr>
+<th>Platform</th>
+<th><img src="https://img.shields.io/badge/MacBook%20Pro-14%202021-lightgrey"  loading="lazy"/></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OS</td>
+<td><img src='https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange' loading="lazy"/></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Xcode</td>
+<td><img src='https://img.shields.io/badge/Xcode-14.3-blue?logo=xcode'  loading="lazy"/></td>
+</tr>
+<tr>
+<td>Xcode Comand Line Tools</td>
+<td>If you have’s install it yet, please refer to <a target="_blank" rel="noopener" href="https://mac.install.guide/commandlinetools/index.html">this article</a>.</td>
+</tr>
+</tbody></table>
 
 </article>
     

@@ -2845,9 +2845,8 @@
 <h1 id="bash-configure"><a href="#bash-configure" class="headerlink" title="bash configure"></a>bash configure</h1><ol>
 <li>Execute <code>bash configure</code> in the root directory of the jdk you just get, you will get the error message like this If all goes well:</li>
 </ol>
-<blockquote>
-<p>configure: The tested number of bits in the target (64) differs from the number of bits expected to be found in the target (32) configure: error: Cannot continue.</p>
-</blockquote>
+   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">configure: The tested number of bits <span class="keyword">in</span> the target (64) differs from the number of bits expected to be found <span class="keyword">in</span> the target (32) configure: error: Cannot <span class="built_in">continue</span>.</span><br></pre></td></tr></table></figure>
+
 <p>   The reason is clearly clarifed in this <a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">question</a>:</p>
 <blockquote>
 <p>Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</p>
@@ -2855,37 +2854,12 @@
 <p>   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction <code>brew install cask adoptopenjdk16</code></p>
 <ol start="2">
 <li><p>Rerun <code>bash configure</code>, then you will a new error like this:</p>
-<blockquote>
-<p>X ‘sprintf’ is deprecated: This function is provided for compatibility reasons only. Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</p>
-</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">X <span class="string">&#x27;sprintf&#x27;</span> is deprecated: This <span class="keyword">function</span> is provided <span class="keyword">for</span> compatibility reasons only. Due to security concerns inherent <span class="keyword">in</span> the design of sprintf(3), it is highly recommended that you use snprintf(3) instead.</span><br></pre></td></tr></table></figure>
+
 <p>As you can see from the message, sprintf is considered insecurity, but we can miss it by adding a parameter <code>--disable warnings as errors</code>, so rerun <code>bash configure --disable warnings as errors</code></p>
 </li>
 <li><p>If you are fortunate enough, you will see success message:</p>
-<blockquote>
-<p>Configuration summary:</p>
-<ul>
-<li>Name:           macosx-aarch64-server-release</li>
-<li>Debug level:    release</li>
-<li>HS debug level: product</li>
-<li>JVM variants:   server</li>
-<li>JVM features:   server: ‘cds compiler1 compiler2 dtrace epsilongc g1gc jfr jni-check jvmci jvmti management nmt parallelgc serialgc services shenandoahgc vm-structs zgc’</li>
-<li>OpenJDK target: OS: macosx, CPU architecture: aarch64, address length: 64</li>
-<li>Version string: 17-internal+0-adhoc.effy.openjdkbackup (17-internal)</li>
-</ul>
-<p>Tools summary:</p>
-<ul>
-<li>Boot JDK:       openjdk version “16.0.2” 2021-07-20 OpenJDK Runtime Environment Zulu16.32+15-CA (build 16.0.2+7) OpenJDK 64-Bit Server VM Zulu16.32+15-CA (build 16.0.2+7, mixed mode) (at &#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Java&#x2F;JavaVirtualMachines&#x2F;azul-16.0.2&#x2F;Contents&#x2F;Home)</li>
-<li>Toolchain:      clang (clang&#x2F;LLVM from Xcode 14.3)</li>
-<li>C Compiler:     Version 14.0.3 (at &#x2F;usr&#x2F;bin&#x2F;clang)</li>
-<li>C++ Compiler:   Version 14.0.3 (at &#x2F;usr&#x2F;bin&#x2F;clang++)</li>
-</ul>
-<p>Build performance summary:</p>
-<ul>
-<li>Cores to use:   8</li>
-<li>Memory limit:   16384 MB</li>
-</ul>
-</blockquote>
-</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Configuration summary:</span><br><span class="line"></span><br><span class="line">* Name:           macosx-aarch64-server-release</span><br><span class="line">* Debug level:    release</span><br><span class="line">* HS debug level: product</span><br><span class="line">* JVM variants:   server</span><br><span class="line">* JVM features:   server: <span class="string">&#x27;cds compiler1 compiler2 dtrace epsilongc g1gc jfr jni-check jvmci jvmti management nmt parallelgc serialgc services shenandoahgc vm-structs zgc&#x27;</span></span><br><span class="line">* OpenJDK target: OS: macosx, CPU architecture: aarch64, address length: 64</span><br><span class="line">* Version string: 17-internal+0-adhoc.effy.openjdkbackup (17-internal)</span><br><span class="line"></span><br><span class="line">Tools summary:</span><br><span class="line"></span><br><span class="line">* Boot JDK:       openjdk version <span class="string">&quot;16.0.2&quot;</span> 2021-07-20 OpenJDK Runtime Environment Zulu16.32+15-CA (build 16.0.2+7) OpenJDK 64-Bit Server VM Zulu16.32+15-CA (build 16.0.2+7, mixed mode) (at /Users/effy/Library/Java/JavaVirtualMachines/azul-16.0.2/Contents/Home)</span><br><span class="line">* Toolchain:      clang (clang/LLVM from Xcode 14.3)</span><br><span class="line">* C Compiler:     Version 14.0.3 (at /usr/bin/clang)</span><br><span class="line">* C++ Compiler:   Version 14.0.3 (at /usr/bin/clang++)</span><br><span class="line"></span><br><span class="line">Build performance summary:</span><br><span class="line"></span><br><span class="line">* Cores to use:   8</span><br><span class="line">* Memory <span class="built_in">limit</span>:   16384 MB</span><br></pre></td></tr></table></figure></li>
 </ol>
 <h1 id="make-images"><a href="#make-images" class="headerlink" title="make images"></a>make images</h1><ol>
 <li><p>Excute <code>make images</code>, then you’ll get an error like this:</p>
@@ -2900,7 +2874,11 @@
 <li><p>Fortunatelly, you just need to do like this <a href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">issue</a>, add two ‘spaces’ in <code>make/autoconf/flags-other.m4</code>, it’s quite weird right？</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">  <span class="comment"># Fix linker warning.</span></span><br><span class="line">  <span class="comment"># Code taken from make/autoconf/flags-cflags.m4 and adapted.</span></span><br><span class="line">-  JVM_BASIC_ASFLAGS+=<span class="string">&quot;-DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span></span><br><span class="line"><span class="string">+  JVM_BASIC_ASFLAGS+=&quot;</span> -DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span><br><span class="line">      -mmacosx-version-min=<span class="variable">$MACOSX_VERSION_MIN</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">  if test -n &quot;</span><span class="variable">$MACOSX_VERSION_MAX</span><span class="string">&quot;; then</span></span><br><span class="line"><span class="string">-      JVM_BASIC_ASFLAGS+=&quot;</span><span class="variable">$OS_CFLAGS</span> \</span><br><span class="line">+      JVM_BASIC_ASFLAGS+=<span class="string">&quot; <span class="variable">$OS_CFLAGS</span> \</span></span><br><span class="line"><span class="string">          -DMAC_OS_X_VERSION_MAX_ALLOWED=<span class="variable">$MACOSX_VERSION_MAX_NODOTS</span>&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
 </ol>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>]]></content>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook</a></p>
+<p><a href="https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3">https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3</a></p>
+<p><a href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b</a></p>
+<p>深入理解Java虚拟机（第三版），周志明</p>
+]]></content>
       <categories>
         <category>Books</category>
       </categories>

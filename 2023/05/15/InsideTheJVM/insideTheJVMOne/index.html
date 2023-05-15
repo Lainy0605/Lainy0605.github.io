@@ -10,7 +10,7 @@
 <meta name="description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间 System Environment   Workspace Specs     OS    Chip    Xcode    Xcode Comand Line Tools I">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How to compile JDK in M1 MacBook——在M1上编译JDK">
-<meta property="og:url" content="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/index.html">
+<meta property="og:url" content="http://liyafei.xyz/2023/05/15/InsideTheJVM/insideTheJVMOne/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
 <meta property="og:description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间 System Environment   Workspace Specs     OS    Chip    Xcode    Xcode Comand Line Tools I">
 <meta property="og:locale" content="en_US">
@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://img.shields.io/badge/Xcode-14.3-blue?logo=xcode">
 <meta property="og:image" content="https://img.shields.io/badge/Version-3.6.8-green">
 <meta property="article:published_time" content="2023-05-15T12:17:21.000Z">
-<meta property="article:modified_time" content="2023-05-15T16:07:39.200Z">
+<meta property="article:modified_time" content="2023-05-15T16:11:58.009Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
@@ -400,7 +400,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Introdution"  data-scroll-to="#Introdution"><span class="toc-number">1.</span> <span class="toc-text">Introdution</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Get-JDK-source-Code"  data-scroll-to="#Get-JDK-source-Code"><span class="toc-number">3.</span> <span class="toc-text">Get JDK source Code</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#bash-configure"  data-scroll-to="#bash-configure"><span class="toc-number">4.</span> <span class="toc-text">bash configure</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#make-images"  data-scroll-to="#make-images"><span class="toc-number">5.</span> <span class="toc-text">make images</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Reference"  data-scroll-to="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Introdution"  data-scroll-to="#Introdution"><span class="toc-number">1.</span> <span class="toc-text">Introdution</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Get-JDK-source-code"  data-scroll-to="#Get-JDK-source-code"><span class="toc-number">3.</span> <span class="toc-text">Get JDK source code</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#bash-configure"  data-scroll-to="#bash-configure"><span class="toc-number">4.</span> <span class="toc-text">bash configure</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#make-images"  data-scroll-to="#make-images"><span class="toc-number">5.</span> <span class="toc-text">make images</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Reference"  data-scroll-to="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -465,7 +465,7 @@
 <td><img src='https://img.shields.io/badge/Version-3.6.8-green'  loading="lazy"/></td>
 </tr>
 </tbody></table>
-<h1 id="Get-JDK-source-Code"><a href="#Get-JDK-source-Code" class="headerlink" title="Get JDK source Code"></a>Get JDK source Code</h1><ol>
+<h1 id="Get-JDK-source-code"><a href="#Get-JDK-source-code" class="headerlink" title="Get JDK source code"></a>Get JDK source code</h1><ol>
 <li><p>First, we need to download the source code of openJDK12 from <a target="_blank" rel="noopener" href="https://hg.openjdk.java.net/jdk/jdk12/">the openJDK’s official website</a></p>
 </li>
 <li><p>If the JDK’s version that we want to compile is N , then we need to prepare another JDK whose version has to be N-1 at least. That’s because part of JDK is written by Java, so we need another available JDK in compile time when we compile it,  and such another JDK is officially called ‘<strong>Bootstrap JDK</strong>‘.  So we need to install openJDK 11 with instruction <code>brew install cask adoptopenjdk11</code> had we install homebrew before.</p>
@@ -505,10 +505,10 @@
 <li><p>Fortunatelly, you just need to do like this <a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">issue</a>, add two ‘spaces’ in <code>make/autoconf/flags-other.m4</code>, it’s quite weird right？</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment"># Fix linker warning.</span></span><br><span class="line">  <span class="comment"># Code taken from make/autoconf/flags-cflags.m4 and adapted.</span></span><br><span class="line">-  JVM_BASIC_ASFLAGS+=<span class="string">&quot;-DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span></span><br><span class="line"><span class="string">+  JVM_BASIC_ASFLAGS+=&quot;</span> -DMAC_OS_X_VERSION_MIN_REQUIRED=<span class="variable">$MACOSX_VERSION_MIN_NODOTS</span> \</span><br><span class="line">      -mmacosx-version-min=<span class="variable">$MACOSX_VERSION_MIN</span><span class="string">&quot;</span></span><br><span class="line"><span class="string">  if test -n &quot;</span><span class="variable">$MACOSX_VERSION_MAX</span><span class="string">&quot;; then</span></span><br><span class="line"><span class="string">-      JVM_BASIC_ASFLAGS+=&quot;</span><span class="variable">$OS_CFLAGS</span> \</span><br><span class="line">+      JVM_BASIC_ASFLAGS+=<span class="string">&quot; <span class="variable">$OS_CFLAGS</span> \</span></span><br><span class="line"><span class="string">          -DMAC_OS_X_VERSION_MAX_ALLOWED=<span class="variable">$MACOSX_VERSION_MAX_NODOTS</span>&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></li>
 </ol>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3">https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b</a></p>
-<p>深入理解Java虚拟机（第三版），周志明</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">1</a>: how-to-compile-openjdk-11-on-an-m1-macbook</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk17u-dev/commit/fbe05ec561e8d2a061be126c969c37c219b594f3">2</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk/commit/d007be0952abdc8beb7b68ebf7529a939162307b">3</a></p>
+<p>4:深入理解Java虚拟机（第三版），周志明</p>
 
 </article>
     
@@ -521,7 +521,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/" title="How to compile JDK in M1 MacBook——在M1上编译JDK">http://liyafei.xyz/2023/05/15/%20InsideTheJVM/insideTheJVMOne/</a>
+        <a href="http://liyafei.xyz/2023/05/15/InsideTheJVM/insideTheJVMOne/" title="How to compile JDK in M1 MacBook——在M1上编译JDK">http://liyafei.xyz/2023/05/15/InsideTheJVM/insideTheJVMOne/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>

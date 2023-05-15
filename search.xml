@@ -2848,9 +2848,7 @@
    <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">configure: The tested number of bits <span class="keyword">in</span> the target (64) differs from the number of bits expected to be found <span class="keyword">in</span> the target (32) configure: error: Cannot <span class="built_in">continue</span>.</span><br></pre></td></tr></table></figure>
 
 <p>   The reason is clearly clarifed in this <a href="https://stackoverflow.com/questions/68358505/how-to-compile-openjdk-11-on-an-m1-macbook">question</a>:</p>
-<blockquote>
-<p>Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</p>
-</blockquote>
+<p>   Apple Silicon chips M1, M2 are all 64-bits architectures. Do not compiler for 32-bit</p>
 <p>   So we have to get openJDK 17, which is a relatively new version and available for M1. We also need to prepare a new Bootstrap JDK which should be Java 16. Use the same instruction <code>brew install cask adoptopenjdk16</code></p>
 <ol start="2">
 <li><p>Rerun <code>bash configure</code>, then you will get a new error like this:</p>

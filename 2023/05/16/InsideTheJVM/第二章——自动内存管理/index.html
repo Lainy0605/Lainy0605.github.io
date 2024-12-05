@@ -7,20 +7,21 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程  分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空">
+<meta name="description" content="运行时数据区域![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png) 对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第二章——自动内存管理">
-<meta property="og:url" content="http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:title" content="第二章——Java内存区域与内存溢出异常">
+<meta property="og:url" content="http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程  分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空">
+<meta property="og:description" content="运行时数据区域![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png) 对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-16T01:20:45.000Z">
-<meta property="article:modified_time" content="2023-05-16T01:55:24.172Z">
+<meta property="article:modified_time" content="2024-12-05T03:33:30.347Z">
 <meta property="article:author" content="Effy">
+<meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
 
 
-<title >第二章——自动内存管理</title>
+<title >第二章——Java内存区域与内存溢出异常</title>
 
 <!-- Favicon -->
 
@@ -66,7 +67,7 @@
 
 
 <!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"liyafei.xyz","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
@@ -252,7 +253,7 @@
                             NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            第二章——自动内存管理
+                            第二章——Java内存区域与内存溢出异常
                         </h1>
 
                         
@@ -355,7 +356,7 @@
                 age:
             </div>
             <div class="trm-label trm-label-light">
-                19
+                21
             </div>
         </li>
     
@@ -393,7 +394,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">1.</span> <span class="toc-text">对象的创建</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#运行时数据区域"  data-scroll-to="#运行时数据区域"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">2.</span> <span class="toc-text">对象的创建</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -429,10 +430,11 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
+    <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
 <li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
 </li>
-<li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>
+<li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择哪种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>
 <ul>
 <li>指针碰撞：一个指针用于作为分界点的指示器，空闲内存和被使用过的内存被该指针分开，分配内存时只需将该指针向空闲内存方向移动一段与对象大小相等的距离<ul>
 <li>适用：Java堆中内存是绝对规整的，使用标记-复制或者标记-整理的垃圾收集器</li>
@@ -468,7 +470,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="第二章——自动内存管理">http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a>
+        <a href="http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="第二章——Java内存区域与内存溢出异常">http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>

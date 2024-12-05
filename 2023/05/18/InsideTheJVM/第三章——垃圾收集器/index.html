@@ -10,7 +10,7 @@
 <meta name="description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="garbageCollect">
-<meta property="og:url" content="http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/index.html">
+<meta property="og:url" content="http://aeffy.icu/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
 <meta property="og:description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
 <meta property="og:locale" content="en_US">
@@ -66,7 +66,7 @@
 
 
 <!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"liyafei.xyz","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
@@ -355,7 +355,7 @@
                 age:
             </div>
             <div class="trm-label trm-label-light">
-                19
+                21
             </div>
         </li>
     
@@ -465,7 +465,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="garbageCollect">http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</a>
+        <a href="http://aeffy.icu/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="garbageCollect">http://aeffy.icu/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>
@@ -494,13 +494,13 @@
         </a>
         <div class="trm-card-descr">
             <div class="trm-label trm-category trm-mb-20">
-                <a href=" #.">
-                    Unclassified
+                <a href=" /categories/Books/">
+                    Books
                 </a>
             </div>
             <h5>
                 <a href="/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="trm-anima-link">
-                    第二章——自动内存管理
+                    第二章——Java内存区域与内存溢出异常
                 </a>
             </h5>
             <div class="trm-divider trm-mb-20 trm-mt-20"></div>

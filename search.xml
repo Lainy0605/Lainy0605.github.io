@@ -2614,12 +2614,13 @@
       </tags>
   </entry>
   <entry>
-    <title>第二章——自动内存管理</title>
+    <title>第二章——Java内存区域与内存溢出异常</title>
     <url>/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
+    <content><![CDATA[<h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
 <li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
 </li>
-<li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>
+<li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择哪种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>
 <ul>
 <li>指针碰撞：一个指针用于作为分界点的指示器，空闲内存和被使用过的内存被该指针分开，分配内存时只需将该指针向空闲内存方向移动一段与对象大小相等的距离<ul>
 <li>适用：Java堆中内存是绝对规整的，使用标记-复制或者标记-整理的垃圾收集器</li>
@@ -2644,6 +2645,12 @@
 </li>
 </ol>
 ]]></content>
+      <categories>
+        <category>Books</category>
+      </categories>
+      <tags>
+        <tag>深入理解Java虚拟机</tag>
+      </tags>
   </entry>
   <entry>
     <title>garbageCollect</title>

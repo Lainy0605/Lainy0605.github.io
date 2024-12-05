@@ -7,21 +7,20 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="a simple bolg">
+<meta name="description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2022年度报告">
-<meta property="og:url" content="http://liyafei.xyz/2023/01/03/annualReviewFor2022/index.html">
+<meta property="og:title" content="garbageCollect">
+<meta property="og:url" content="http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="a simple bolg">
+<meta property="og:description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-01-03T11:39:04.000Z">
-<meta property="article:modified_time" content="2023-01-03T12:21:17.415Z">
+<meta property="article:published_time" content="2023-05-18T08:18:34.000Z">
+<meta property="article:modified_time" content="2023-05-26T11:30:52.595Z">
 <meta property="article:author" content="Effy">
-<meta property="article:tag" content="年度报告">
 <meta name="twitter:card" content="summary">
 
 
-<title >2022年度报告</title>
+<title >garbageCollect</title>
 
 <!-- Favicon -->
 
@@ -250,10 +249,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            年复一年
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            2022年度报告
+                            garbageCollect
                         </h1>
 
                         
@@ -295,7 +294,13 @@
 <div class="trm-main-card-frame trm-sidebar">
     <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
     
-        <!-- card header -->
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
 <div class="trm-mc-header">
     <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
     <h5 class="trm-name trm-mb-15">
@@ -385,6 +390,13 @@
 </div>
 <!-- action button end -->
 
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#如何判断对象应该被回收"  data-scroll-to="#如何判断对象应该被回收"><span class="toc-number">1.</span> <span class="toc-text">如何判断对象应该被回收</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用计数法"  data-scroll-to="#引用计数法"><span class="toc-number">1.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#可达性分析法"  data-scroll-to="#可达性分析法"><span class="toc-number">1.2.</span> <span class="toc-text">可达性分析法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用的类型"  data-scroll-to="#引用的类型"><span class="toc-number">1.3.</span> <span class="toc-text">引用的类型</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
     
     </div>
 </div>
@@ -399,13 +411,13 @@
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="far fa-calendar-alt trm-icon"></i><br>
-            01/03
+            05/18
         </div>
     </div>
     <div class="col-sm-4">
         <div class="trm-card trm-label trm-label-light text-center">
             <i class="far fa-clock trm-icon"></i><br>
-            19:39
+            16:18
         </div>
     </div>
     <div class="col-sm-4">
@@ -417,7 +429,31 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    
+    <h1 id="如何判断对象应该被回收"><a href="#如何判断对象应该被回收" class="headerlink" title="如何判断对象应该被回收"></a>如何判断对象应该被回收</h1><h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><p>原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。</p>
+<p>缺陷：对象之间相互循环引用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReferenceCountingGC</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="type">Object</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">_1MB</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">byte</span>[] bigSize = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">2</span> * _1MB];</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testGC</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ReferenceCountingGC</span> <span class="variable">objA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReferenceCountingGC</span>();</span><br><span class="line">    <span class="type">ReferenceCountingGC</span> <span class="variable">objB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReferenceCountingGC</span>();</span><br><span class="line">    objA.instance = objB;</span><br><span class="line">    objB.instance = objA;</span><br><span class="line">    </span><br><span class="line">    objA = <span class="literal">null</span>;</span><br><span class="line">    objB = <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">    System.gc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主流的Java虚拟机都没有选用引用计数法</p>
+<h2 id="可达性分析法"><a href="#可达性分析法" class="headerlink" title="可达性分析法"></a>可达性分析法</h2><p>当前主流的商用程序语言（Java，C#等）都是通过可达性分析算法来判定对象是否存活。</p>
+<p>原理：通过一系列称为“GC Roots”的根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”（Reference Chain），如果某个对象到GC Roots间没有任何引用链相连，则证明此对象不可能再被使用的。</p>
+<p>GC Roots：</p>
+<ul>
+<li>虚拟机栈中引用的对象</li>
+<li>本地方法栈中引用的对象</li>
+<li>类静态属性引用的对象</li>
+<li>常量引用的对象</li>
+<li>所有被同步锁（synchronized关键字）持有的对象</li>
+<li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象（比如NullPointerException、OutOfMemoryError）等，还有系统类加载器</li>
+<li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等</li>
+</ul>
+<h2 id="引用的类型"><a href="#引用的类型" class="headerlink" title="引用的类型"></a>引用的类型</h2><p>在JDK 1.2之后，Java对引用的概念进行了扩充：</p>
+<ul>
+<li>强引用（Strongly reference）：最传统的“引用”的定义，程序代码中普遍存在的引用赋值，即类似“Object obj&#x3D;new Object()”，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象</li>
+<li>软引用（Soft reference）：用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存，才会抛出内存溢出异常。JDK1.2之后提供了SoftReference类来实现软引用</li>
+<li>弱引用（Weak reference）：用来描述非必须对象，强度比软引用更弱，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。在JDK1.2之后提供了WeakReference类来实现弱引用</li>
+<li>虚引用（Phantom reference）：也称为“幽灵引用”或者“幻影引用”，最弱的一种引用关系。一个对象是否有虚引用完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。JDK1.2之后提供了PhantomReference类来实现虚引用</li>
+</ul>
+
 </article>
     
     
@@ -429,7 +465,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://liyafei.xyz/2023/01/03/annualReviewFor2022/" title="2022年度报告">http://liyafei.xyz/2023/01/03/annualReviewFor2022/</a>
+        <a href="http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" title="garbageCollect">http://liyafei.xyz/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>
@@ -447,9 +483,10 @@
         </h5>
     </div>
     
+    
         <div class="col-lg-6">
     <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
-        <a href="/2023/01/16/tipsForMacOS/" class="trm-cover-frame trm-anima-link">
+        <a href="/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="trm-cover-frame trm-anima-link">
             
             
                 <img src="/img/block.jpg" alt="cover">
@@ -457,50 +494,19 @@
         </a>
         <div class="trm-card-descr">
             <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/%E5%AD%A6%E4%B9%A0/">
-                    学习
+                <a href=" #.">
+                    Unclassified
                 </a>
             </div>
             <h5>
-                <a href="/2023/01/16/tipsForMacOS/" class="trm-anima-link">
-                    一些启动台图标的问题
+                <a href="/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="trm-anima-link">
+                    第二章——自动内存管理
                 </a>
             </h5>
             <div class="trm-divider trm-mb-20 trm-mt-20"></div>
             <ul class="trm-card-data trm-label">
-                <li>23/01/16</li>
-                <li>21:12</li>
-                
-                
-            </ul>
-        </div>
-    </div>
-</div>
-    
-    
-        <div class="col-lg-6">
-    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
-        <a href="/2022/12/28/life/COVID19DiaryTwo/" class="trm-cover-frame trm-anima-link">
-            
-            
-                <img src="/img/block.jpg" alt="cover">
-            
-        </a>
-        <div class="trm-card-descr">
-            <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/%E7%94%9F%E6%B4%BB/">
-                    生活
-                </a>
-            </div>
-            <h5>
-                <a href="/2022/12/28/life/COVID19DiaryTwo/" class="trm-anima-link">
-                    羊羊日记其二
-                </a>
-            </h5>
-            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>22/12/28</li>
-                <li>14:18</li>
+                <li>23/05/16</li>
+                <li>09:20</li>
                 
                 
             </ul>
@@ -523,7 +529,7 @@
 
     
         <div class="trm-footer-item">
-            <span>© 2022- 2023</span>
+            <span>© 2022- 2024</span>
             <span class="footer-separator">·</span>
             <span class="trm-accent-color">Effy</span>
         </div>

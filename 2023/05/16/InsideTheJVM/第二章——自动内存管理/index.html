@@ -7,18 +7,20 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="a simple bolg">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Effy&#39;s Page">
-<meta property="og:url" content="http://liyafei.xyz/tags/%E5%B9%B4%E5%BA%A6%E6%8A%A5%E5%91%8A/index.html">
+<meta name="description" content="对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程  分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章——自动内存管理">
+<meta property="og:url" content="http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="a simple bolg">
+<meta property="og:description" content="对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程  分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-05-16T01:20:45.000Z">
+<meta property="article:modified_time" content="2023-05-16T01:55:24.172Z">
 <meta property="article:author" content="Effy">
 <meta name="twitter:card" content="summary">
 
 
-<title >Effy's Page</title>
+<title >第二章——自动内存管理</title>
 
 <!-- Favicon -->
 
@@ -225,7 +227,8 @@
             <!-- top bar end -->
 
             <!-- body -->
-            <div class="trm-content-start">
+            
+<div class="trm-content-start">
     <!-- banner -->
     <div class="trm-banner" data-scroll data-scroll-direction="vertical">
     
@@ -246,10 +249,10 @@
                     <!-- banner title -->
                     <div class="trm-banner-text ">
                         <div class="trm-label trm-mb-20">
-                            The Article archive
+                            NEWS LETTER
                         </div>
                         <h1 class="trm-mb-30 trm-hsmb-font">
-                            远看山有色，<br>近听水无声。
+                            第二章——自动内存管理
                         </h1>
 
                         
@@ -259,7 +262,7 @@
                                 </li>
                                 <li>
                                     <span>
-                                        tags
+                                        2023
                                     </span
                                 ></li>
                             </ul>
@@ -291,7 +294,13 @@
 <div class="trm-main-card-frame trm-sidebar">
     <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
     
-        <!-- card header -->
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
 <div class="trm-mc-header">
     <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
     <h5 class="trm-name trm-mb-15">
@@ -381,6 +390,13 @@
 </div>
 <!-- action button end -->
 
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">1.</span> <span class="toc-text">对象的创建</span></a></li></ol>
+</div>
+            </div>
+        </div>
     
     </div>
 </div>
@@ -391,73 +407,149 @@
                 <div class="trm-content" id="trm-content">
                     <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
 
-                    <div class="row">
-    <div class="col-lg-12">
-        <div class="trm-card">
-            <div style="padding: 0 20px;">
-                
-                    <ul class="row trm-tag-list trm-list" itemprop="keywords"><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/AOP/" rel="tag">AOP</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/Java%E5%B9%B6%E5%8F%91/" rel="tag">Java并发</a><span class="tag-list-count">2</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/Java%E9%9B%86%E5%90%88/" rel="tag">Java集合</a><span class="tag-list-count">2</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">2</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/js/" rel="tag">js</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/macOS/" rel="tag">macOS</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E5%B9%B4%E5%BA%A6%E6%8A%A5%E5%91%8A/" rel="tag">年度报告</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a><span class="tag-list-count">5</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Java%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag">深入理解Java虚拟机</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E4%BD%8D%E8%BF%90%E7%AE%97/" rel="tag">移位运算</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E7%BE%8A%E7%BE%8A%E6%97%A5%E8%AE%B0/" rel="tag">羊羊日记</a><span class="tag-list-count">2</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E9%89%B4%E6%9D%83/" rel="tag">鉴权</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E9%9C%80%E6%B1%82%E4%B8%8E%E5%95%86%E4%B8%9A%E6%A8%A1%E5%BC%8F%E5%88%9B%E6%96%B0/" rel="tag">需求与商业模式创新</a><span class="tag-list-count">1</span></li><li class="col-lg-4 trm-list-item"><a class="tag-list-link" href="/tags/%E9%A1%B9%E7%9B%AE/" rel="tag">项目</a><span class="tag-list-count">1</span></li></ul>
-                
-            </div>
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            05/16
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            09:20
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
         </div>
     </div>
 </div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
+<li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
+</li>
+<li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择那种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>
+<ul>
+<li>指针碰撞：一个指针用于作为分界点的指示器，空闲内存和被使用过的内存被该指针分开，分配内存时只需将该指针向空闲内存方向移动一段与对象大小相等的距离<ul>
+<li>适用：Java堆中内存是绝对规整的，使用标记-复制或者标记-整理的垃圾收集器</li>
+</ul>
+</li>
+<li>空闲列表：虚拟机维护一个列表，记录哪些内存块可用，在分配的时候从列表中找到一块足够大的空间划分给对象实例，并更新列表上的记录<ul>
+<li>适用：Java堆中的内存并不是规整的，使用标记-清除的垃圾收集器</li>
+</ul>
+</li>
+</ul>
+<p>保证内存分配时线程安全，线程A正在创建对象a，指针还未被修改时，线程B将指针修改：</p>
+<ul>
+<li>CAS+失败重试</li>
+<li>TLAB：为每个线程在Java堆中预先分配一小块内存，称为本地线程分配缓冲(Thread local Allocation Buffer, TLAB)，线程先在本地缓冲区分配，该区域用完，分配新的缓冲区时才需要同步锁定。通过-XX:+&#x2F;-UseTLAB参数来设定</li>
+</ul>
+</li>
+<li><p>初始化零值：将分配到的内存空间都初始化为零值，如果使用了TLAB，可以提前至TLAB分配时顺便进行。该操作保证了对象的实例字段在Java代码中可以不赋初始值就直接使用，使程序能访问到这些字段的数据类型所对应的零值</p>
+</li>
+<li><p>设置对象头：例如该对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的GC分代年龄等信息</p>
+</li>
+<li><p>执行&lt;init&gt;()构造函数</p>
+</li>
+</ol>
 
-<!-- history -->
+</article>
+    
+    
 
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="第二章——自动内存管理">http://liyafei.xyz/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
 <div class="row">
     <div class="col-lg-12">
         <!-- title -->
         <h5 class="trm-title-with-divider">
-            
-                年度报告
-            
-            <span data-number="01"></span>
+            Other Articles
+            <span data-number="02"></span>
         </h5>
     </div>
-    <div class="col-lg-12">
-        <!-- timeline -->
-        <div class="trm-timeline">
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="trm-cover-frame trm-anima-link">
             
-            <div class="trm-timeline-item trm-scroll-animation" data-scroll data-scroll-offset="40">
-                <div class="trm-timeline-mark-light"></div>
-                <div class="trm-timeline-mark"></div>
-                <div class="trm-a trm-timeline-content more">
-                    
-                        <div class="trm-card-header">
-                            <div class="trm-left-side">
-                                <h6>
-                                    <a href="/2023/01/03/annualReviewFor2022/" class="trm-anima-link">
-                                        2022年度报告
-                                    </a>
-                                </h6>
-                                <div class="trm-text-sm trm-accent-color trm-mt-15">
-                                    <ul class="trm-card-data trm-label ">
-                                        <li class="trm-accent-color">01/03</li>
-                                        <li class="trm-accent-color">19:39</li>
-                                        
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
             </div>
-            
+            <h5>
+                <a href="/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="trm-anima-link">
+                    garbageCollect
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/05/18</li>
+                <li>16:18</li>
+                
+                
+            </ul>
         </div>
-        <!-- timeline end -->
     </div>
 </div>
-
-<!-- history end -->
-
-
-    <div class="trm-pagination">
-        <span class="page-number current">1</span>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/05/15/InsideTheJVM/insideTheJVMOne/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/Books/">
+                    Books
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/05/15/InsideTheJVM/insideTheJVMOne/" class="trm-anima-link">
+                    How to compile JDK in M1 MacBook——在M1上编译JDK
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/05/15</li>
+                <li>20:17</li>
+                
+                
+            </ul>
+        </div>
     </div>
+</div>
+    
+</div>
 
-
+    
 
 
 
@@ -470,7 +562,7 @@
 
     
         <div class="trm-footer-item">
-            <span>© 2022- 2023</span>
+            <span>© 2022- 2024</span>
             <span class="footer-separator">·</span>
             <span class="trm-accent-color">Effy</span>
         </div>
@@ -577,6 +669,9 @@
 
 
     <!-- 评论插件 -->
+    
+        
+        
     
 
 

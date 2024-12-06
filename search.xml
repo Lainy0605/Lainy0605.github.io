@@ -2965,8 +2965,8 @@
 <li><p>状态转移方程<br>$$&amp;path[n-1][w] \quad 不装物品n \quad ① \<br>&amp;path[n-1][w-wg[n]] \quad 装入物品n \quad ②\[2ex]<br>&amp;path[n][w] &#x3D;<br>\begin{cases}<br>①, \quad ① &gt; ②\[2ex]<br>②, \quad ①&lt; ②\[2ex]<br>① + ②, \quad ①&#x3D;②<br>\end{cases}$$</p>
 </li>
 </ul>
-<h2 id="怎么装"><a href="#怎么装" class="headerlink" title="怎么装"></a>怎么装</h2><ul>
-<li><p>额外用一个三维数组path存放具体装法<br>$$<br>path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的具体装法<br>$$</p>
+<h2 id="具体装法"><a href="#具体装法" class="headerlink" title="具体装法"></a>具体装法</h2><ul>
+<li><p>额外用一个三维数组path存放具体装法<br>$$path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的具体装法$$</p>
 </li>
 <li><p>状态转移方程</p>
 </li>
@@ -2988,7 +2988,7 @@
 <li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的装法数量</strong></li>
 <li>状态转移方程改为 $dp[n][w] &#x3D; dp[n-1][w] + dp[n][w-wg[n]] $</li>
 </ol>
-<h2 id="怎么装-1"><a href="#怎么装-1" class="headerlink" title="怎么装"></a>怎么装</h2><ol>
+<h2 id="具体装法-1"><a href="#具体装法-1" class="headerlink" title="具体装法"></a>具体装法</h2><ol>
 <li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的具体装法</strong>（三维数组）</li>
 <li>状态转移方程改为 $dp[n][w] &#x3D; [dp[n-1][w], \quad dp[n][w-wg[n]].EachOf().append(物品n)]$</li>
 </ol>

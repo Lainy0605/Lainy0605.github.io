@@ -7,12 +7,12 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间">
+<meta name="description" content="最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How to compile JDK in M1 MacBook——在M1上编译JDK">
 <meta property="og:url" content="http://aeffy.icu/2023/05/15/InsideTheJVM/insideTheJVMOne/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="Introdution最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间">
+<meta property="og:description" content="最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img.shields.io/badge/Apple-MacBook%20Pro%2014%202021-lightgrey?&logo=apple&logoColor=white">
 <meta property="og:image" content="https://img.shields.io/badge/macOS-Ventura%2013.3.1-orange?&logo=apple&logoColor=white">
@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://img.shields.io/badge/Xcode-14.3-blue?logo=xcode">
 <meta property="og:image" content="https://img.shields.io/badge/Version-3.6.8-green">
 <meta property="article:published_time" content="2023-05-15T12:17:21.000Z">
-<meta property="article:modified_time" content="2023-05-15T16:57:09.944Z">
+<meta property="article:modified_time" content="2024-12-06T08:13:20.318Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
@@ -404,7 +404,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Introdution"  data-scroll-to="#Introdution"><span class="toc-number">1.</span> <span class="toc-text">Introdution</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">2.</span> <span class="toc-text">System Environment</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Get-JDK-source-code"  data-scroll-to="#Get-JDK-source-code"><span class="toc-number">3.</span> <span class="toc-text">Get JDK source code</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Configure"  data-scroll-to="#Configure"><span class="toc-number">4.</span> <span class="toc-text">Configure</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Make-images"  data-scroll-to="#Make-images"><span class="toc-number">5.</span> <span class="toc-text">Make images</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Reference"  data-scroll-to="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#System-Environment"  data-scroll-to="#System-Environment"><span class="toc-number">1.</span> <span class="toc-text">System Environment</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Get-JDK-source-code"  data-scroll-to="#Get-JDK-source-code"><span class="toc-number">2.</span> <span class="toc-text">Get JDK source code</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Configure"  data-scroll-to="#Configure"><span class="toc-number">3.</span> <span class="toc-text">Configure</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Make-images"  data-scroll-to="#Make-images"><span class="toc-number">4.</span> <span class="toc-text">Make images</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#Reference"  data-scroll-to="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -440,7 +440,7 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="Introdution"><a href="#Introdution" class="headerlink" title="Introdution"></a>Introdution</h1><p>最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间</p>
+    <p>最近开始看《深入理解Java虚拟机》，出来混果然还是要还的，就从最基础的债开始还起吧。第一部分主要是编译JDK，由于个人是M1芯片，导致编译过程中出现诸多问题，网上又少有相关报错，导致花费了不少时间</p>
 <span id="more"></span>
 
 <h1 id="System-Environment"><a href="#System-Environment" class="headerlink" title="System Environment"></a>System Environment</h1><table>

@@ -2,7 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://aeffy.icu/2023/05/10/sort/DirectInsertsort/</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://aeffy.icu/2023/05/10/sort/BinaryInsertsort/</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://aeffy.icu/2023/04/27/sort/Shellsort/</loc>
+    
+    <lastmod>2024-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://aeffy.icu/2023/05/15/InsideTheJVM/insideTheJVMOne/</loc>
     
     <lastmod>2024-12-06</lastmod>
     
@@ -38,36 +65,9 @@
   </url>
   
   <url>
-    <loc>http://aeffy.icu/2023/05/15/InsideTheJVM/insideTheJVMOne/</loc>
-    
-    <lastmod>2023-05-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://aeffy.icu/2023/04/27/sort/Quicksort/</loc>
     
     <lastmod>2023-05-11</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://aeffy.icu/2023/05/10/sort/BinaryInsertsort/</loc>
-    
-    <lastmod>2023-05-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://aeffy.icu/2023/05/10/sort/DirectInsertsort/</loc>
-    
-    <lastmod>2023-05-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

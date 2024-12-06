@@ -2956,7 +2956,7 @@
 <ul>
 <li><p>dp数组定义<br>$$dp[n][w] &#x3D; 仅使用前n个物品（不可重复使用）、背包容量为w时能装下的最大价值$$</p>
 </li>
-<li><p>状态转移方程<br>$$dp[n][w] &#x3D; Max<br>\begin{cases}<br>dp[n-1][w], \quad 不装物品n \[2ex]<br>dp[n-1][w-wg[n]] + val[n], \quad 装入物品n<br>\end{cases}$$</p>
+<li><p>状态转移方程<br>$$dp[n][w] &#x3D; Max\begin{cases}dp[n-1][w], \quad 不装物品n \[2ex]dp[n-1][w-wg[n]]+ val[n], \quad 装入物品n\end{cases}$$</p>
 </li>
 </ul>
 <h2 id="有几种不同的装法"><a href="#有几种不同的装法" class="headerlink" title="有几种不同的装法"></a>有几种不同的装法</h2><ul>

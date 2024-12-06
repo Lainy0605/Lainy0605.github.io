@@ -2616,7 +2616,8 @@
   <entry>
     <title>第二章——Java内存区域与内存溢出异常</title>
     <url>/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
+    <content><![CDATA[<h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png)</p>
+<p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
 <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
 <li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
 </li>
@@ -2942,6 +2943,64 @@
       </categories>
       <tags>
         <tag>排序算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>背包问题</title>
+    <url>/2024/12/05/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="0-1背包"><a href="#0-1背包" class="headerlink" title="0-1背包"></a>0-1背包</h1><p>背包容量为$W$，物品有$N$个且每种物品不可重复使用，物品$n$的重量为$wg[n]$、价值为$val[n]$</p>
+<p>问最多能装多少价值？</p>
+<ul>
+<li><p>dp数组定义<br>$$<br>dp[n][w] &#x3D; 仅使用前n个物品（不可重复使用）、背包容量为w时能装下的最大价值<br>$$</p>
+</li>
+<li><p>状态转移方程</p>
+</li>
+</ul>
+<p>$$<br>dp[n][w] &#x3D; Max<br>\begin{cases}<br>dp[n-1][w], \quad 不装物品n \[2ex]<br>dp[n-1][w-wg[n]] + val[n], \quad 装入物品n<br>\end{cases}<br>$$</p>
+<h2 id="有几种不同的装法"><a href="#有几种不同的装法" class="headerlink" title="有几种不同的装法"></a>有几种不同的装法</h2><ul>
+<li><p>额外用一个三维数组path存放装法数量<br>$$<br>path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的装法数量<br>$$</p>
+</li>
+<li><p>状态转移方程</p>
+</li>
+</ul>
+<p>$$<br>path[n-1][w] \quad 不装物品n \quad ① \<br>path[n-1][w-wg[n]] \quad 装入物品n \quad ②\[2ex]<br>path[n][w] &#x3D;<br>\begin{cases}<br>①, \quad ① &gt; ②\[2ex]<br>②, \quad ①&lt; ②\[2ex]<br>① + ②, \quad ①&#x3D;②<br>\end{cases}<br>$$</p>
+<h2 id="怎么装"><a href="#怎么装" class="headerlink" title="怎么装"></a>怎么装</h2><ul>
+<li><p>额外用一个三维数组path存放具体装法<br>$$<br>path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的具体装法<br>$$</p>
+</li>
+<li><p>状态转移方程</p>
+</li>
+</ul>
+<p>$$<br>path[n-1][w] \quad 不装物品n \quad ① \<br>path[n-1][w-wg[n] \quad 装入物品n \quad ② \[2ex]<br>path[n][w] &#x3D;<br>\begin{cases}<br>① \quad①, \quad ①&gt;② \[2ex]<br>②.EachOf().append(物品n) \quad②, \quad ①&lt;②\[2ex]<br>[①, \quad ②.EachOf().append(物品n)], \quad ①&#x3D;② \[2ex]<br>\end{cases}<br>$$</p>
+<h2 id="物品可重复使用"><a href="#物品可重复使用" class="headerlink" title="物品可重复使用"></a>物品可重复使用</h2><ol>
+<li>修改dp数组定义为 <strong>可重复使用</strong> </li>
+<li>由于可以重复使用，状态转移方程 <strong>装入物品n</strong> 分支应该改为 $dp[n][w-wg[n]]+val[n]$</li>
+</ol>
+<h1 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h1><p>背包容量为$W$，物品有$N$个且每种物品可以重复使用，物品$n$的重量为$wg[n]$</p>
+<p>问是否能够正好装满？</p>
+<ul>
+<li><p>dp数组定义<br>$$<br>dp[n][w] &#x3D; 仅使用前n个物品（可重复使用），背包容量为w时是否能够正好装满<br>$$</p>
+</li>
+<li><p>状态转移方程<br>$$<br>dp[n][w] &#x3D; ||<br>\begin{cases}<br>dp[n-1][w]，不装物品n \[2ex]<br>dp[n][w-wg[n]]，装入物品n<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+<h2 id="有几种不同的装法-1"><a href="#有几种不同的装法-1" class="headerlink" title="有几种不同的装法"></a>有几种不同的装法</h2><ol>
+<li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的装法数量</strong></li>
+<li>状态转移方程改为 $dp[n][w] &#x3D; dp[n-1][w] + dp[n][w-wg[n]] $</li>
+</ol>
+<h2 id="怎么装-1"><a href="#怎么装-1" class="headerlink" title="怎么装"></a>怎么装</h2><ol>
+<li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的具体装法</strong>（三维数组）</li>
+<li>状态转移方程改为 $dp[n][w] &#x3D; [dp[n-1][w], \quad dp[n][w-wg[n]].EachOf().append(物品n)]$</li>
+</ol>
+<h2 id="物品不可重复使用"><a href="#物品不可重复使用" class="headerlink" title="物品不可重复使用"></a>物品不可重复使用</h2><ol>
+<li>修改dp数组定义为 <strong>不可重复使用</strong></li>
+<li>状态转移方程 <strong>装入物品n</strong> 分支应该改为 $dp[n-1][w-wt[n]]$</li>
+</ol>
+]]></content>
+      <categories>
+        <category>algothrim</category>
+      </categories>
+      <tags>
+        <tag>dynamic programming</tag>
       </tags>
   </entry>
 </search>

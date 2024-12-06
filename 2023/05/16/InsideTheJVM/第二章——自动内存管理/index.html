@@ -7,15 +7,15 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="运行时数据区域![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png) 对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是">
+<meta name="description" content="运行时数据区域![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png) ![image-20241205113328261](&#x2F;Users&#x2F;effy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第二章——Java内存区域与内存溢出异常">
 <meta property="og:url" content="http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="运行时数据区域![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png) 对象的创建 类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是">
+<meta property="og:description" content="运行时数据区域![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png) ![image-20241205113328261](&#x2F;Users&#x2F;effy">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-16T01:20:45.000Z">
-<meta property="article:modified_time" content="2024-12-05T03:33:30.347Z">
+<meta property="article:modified_time" content="2024-12-05T05:45:34.394Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
@@ -430,7 +430,8 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
+    <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png)</p>
+<p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
 <h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
 <li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
 </li>

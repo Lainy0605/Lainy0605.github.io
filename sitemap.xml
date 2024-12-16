@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://aeffy.icu/2024/12/16/%E5%9B%9E%E6%BA%AF/</loc>
+    <loc>http://aeffy.icu/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2024-12-16</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>http://aeffy.icu/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</loc>
+    <loc>http://aeffy.icu/2024/12/16/algorithm/%E5%9B%9E%E6%BA%AF/</loc>
     
     <lastmod>2024-12-16</lastmod>
     
@@ -104,15 +104,6 @@
     <loc>http://aeffy.icu/2023/04/27/algorithm/sort/Quicksort/</loc>
     
     <lastmod>2023-05-11</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://aeffy.icu/2023/05/10/algorithm/%E5%9B%9E%E6%BA%AF/</loc>
-    
-    <lastmod>2023-05-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

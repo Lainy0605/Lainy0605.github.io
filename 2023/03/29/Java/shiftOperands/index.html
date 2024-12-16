@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言Java中的移位操作主要包括三种：&lt;&lt;(左移)、&gt;&gt;（有符号右移）、&gt;&gt;&gt;（无符号右移）。这三种移位操作都只能作用于long、int、short、byte、char这五种基本的整型类型上，由于 double，float 在二进制中的表现比较特殊，因此不能来进行移位操作。通常情况下，移位操作比普通运算的效率更高。 左移 &lt;&lt;左移运算是将数据的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的移位运算">
+<meta property="og:url" content="http://aeffy.icu/2023/03/29/Java/shiftOperands/index.html">
+<meta property="og:site_name" content="Effy&#39;s Page">
+<meta property="og:description" content="前言Java中的移位操作主要包括三种：&lt;&lt;(左移)、&gt;&gt;（有符号右移）、&gt;&gt;&gt;（无符号右移）。这三种移位操作都只能作用于long、int、short、byte、char这五种基本的整型类型上，由于 double，float 在二进制中的表现比较特殊，因此不能来进行移位操作。通常情况下，移位操作比普通运算的效率更高。 左移 &lt;&lt;左移运算是将数据的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-29T06:11:44.000Z">
+<meta property="article:modified_time" content="2023-04-03T02:57:08.865Z">
+<meta property="article:author" content="Effy">
+<meta property="article:tag" content="移位运算">
+<meta name="twitter:card" content="summary">
+
+
+<title >Java中的移位运算</title>
+
+<!-- Favicon -->
+
+    <link href='/img/lyft.ico?v=1.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/lyft.ico?v=1.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=1.2.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+
+
+    
+
+    
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+			<a href="/" class="trm-logo-frame trm-anima-link">
+				
+					<img src="/img/lyft.svg" alt="logo">
+				
+				
+					<div class="trm-logo-text">
+						WelcomeTo<span>Effy&#39;sWorld</span>
+					</div>
+				
+			</a>
+			<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+
+			<!-- menu -->
+			<div class="trm-menu">
+				<nav>
+					<ul>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/" target="">
+								Home
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/archives/" target="">
+								archives
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/categories/" target="">
+								categories
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/tags/" target="">
+								tags
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/about/" target="">
+								About
+							</a>
+							
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+			<!-- menu end -->
+			
+			<!-- mode switcher place -->
+			
+			<div class="trm-mode-switcher-place">
+				<!-- <div class="trm-hidden-switcher"> -->
+					<div class="trm-mode-switcher">
+					  <i class="far fa-sun"></i>
+					  <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+					  <label class="trm-swich" for="trm-swich"></label>
+					  <i class="far fa-moon"></i>
+					</div>
+				  <!-- </div> -->
+			</div>
+			
+			<!-- mode switcher place end -->
+
+			
+				
+				<div id="trm-search-btn" class="trm-search-btn">
+					<i class="fas fa-search"></i>
+				</div>
+				 
+			 
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" src="/img/banner.png" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Java中的移位运算
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
+    <h5 class="trm-name trm-mb-15">
+        Effy
+    </h5>
+    
+    <div class="trm-label">
+        我
+        <span class="trm-typed-text">
+            <!-- Words for theme.user.typedText -->
+        </span>
+    </div>
+    
+</div>
+<!-- card header end -->
+
+<!-- sidebar social -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+
+<div class="trm-social">
+    
+        <a href="https://github.com/Lainy0605" title="Github" rel="nofollow" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/effyspage" title="Gitee" rel="nofollow" target="_blank">
+            <i class="fab fa-github-alt"></i>
+        </a>
+    
+        <a href="https://music.163.com/#/user/home?id=610482486" title="NetEaseMusic" rel="nofollow" target="_blank">
+            <i class="fab fa-itunes"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/335136462?spm_id_from=333.1007.0.0" title="Bilibili" rel="nofollow" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
+    
+        <a href="https://steamcommunity.com/profiles/76561199081278457/" title="Steam" rel="nofollow" target="_blank">
+            <i class="fab fa-steam"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+
+<!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                age:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                City:
+            </div>
+            <div class="trm-label trm-label-light">
+                Kunshan, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                school:
+            </div>
+            <div class="trm-label trm-label-light">
+                Nanjing University
+            </div>
+        </li>
+    
+</ul>
+
+<!-- info end -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<!-- action button -->
+<div class="text-center">
+    <a href="mailto:592511932@qq.com" class="trm-btn">
+        Contact Me
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+<!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#前言"  data-scroll-to="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#左移"  data-scroll-to="#左移"><span class="toc-number">2.</span> <span class="toc-text">左移 &lt;&lt;</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#有符号右移"  data-scroll-to="#有符号右移"><span class="toc-number">3.</span> <span class="toc-text">有符号右移 &gt;&gt;</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#无符号右移"  data-scroll-to="#无符号右移"><span class="toc-number">4.</span> <span class="toc-text">无符号右移 &gt;&gt;&gt;</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#坑"  data-scroll-to="#坑"><span class="toc-number">5.</span> <span class="toc-text">坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#对-short、byte、char-的移位操作"  data-scroll-to="#对-short、byte、char-的移位操作"><span class="toc-number">5.0.1.</span> <span class="toc-text">对 short、byte、char 的移位操作</span></a></li><li class="toc-item toc-level-3"><a rel="nofollow" class="toc-link" href="#移位的位数超过数值所占有的位数"  data-scroll-to="#移位的位数超过数值所占有的位数"><span class="toc-number">5.0.2.</span> <span class="toc-text">移位的位数超过数值所占有的位数</span></a></li></ol></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            03/29
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            14:11
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Java中的移位操作主要包括三种：&lt;&lt;(左移)、&gt;&gt;（有符号右移）、&gt;&gt;&gt;（无符号右移）。这三种移位操作都只能作用于<code>long</code>、<code>int</code>、<code>short</code>、<code>byte</code>、<code>char</code>这五种基本的整型类型上，由于 <code>double</code>，<code>float</code> 在二进制中的表现比较特殊，因此不能来进行移位操作。通常情况下，移位操作比普通运算的效率更高。</p>
+<h1 id="左移"><a href="#左移" class="headerlink" title="左移 &lt;&lt;"></a>左移 &lt;&lt;</h1><p>左移运算是将数据的二进制数向左移动若干位，高位丢弃，低位补零，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">a &lt;&lt;= <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// a的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//向左移动10位，高位丢弃，低位补零：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111100 00000000</span></span><br><span class="line"><span class="comment">//结果是a = -1024</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="有符号右移"><a href="#有符号右移" class="headerlink" title="有符号右移 &gt;&gt;"></a>有符号右移 &gt;&gt;</h1><p>有符号右移是将数据的二进制数向右移动若干位，低位丢弃，高位补符号位，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">8</span>;</span><br><span class="line">a &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// a的二进制数：</span></span><br><span class="line"><span class="comment">//00000000 00000000 00000000 00001000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补0</span></span><br><span class="line"><span class="comment">//00000000 00000000 00000000 00000001</span></span><br><span class="line"><span class="comment">//结果是a = 1</span></span><br><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span>-<span class="number">8</span>;</span><br><span class="line">b &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// b的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补1</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//结果是b = -1</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="无符号右移"><a href="#无符号右移" class="headerlink" title="无符号右移 &gt;&gt;&gt;"></a>无符号右移 &gt;&gt;&gt;</h1><p>无符号右移是将数据的二进制数向右移动若干位，低位丢弃，高位补0，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span>-<span class="number">8</span>;</span><br><span class="line">b &gt;&gt;= <span class="number">3</span>;</span><br><span class="line"><span class="comment">// b的二进制数：</span></span><br><span class="line"><span class="comment">//11111111 11111111 11111111 11111000</span></span><br><span class="line"><span class="comment">//向右移动10位，低位丢弃，高位补0</span></span><br><span class="line"><span class="comment">//00011111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//结果是b = 536870911</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现正数的&gt;&gt;和&gt;&gt;&gt;是等价的</p>
+<h1 id="坑"><a href="#坑" class="headerlink" title="坑"></a>坑</h1><h3 id="对-short、byte、char-的移位操作"><a href="#对-short、byte、char-的移位操作" class="headerlink" title="对 short、byte、char 的移位操作"></a>对 short、byte、char 的移位操作</h3><p>java对short、byte和char的移位操作，首先会将其补成32位的int型，再对其进行移位操作，最后低位截取对应的位数，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">2</span>;</span><br><span class="line">System.out.println(a &gt;&gt;&gt; <span class="number">1</span>);</span><br><span class="line"><span class="comment">//首先将8位的a转成32位</span></span><br><span class="line"><span class="comment">//11111110 -&gt; 11111111 11111111 11111111 11111110</span></span><br><span class="line"><span class="comment">//对这32位int进行移位，此时是无符号右移1位，高位补0</span></span><br><span class="line"><span class="comment">//01111111 11111111 11111111 11111111</span></span><br><span class="line"><span class="comment">//注意此时并没有赋值号，因此直接输出该32位的结果</span></span><br><span class="line"><span class="comment">//输出结果为：2147483647</span></span><br><span class="line">System.out.println(a &gt;&gt;= <span class="number">1</span>);</span><br><span class="line"><span class="comment">//此时有赋值号，将移位后的结果截取低8位，即11111111</span></span><br><span class="line"><span class="comment">//输出结果为：-1</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，如果输出a &gt;&gt; 3，此时不会对结果进行截取。只有a &gt;&gt;&#x3D; 3，即对a赋值的时候才会进行低位截取，比如此时a是byte类型，在java中占8位，就对移位后的结果取低8位赋给a</p>
+<h3 id="移位的位数超过数值所占有的位数"><a href="#移位的位数超过数值所占有的位数" class="headerlink" title="移位的位数超过数值所占有的位数"></a>移位的位数超过数值所占有的位数</h3><p>对于要移动的位数i，如果i超过了该类型数值所占位数j，则取i%j的结果作为最终要移动的位数，其中short、byte和char类型总是会先转化为32位int，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">byte</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">8</span>);</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">32</span>);</span><br><span class="line">System.out.println(c &gt;&gt;&gt; <span class="number">33</span>);</span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">// 0</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://aeffy.icu/2023/03/29/Java/shiftOperands/" title="Java中的移位运算">http://aeffy.icu/2023/03/29/Java/shiftOperands/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/04/27/algorithm/sort/Quicksort/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E7%AE%97%E6%B3%95/">
+                    算法
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/04/27/algorithm/sort/Quicksort/" class="trm-anima-link">
+                    排序算法之一———快速排序
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/04/27</li>
+                <li>09:48</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/03/23/zhaoyinInterviewOne/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/03/23/zhaoyinInterviewOne/" class="trm-anima-link">
+                    面经总结
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/03/23</li>
+                <li>10:07</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2024</span>
+            <span class="footer-separator">·</span>
+            <span class="trm-accent-color">Effy</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator"> | </span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v1.2.7
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            The blog has been lovely to run <span id="since" class="trm-accent-color"></span> day
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        BirthDay = new Date("12/19/2022 17:00:00");
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        msPerDay = 24 * 60 * 60 * 1000
+        day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  <div id="trm-back-top" class="trm-back-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+  
+<div class="trm-search-popup">
+    <div class="trm-search-header">
+        <span class="trm-search-popup-btn-close">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <div class="form trm-search-form">
+        <input class="trm-search-input" type="text" placeholder="Searching...">
+    </div>
+    <div class="trm-search-result-container">
+
+    </div>
+</div>
+
+  <!-- Plugin -->
+
+
+
+    
+    
+
+    
+<script src="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=1.2.7"></script>
+    
+
+    
+        
+<script src="//cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=1.2.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+
+    <!-- 评论插件 -->
+    
+        
+        
+    
+
+
+
+<!-- 评论插件 -->
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=1.2.7"></script>
+
+</body>
+
+</html>

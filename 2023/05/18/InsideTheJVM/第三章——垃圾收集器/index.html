@@ -7,17 +7,22 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
+<meta name="description" content="空间分配担保JDK 6 Update 24 之前： 在触发Minor GC之前，虚拟机会先检查老年代最大连续可用空间是否大于新生代所有对象总空间：  如果大于，则这次Minor GC可以确保是安全的 否则会判断-XX:HandlePromotionFailure参数是否允许担保失败 如果允许，则检查老年代最大连续可用空间是否大于历次晋升到老年代对象的平均大小 如果大于，则冒险进行一次Minor G">
 <meta property="og:type" content="article">
 <meta property="og:title" content="garbageCollect">
 <meta property="og:url" content="http://aeffy.icu/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
-<meta property="og:description" content="如何判断对象应该被回收引用计数法原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。 缺陷：对象之间相互循环引用 1234567891011121314151617public class ReferenceCountingGC &amp;#123;	public Object instance &#x3D; null;">
+<meta property="og:description" content="空间分配担保JDK 6 Update 24 之前： 在触发Minor GC之前，虚拟机会先检查老年代最大连续可用空间是否大于新生代所有对象总空间：  如果大于，则这次Minor GC可以确保是安全的 否则会判断-XX:HandlePromotionFailure参数是否允许担保失败 如果允许，则检查老年代最大连续可用空间是否大于历次晋升到老年代对象的平均大小 如果大于，则冒险进行一次Minor G">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://aeffy.icu/Users/effy/Library/Application%20Support/typora-user-images/image-20241213172655488.png">
+<meta property="og:image" content="http://aeffy.icu/Users/effy/Library/Application%20Support/typora-user-images/image-20241216100015039.png">
+<meta property="og:image" content="http://aeffy.icu/Users/effy/Library/Application%20Support/typora-user-images/image-20241213171329892.png">
+<meta property="og:image" content="http://aeffy.icu/Users/effy/Library/Application%20Support/typora-user-images/image-20241213172114654.png">
 <meta property="article:published_time" content="2023-05-18T08:18:34.000Z">
-<meta property="article:modified_time" content="2023-05-26T11:30:52.595Z">
+<meta property="article:modified_time" content="2024-12-16T02:46:07.308Z">
 <meta property="article:author" content="Effy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://aeffy.icu/Users/effy/Library/Application%20Support/typora-user-images/image-20241213172655488.png">
 
 
 <title >garbageCollect</title>
@@ -397,7 +402,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#如何判断对象应该被回收"  data-scroll-to="#如何判断对象应该被回收"><span class="toc-number">1.</span> <span class="toc-text">如何判断对象应该被回收</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用计数法"  data-scroll-to="#引用计数法"><span class="toc-number">1.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#可达性分析法"  data-scroll-to="#可达性分析法"><span class="toc-number">1.2.</span> <span class="toc-text">可达性分析法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用的类型"  data-scroll-to="#引用的类型"><span class="toc-number">1.3.</span> <span class="toc-text">引用的类型</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#空间分配担保"  data-scroll-to="#空间分配担保"><span class="toc-number">1.</span> <span class="toc-text">空间分配担保</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#如何判断对象应该被回收"  data-scroll-to="#如何判断对象应该被回收"><span class="toc-number">2.</span> <span class="toc-text">如何判断对象应该被回收</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用计数法"  data-scroll-to="#引用计数法"><span class="toc-number">2.1.</span> <span class="toc-text">引用计数法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#可达性分析法"  data-scroll-to="#可达性分析法"><span class="toc-number">2.2.</span> <span class="toc-text">可达性分析法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#引用的类型"  data-scroll-to="#引用的类型"><span class="toc-number">2.3.</span> <span class="toc-text">引用的类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#垃圾回收算法"  data-scroll-to="#垃圾回收算法"><span class="toc-number">3.</span> <span class="toc-text">垃圾回收算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#标记-清除算法"  data-scroll-to="#标记-清除算法"><span class="toc-number">3.1.</span> <span class="toc-text">标记-清除算法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#复制算法"  data-scroll-to="#复制算法"><span class="toc-number">3.2.</span> <span class="toc-text">复制算法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#标记-整理算法"  data-scroll-to="#标记-整理算法"><span class="toc-number">3.3.</span> <span class="toc-text">标记-整理算法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#分代收集算法"  data-scroll-to="#分代收集算法"><span class="toc-number">3.4.</span> <span class="toc-text">分代收集算法</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#垃圾收集器"  data-scroll-to="#垃圾收集器"><span class="toc-number">4.</span> <span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Serial-Serial-Old"  data-scroll-to="#Serial-Serial-Old"><span class="toc-number">4.1.</span> <span class="toc-text">Serial+ Serial Old</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#ParNew-CMS"  data-scroll-to="#ParNew-CMS"><span class="toc-number">4.2.</span> <span class="toc-text">ParNew + CMS</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#Parallel-Scavenge-Parallel-Old"  data-scroll-to="#Parallel-Scavenge-Parallel-Old"><span class="toc-number">4.3.</span> <span class="toc-text">Parallel Scavenge + Parallel Old</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#G1"  data-scroll-to="#G1"><span class="toc-number">4.4.</span> <span class="toc-text">G1</span></a></li></ol></li></ol>
 </div>
             </div>
         </div>
@@ -433,14 +438,29 @@
 </div>
 <div class="trm-card ">
     <article class="trm-publication">
-    <h1 id="如何判断对象应该被回收"><a href="#如何判断对象应该被回收" class="headerlink" title="如何判断对象应该被回收"></a>如何判断对象应该被回收</h1><h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><p>原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。</p>
+    <h1 id="空间分配担保"><a href="#空间分配担保" class="headerlink" title="空间分配担保"></a>空间分配担保</h1><p>JDK 6 Update 24 之前：</p>
+<p>在触发<code>Minor GC</code>之前，虚拟机会先检查<strong>老年代最大连续可用空间</strong>是否大于<strong>新生代所有对象总空间</strong>：</p>
+<ul>
+<li>如果大于，则这次Minor GC可以确保是安全的</li>
+<li>否则会判断<code>-XX:HandlePromotionFailure</code>参数是否允许担保失败<ul>
+<li>如果允许，则检查<strong>老年代最大连续可用空间</strong>是否大于<strong>历次晋升到老年代对象的平均大小</strong><ul>
+<li>如果大于，则冒险进行一次<code>Minor GC</code></li>
+<li>否则出发<code>Full GC</code></li>
+</ul>
+</li>
+<li>不允许则触发<code>Full GC</code></li>
+</ul>
+</li>
+</ul>
+<p>JDK 6 Update 24 之后：只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小，就会进行<code>Minor GC</code>，否则将进行<code>Full GC</code></p>
+<h1 id="如何判断对象应该被回收"><a href="#如何判断对象应该被回收" class="headerlink" title="如何判断对象应该被回收"></a>如何判断对象应该被回收</h1><h2 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h2><p>原理：在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数为零的对象就是不可能再被使用的。</p>
 <p>缺陷：对象之间相互循环引用</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReferenceCountingGC</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="type">Object</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">_1MB</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span>;</span><br><span class="line">  <span class="keyword">private</span> <span class="type">byte</span>[] bigSize = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">2</span> * _1MB];</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">testGC</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ReferenceCountingGC</span> <span class="variable">objA</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReferenceCountingGC</span>();</span><br><span class="line">    <span class="type">ReferenceCountingGC</span> <span class="variable">objB</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReferenceCountingGC</span>();</span><br><span class="line">    objA.instance = objB;</span><br><span class="line">    objB.instance = objA;</span><br><span class="line">    </span><br><span class="line">    objA = <span class="literal">null</span>;</span><br><span class="line">    objB = <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">    System.gc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>主流的Java虚拟机都没有选用引用计数法</p>
 <h2 id="可达性分析法"><a href="#可达性分析法" class="headerlink" title="可达性分析法"></a>可达性分析法</h2><p>当前主流的商用程序语言（Java，C#等）都是通过可达性分析算法来判定对象是否存活。</p>
 <p>原理：通过一系列称为“GC Roots”的根对象作为起始节点集，从这些节点开始，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”（Reference Chain），如果某个对象到GC Roots间没有任何引用链相连，则证明此对象不可能再被使用的。</p>
-<p>GC Roots：</p>
+<p><strong>GC Roots：</strong></p>
 <ul>
 <li>虚拟机栈中引用的对象</li>
 <li>本地方法栈中引用的对象</li>
@@ -450,13 +470,139 @@
 <li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象（比如NullPointerException、OutOfMemoryError）等，还有系统类加载器</li>
 <li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等</li>
 </ul>
+<p><strong>对象不可达一定会被回收吗？</strong></p>
+<p>对象回收前，如果它的<code>finalize()</code>方法<strong>被重写</strong>并且<strong>从未执行过</strong>，会先执行<code>finalize()</code>方法，执行完后如果仍旧没有任何引用，那么该对象会被回收。</p>
 <h2 id="引用的类型"><a href="#引用的类型" class="headerlink" title="引用的类型"></a>引用的类型</h2><p>在JDK 1.2之后，Java对引用的概念进行了扩充：</p>
 <ul>
-<li>强引用（Strongly reference）：最传统的“引用”的定义，程序代码中普遍存在的引用赋值，即类似“Object obj&#x3D;new Object()”，只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象</li>
-<li>软引用（Soft reference）：用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收，如果这次回收还没有足够的内存，才会抛出内存溢出异常。JDK1.2之后提供了SoftReference类来实现软引用</li>
-<li>弱引用（Weak reference）：用来描述非必须对象，强度比软引用更弱，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无论当前内存是否足够，都会回收掉只被弱引用关联的对象。在JDK1.2之后提供了WeakReference类来实现弱引用</li>
-<li>虚引用（Phantom reference）：也称为“幽灵引用”或者“幻影引用”，最弱的一种引用关系。一个对象是否有虚引用完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。JDK1.2之后提供了PhantomReference类来实现虚引用</li>
+<li>强引用（Strongly reference）：最传统的“引用”的定义，程序代码中普遍存在的引用赋值，即类似“Object obj&#x3D;new Object()”，<strong>只要强引用关系还存在，垃圾收集器就永远不会回收掉被引用的对象</strong></li>
+<li>软引用（Soft reference）：用来描述一些还有用，但非必须的对象。只被软引用关联着的对象，<strong>在JVM内存不足时，就会被回收</strong>。可以和一个引用队列(ReferenceQueue)联合使用，如果弱引用所引用的对象被垃圾回收，Java 虚拟机就会把这个弱引用加入到与之关联的引用队列中。JDK1.2之后提供了SoftReference类来实现软引用</li>
+<li>弱引用（Weak reference）：用来描述非必须对象，强度比软引用更弱，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。当垃圾收集器开始工作，无<strong>论当前内存是否足够，都会回收掉只被弱引用关联的对象</strong>。在JDK1.2之后提供了WeakReference类来实现弱引用</li>
+<li>虚引用（Phantom reference）：也称为“幽灵引用”或者“幻影引用”，最弱的一种引用关系。一个对象是否有虚引用完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。为一个对象设置虚引用关联的<strong>唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知</strong>。JDK1.2之后提供了PhantomReference类来实现虚引用</li>
 </ul>
+<h1 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h1><h2 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h2><h2 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h2><h2 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h2><h2 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h2><h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><p>默认垃圾收集器：</p>
+<p>JDK 8: Parallel Scavenge(新生代) + Parallel Old(老年代)</p>
+<p>JDK 9-: G1(新生代 + 老年代)</p>
+<p>![image-20241216103245314](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241216103245314.png)</p>
+<h2 id="Serial-Serial-Old"><a href="#Serial-Serial-Old" class="headerlink" title="Serial+ Serial Old"></a>Serial+ Serial Old</h2><p>算法：新生代采用标记+复制算法，老年代采用标记+整理算法</p>
+<p> 缺点：</p>
+<ul>
+<li>单线程，停顿时间(STW)长</li>
+</ul>
+<p>![image-20241213170915843](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241213170915843.png)</p>
+<h2 id="ParNew-CMS"><a href="#ParNew-CMS" class="headerlink" title="ParNew + CMS"></a>ParNew + CMS</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>ParNew</th>
+<th>CMS(Concurrent Mark Sweep)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JVM参数</td>
+<td>-XX:+UseParNewGC</td>
+<td>-XX:+UseConcMarkSweepGC</td>
+</tr>
+<tr>
+<td>特点</td>
+<td>本质上是对Serial在多CPU下的优化，使用多线程回收</td>
+<td>关注系统的暂停时间，允许用户线程和垃圾回收线程在某些步骤中同时执行，减少了用户线程的等待时间，吞吐量方面会下降</td>
+</tr>
+<tr>
+<td>回收区域</td>
+<td>新生代</td>
+<td>老年代</td>
+</tr>
+<tr>
+<td>回收算法</td>
+<td>标记-复制算法</td>
+<td>标记-整理算法</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>多CPU下停顿时间较短</td>
+<td>系统由于垃圾回收的停顿时间较短，用户体验好</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>吞吐量和停顿时间不如G1，JDK9以后不建议使用</td>
+<td>1.内存碎片问题：使用标记-清除算法，存在内存碎片<br />2.退化问题：老年代内存不足分配对象，CMS会退化成Serial Old单线程回收老年代<br />3.浮动垃圾问题：无法处理并发清除过程中产生的浮动垃圾</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>JDK8及以前，和CMS搭配使用</td>
+<td>大型互联网系统中用户请求数据量大、频率高的场景，比如订单接口、商品接口等</td>
+</tr>
+<tr>
+<td></td>
+<td><img src="/Users/effy/Library/Application Support/typora-user-images/image-20241213172655488.png" alt="image-20241213172655488" style="zoom:50%;"  loading="lazy"/></td>
+<td><img src="/Users/effy/Library/Application Support/typora-user-images/image-20241216100015039.png" alt="image-20241216100015039" style="zoom:50%;"  loading="lazy"/></td>
+</tr>
+</tbody></table>
+<p>CMS执行步骤：</p>
+<ol>
+<li>初始标记：用极短的时间标记出GC Roots直接关联的对象</li>
+<li>并发标记：标记所有对象，用户线程不需要暂停</li>
+<li>重新标记：由于并发标记阶段有些对象发生了变化，存在错标、漏标等情况，需要重新标记</li>
+<li>并发清除：清理死亡的对象，用户线程不需要暂停</li>
+</ol>
+<h2 id="Parallel-Scavenge-Parallel-Old"><a href="#Parallel-Scavenge-Parallel-Old" class="headerlink" title="Parallel Scavenge + Parallel Old"></a>Parallel Scavenge + Parallel Old</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Parallel Scavenge</th>
+<th>Parallel Old</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JVM参数</td>
+<td>-XX:UseParallelGC<br />-XX:MaxGCPauseMillis: 最大暂停时间<br />-XX:GCTimeRation: 吞吐量<br />-XX:UseAdaptiveSizePolicy: 自动调整内存大小</td>
+<td>-XX:UseParallelOldGC</td>
+</tr>
+<tr>
+<td>特点</td>
+<td>多线程并行回收，关注系统的吞吐量，具备自动调整堆内存大小的能力，允许用户设置最大暂停时间</td>
+<td>Parallel Scavenge的老年代版本，多线程并发收集，</td>
+</tr>
+<tr>
+<td>回收区域</td>
+<td><strong>新生代</strong></td>
+<td><strong>老年代</strong></td>
+</tr>
+<tr>
+<td>算法</td>
+<td>标记-复制算法</td>
+<td>标记-整理算法</td>
+</tr>
+<tr>
+<td>优点</td>
+<td>吞吐量高、而且手动可控；为了调整吞吐量，虚拟机会动态调整堆的参数</td>
+<td>并发效率高，在多核CPU下收集效率高</td>
+</tr>
+<tr>
+<td>缺点</td>
+<td>不能保证单次的停顿时间</td>
+<td>暂停时间比较长长</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>后台任务，不需要与用户交互，并且容易产生大量的对象。比如大数据的处理，大文件的导出</td>
+<td>与Parallel Scavenge配套使用</td>
+</tr>
+<tr>
+<td>工作流程</td>
+<td><img src="/Users/effy/Library/Application Support/typora-user-images/image-20241213171329892.png" alt="image-20241213171329892" style="zoom:50%;"  loading="lazy"/></td>
+<td><img src="/Users/effy/Library/Application Support/typora-user-images/image-20241213172114654.png" alt="image-20241213172114654" style="zoom:50%;"  loading="lazy"/></td>
+</tr>
+</tbody></table>
+<h2 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h2><p>G1的整个堆会被划分为多个大小相等的区域，称之为区Region，区域不要求是连续的。分为Eden、Survivor和Old区，以及存放大对象的Humogous区（超过一个Region区的1&#x2F;2会被直接放在该区）</p>
+<p>![image-20241216103646557](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241216103646557.png)</p>
+<p><strong>优点</strong></p>
+<ol>
+<li>支持巨大的堆空间回收，并有较高的吞吐量</li>
+<li>支持多CPU并行垃圾回收</li>
+<li>允许用户设置最大暂停时间</li>
+</ol>
+<p>![image-20241216102322973](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241216102322973.png)</p>
 
 </article>
     
@@ -489,7 +635,7 @@
     
         <div class="col-lg-6">
     <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
-        <a href="/2024/12/05/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="trm-cover-frame trm-anima-link">
+        <a href="/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="trm-cover-frame trm-anima-link">
             
             
                 <img src="/img/block.jpg" alt="cover">
@@ -497,12 +643,12 @@
         </a>
         <div class="trm-card-descr">
             <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/algorithm/">
-                    algorithm
+                <a href=" /categories/%E7%AE%97%E6%B3%95/">
+                    算法
                 </a>
             </div>
             <h5>
-                <a href="/2024/12/05/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="trm-anima-link">
+                <a href="/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="trm-anima-link">
                     背包问题
                 </a>
             </h5>

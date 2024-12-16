@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="0-1背包背包容量为$ W $，物品有$N$个且每种物品不可重复使用，物品$n$的重量为$wg[n]$、价值为$val[n]$ 问最多能装多少价值？  dp数组定义$$dp[n][w] &#x3D; 仅使用前n个物品（不可重复使用）、背包容量为w时能装下的最大价值$$  状态转移方程$$dp[n][w] &#x3D; Max$$   有几种不同的装法 额外用一个三维数组path存放装法数量$$pa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="背包问题">
+<meta property="og:url" content="http://aeffy.icu/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Effy&#39;s Page">
+<meta property="og:description" content="0-1背包背包容量为$ W $，物品有$N$个且每种物品不可重复使用，物品$n$的重量为$wg[n]$、价值为$val[n]$ 问最多能装多少价值？  dp数组定义$$dp[n][w] &#x3D; 仅使用前n个物品（不可重复使用）、背包容量为w时能装下的最大价值$$  状态转移方程$$dp[n][w] &#x3D; Max$$   有几种不同的装法 额外用一个三维数组path存放装法数量$$pa">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-12-05T08:16:40.000Z">
+<meta property="article:modified_time" content="2024-12-16T07:21:24.403Z">
+<meta property="article:author" content="Effy">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="背包问题">
+<meta name="twitter:card" content="summary">
+
+
+<title >背包问题</title>
+
+<!-- Favicon -->
+
+    <link href='/img/lyft.ico?v=1.2.7' rel='icon' type='image/png' sizes='16x16' ></link>
+
+
+    <link href='/img/lyft.ico?v=1.2.7' rel='icon' type='image/png' sizes='32x32' ></link>
+
+
+    <link href='/apple-touch-icon.png?v=1.2.7' rel='apple-touch-icon' sizes='180x180' ></link>
+
+
+    <link href='/site.webmanifest' rel='manifest' ></link>
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
+
+    
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
+
+
+    
+
+    
+        
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+
+        
+            
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.css">
+
+        
+    
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+
+    
+
+
+
+<!-- Site Analytics -->
+ 
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" data-scroll-container style="opacity: 0">
+          <div data-scroll-section id="content" class="trm-scroll-section">
+
+            <div class="locomotive-scroll__sticky-target" style=" position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+
+            <!-- top bar -->
+            <header class="trm-top-bar" data-scroll data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="-10">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+			<a href="/" class="trm-logo-frame trm-anima-link">
+				
+					<img src="/img/lyft.svg" alt="logo">
+				
+				
+					<div class="trm-logo-text">
+						WelcomeTo<span>Effy&#39;sWorld</span>
+					</div>
+				
+			</a>
+			<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+
+			<!-- menu -->
+			<div class="trm-menu">
+				<nav>
+					<ul>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/" target="">
+								Home
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/archives/" target="">
+								archives
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/categories/" target="">
+								categories
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/tags/" target="">
+								tags
+							</a>
+							
+						</li>
+						
+						<li class="menu-item-has-children ">
+							<a  href="/about/" target="">
+								About
+							</a>
+							
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+			<!-- menu end -->
+			
+			<!-- mode switcher place -->
+			
+			<div class="trm-mode-switcher-place">
+				<!-- <div class="trm-hidden-switcher"> -->
+					<div class="trm-mode-switcher">
+					  <i class="far fa-sun"></i>
+					  <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+					  <label class="trm-swich" for="trm-swich"></label>
+					  <i class="far fa-moon"></i>
+					</div>
+				  <!-- </div> -->
+			</div>
+			
+			<!-- mode switcher place end -->
+
+			
+				
+				<div id="trm-search-btn" class="trm-search-btn">
+					<i class="fas fa-search"></i>
+				</div>
+				 
+			 
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner" data-scroll data-scroll-direction="vertical">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" src="/img/banner.png" alt="banner" class="trm-banner-cover" data-scroll data-scroll-direction="vertical" data-scroll-speed="-3">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container" data-scroll data-scroll-direction="vertical" data-scroll-speed="0">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            背包问题
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2024
+                                    </span
+                                ></li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <a href="#about-triger" data-scroll-to="#about-triger" data-scroll-offset="-130" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </a>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    
+
+<div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card" data-scroll data-scroll-repeat data-scroll-sticky data-scroll-target=".locomotive-scroll__sticky-target" data-scroll-offset="60"> 
+    
+        <div class="trm-tabs" id="sidebar-tabs">
+           <div class="trm-tabs-nav trm-mb-40" id="trm-tabs-nav">
+                <div data-to="tabs-user" class="trm-tabs-nav-item"><i class="fas fa-user-alt"></i></div>
+                <div data-to="tabs-toc" class="trm-tabs-nav-item active"><i class="fas fa-th-list"></i></div>
+           </div>
+            <div name="tabs-user" class="trm-tabs-item">
+                <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20"><img class="trm-avatar" src="/img/avatar.jpg" alt="Avatar"> </div>
+    <h5 class="trm-name trm-mb-15">
+        Effy
+    </h5>
+    
+    <div class="trm-label">
+        我
+        <span class="trm-typed-text">
+            <!-- Words for theme.user.typedText -->
+        </span>
+    </div>
+    
+</div>
+<!-- card header end -->
+
+<!-- sidebar social -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+
+<div class="trm-social">
+    
+        <a href="https://github.com/Lainy0605" title="Github" rel="nofollow" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+    
+        <a href="https://gitee.com/effyspage" title="Gitee" rel="nofollow" target="_blank">
+            <i class="fab fa-github-alt"></i>
+        </a>
+    
+        <a href="https://music.163.com/#/user/home?id=610482486" title="NetEaseMusic" rel="nofollow" target="_blank">
+            <i class="fab fa-itunes"></i>
+        </a>
+    
+        <a href="https://space.bilibili.com/335136462?spm_id_from=333.1007.0.0" title="Bilibili" rel="nofollow" target="_blank">
+            <i class="fab fa-youtube"></i>
+        </a>
+    
+        <a href="https://steamcommunity.com/profiles/76561199081278457/" title="Steam" rel="nofollow" target="_blank">
+            <i class="fab fa-steam"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+
+<!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                age:
+            </div>
+            <div class="trm-label trm-label-light">
+                21
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                City:
+            </div>
+            <div class="trm-label trm-label-light">
+                Kunshan, China
+            </div>
+        </li>
+    
+        <li>
+            <div class="trm-label">
+                school:
+            </div>
+            <div class="trm-label trm-label-light">
+                Nanjing University
+            </div>
+        </li>
+    
+</ul>
+
+<!-- info end -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<!-- action button -->
+<div class="text-center">
+    <a href="mailto:592511932@qq.com" class="trm-btn">
+        Contact Me
+        <i class="far fa-envelope"></i>
+    </a>
+</div>
+<!-- action button end -->
+
+            </div>
+            <div name="tabs-toc" class="trm-tabs-item active">
+                <div class="post-toc">
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#0-1背包"  data-scroll-to="#0-1背包"><span class="toc-number">1.</span> <span class="toc-text">0-1背包</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#有几种不同的装法"  data-scroll-to="#有几种不同的装法"><span class="toc-number">1.1.</span> <span class="toc-text">有几种不同的装法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#具体装法"  data-scroll-to="#具体装法"><span class="toc-number">1.2.</span> <span class="toc-text">具体装法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#物品可重复使用"  data-scroll-to="#物品可重复使用"><span class="toc-number">1.3.</span> <span class="toc-text">物品可重复使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#完全背包"  data-scroll-to="#完全背包"><span class="toc-number">2.</span> <span class="toc-text">完全背包</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#有几种不同的装法-1"  data-scroll-to="#有几种不同的装法-1"><span class="toc-number">2.1.</span> <span class="toc-text">有几种不同的装法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#具体装法-1"  data-scroll-to="#具体装法-1"><span class="toc-number">2.2.</span> <span class="toc-text">具体装法</span></a></li><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#物品不可重复使用"  data-scroll-to="#物品不可重复使用"><span class="toc-number">2.3.</span> <span class="toc-text">物品不可重复使用</span></a></li></ol></li></ol>
+</div>
+            </div>
+        </div>
+    
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="col-lg-8">
+                <div class="trm-content" id="trm-content">
+                    <div data-scroll data-scroll-repeat data-scroll-offset="500" id="about-triger"></div>
+
+                    <div class="row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-calendar-alt trm-icon"></i><br>
+            12/05
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-clock trm-icon"></i><br>
+            16:16
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="far fa-user trm-icon"></i><br>
+            Effy
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article class="trm-publication">
+    <h1 id="0-1背包"><a href="#0-1背包" class="headerlink" title="0-1背包"></a>0-1背包</h1><p>背包容量为$ W $，物品有$N$个且每种物品不可重复使用，物品$n$的重量为$wg[n]$、价值为$val[n]$</p>
+<p>问最多能装多少价值？</p>
+<ul>
+<li><p>dp数组定义<br>$$dp[n][w] &#x3D; 仅使用前n个物品（不可重复使用）、背包容量为w时能装下的最大价值$$</p>
+</li>
+<li><p>状态转移方程<br>$$dp[n][w] &#x3D; Max$$</p>
+</li>
+</ul>
+<h2 id="有几种不同的装法"><a href="#有几种不同的装法" class="headerlink" title="有几种不同的装法"></a>有几种不同的装法</h2><ul>
+<li><p>额外用一个三维数组path存放装法数量<br>$$path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的装法数量$$</p>
+</li>
+<li><p>状态转移方程<br>$$&amp;path[n-1][w] \quad 不装物品n \quad ① \<br>&amp;path[n-1][w-wg[n]] \quad 装入物品n \quad ②\[2ex]<br>&amp;path[n][w] &#x3D;<br>\begin{cases}<br>①, \quad ① &gt; ②\[2ex]<br>②, \quad ①&lt; ②\[2ex]<br>① + ②, \quad ①&#x3D;②<br>\end{cases}$$</p>
+</li>
+</ul>
+<h2 id="具体装法"><a href="#具体装法" class="headerlink" title="具体装法"></a>具体装法</h2><ul>
+<li><p>额外用一个三维数组path存放具体装法<br>$$path[n][w] &#x3D; 仅使用前n个物品（不可重复使用），背包容量为w时能装下最大价值的具体装法$$</p>
+</li>
+<li><p>状态转移方程</p>
+</li>
+</ul>
+<p>$$<br>path[n-1][w] \quad 不装物品n \quad ① \<br>path[n-1][w-wg[n] \quad 装入物品n \quad ② \[2ex]<br>path[n][w] &#x3D;<br>\begin{cases}<br>① \quad①, \quad ①&gt;② \[2ex]<br>②.EachOf().append(物品n) \quad②, \quad ①&lt;②\[2ex]<br>[①, \quad ②.EachOf().append(物品n)], \quad ①&#x3D;② \[2ex]<br>\end{cases}<br>$$</p>
+<h2 id="物品可重复使用"><a href="#物品可重复使用" class="headerlink" title="物品可重复使用"></a>物品可重复使用</h2><ol>
+<li>修改dp数组定义为 <strong>可重复使用</strong> </li>
+<li>由于可以重复使用，状态转移方程 <strong>装入物品n</strong> 分支应该改为$dp[n][w-wg[n]]+val[n]$</li>
+</ol>
+<h1 id="完全背包"><a href="#完全背包" class="headerlink" title="完全背包"></a>完全背包</h1><p>背包容量为$W$，物品有$N$个且每种物品可以重复使用，物品$n$的重量为$wg[n]$</p>
+<p>问是否能够正好装满？</p>
+<ul>
+<li><p>dp数组定义<br>$$dp[n][w] &#x3D; 仅使用前n个物品（可重复使用），背包容量为w时是否能够正好装满$$</p>
+</li>
+<li><p>状态转移方程<br>$$<br>dp[n][w] &#x3D; ||<br>\begin{cases}<br>dp[n-1][w]，不装物品n \[2ex]<br>dp[n][w-wg[n]]，装入物品n<br>\end{cases}<br>$$</p>
+</li>
+</ul>
+<h2 id="有几种不同的装法-1"><a href="#有几种不同的装法-1" class="headerlink" title="有几种不同的装法"></a>有几种不同的装法</h2><ol>
+<li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的装法数量</strong></li>
+<li>状态转移方程改为 $dp[n][w] &#x3D; dp[n-1][w] + dp[n][w-wg[n]] $</li>
+</ol>
+<h2 id="具体装法-1"><a href="#具体装法-1" class="headerlink" title="具体装法"></a>具体装法</h2><ol>
+<li>修改dp数组定义为 <strong>仅使用前n个物品（可重复使用），背包容量为w时正好能装满的具体装法</strong>（三维数组）</li>
+<li>状态转移方程改为 $dp[n][w] &#x3D; [dp[n-1][w], \quad dp[n][w-wg[n]].EachOf().append(物品n)]$</li>
+</ol>
+<h2 id="物品不可重复使用"><a href="#物品不可重复使用" class="headerlink" title="物品不可重复使用"></a>物品不可重复使用</h2><ol>
+<li>修改dp数组定义为 <strong>不可重复使用</strong></li>
+<li>状态转移方程 <strong>装入物品n</strong> 分支应该改为 $dp[n-1][w-wt[n]]$</li>
+</ol>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Effy
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a href="http://aeffy.icu/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" title="背包问题">http://aeffy.icu/2024/12/05/algorithm/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2024/12/10/Java/JavaBasis/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2024/12/10/Java/JavaBasis/" class="trm-anima-link">
+                    JavaBasis
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>24/12/10</li>
+                <li>15:55</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation" data-scroll data-scroll-offset="40">
+        <a href="/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img src="/img/block.jpg" alt="cover">
+            
+        </a>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" #.">
+                    Unclassified
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/05/18/InsideTheJVM/%E7%AC%AC%E4%B8%89%E7%AB%A0%E2%80%94%E2%80%94%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="trm-anima-link">
+                    garbageCollect
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/05/18</li>
+                <li>16:18</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation" data-scroll data-scroll-offset="50">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2022- 2024</span>
+            <span class="footer-separator">·</span>
+            <span class="trm-accent-color">Effy</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v6.3.0
+            </span>
+            <span class="footer-separator"> | </span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v1.2.7
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item">
+            The blog has been lovely to run <span id="since" class="trm-accent-color"></span> day
+        </div>
+     
+
+     
+</footer>
+
+<script>
+    function show_date_time () {
+        BirthDay = new Date("12/19/2022 17:00:00");
+        today = new Date();
+        timeold = (today.getTime() - BirthDay.getTime());
+        msPerDay = 24 * 60 * 60 * 1000
+        day = Math.floor(timeold / msPerDay)
+        since.innerHTML = day
+    }
+    show_date_time()
+</script>
+ 
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+          </div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+
+  </div>
+  <!-- app wrapper end -->
+
+  <div id="trm-back-top" class="trm-back-top">
+    <i class="fas fa-arrow-up"></i>
+</div>
+  
+<div class="trm-search-popup">
+    <div class="trm-search-header">
+        <span class="trm-search-popup-btn-close">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <div class="form trm-search-form">
+        <input class="trm-search-input" type="text" placeholder="Searching...">
+    </div>
+    <div class="trm-search-result-container">
+
+    </div>
+</div>
+
+  <!-- Plugin -->
+
+
+
+    
+    
+
+    
+<script src="//cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+
+    
+<script src="//cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=1.2.7"></script>
+    
+
+    
+        
+<script src="//cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=1.2.7"></script>
+    
+
+    <!-- 数学公式 -->
+    
+        
+<script src="//cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js" data-swup-reload-script></script>
+
+        
+            
+<script src="//cdn.jsdelivr.net/npm/katex@latest/dist/contrib/copy-tex.min.js" data-swup-reload-script></script>
+
+        
+        
+<script src="//cdn.jsdelivr.net/npm/katex@latest/dist/contrib/auto-render.min.js" data-swup-reload-script></script>
+
+        <script data-swup-reload-script>
+              window.renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                    { left: '\\[', right: '\\]', display: true },
+                ],
+                ...{},
+            })
+        </script>
+    
+
+
+    <!-- 评论插件 -->
+    
+        
+        
+    
+
+
+
+<!-- 评论插件 -->
+
+
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=1.2.7"></script>
+
+</body>
+
+</html>

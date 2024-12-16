@@ -15,7 +15,7 @@
 <meta property="og:description" content="运行时数据区域![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png) ![image-20241205113328261](&#x2F;Users&#x2F;effy">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-16T01:20:45.000Z">
-<meta property="article:modified_time" content="2024-12-05T05:45:34.394Z">
+<meta property="article:modified_time" content="2024-12-13T08:51:19.115Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
@@ -398,7 +398,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#运行时数据区域"  data-scroll-to="#运行时数据区域"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.1.</span> <span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">2.</span> <span class="toc-text">对象的创建</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#运行时数据区域"  data-scroll-to="#运行时数据区域"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#不同JDK版本运行时数据区域的区别"  data-scroll-to="#不同JDK版本运行时数据区域的区别"><span class="toc-number">1.1.</span> <span class="toc-text">不同JDK版本运行时数据区域的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#类的生命周期-类加载过程"  data-scroll-to="#类的生命周期-类加载过程"><span class="toc-number">2.</span> <span class="toc-text">类的生命周期&#x2F;类加载过程</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#什么时候可以卸载类"  data-scroll-to="#什么时候可以卸载类"><span class="toc-number">3.</span> <span class="toc-text">什么时候可以卸载类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">4.</span> <span class="toc-text">对象的创建</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -436,7 +436,19 @@
     <article class="trm-publication">
     <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png)</p>
 <p>![image-20241205113328261](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205113328261.png)</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
+<h2 id="不同JDK版本运行时数据区域的区别"><a href="#不同JDK版本运行时数据区域的区别" class="headerlink" title="不同JDK版本运行时数据区域的区别"></a>不同JDK版本运行时数据区域的区别</h2><p>JDK6</p>
+<p>![image-20241212153035384](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241212153035384.png)</p>
+<p>JDK7</p>
+<p>![image-20241212153142083](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241212153142083.png)</p>
+<p>JDK8</p>
+<p>![image-20241212153219116](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241212153219116.png)</p>
+<h1 id="类的生命周期-类加载过程"><a href="#类的生命周期-类加载过程" class="headerlink" title="类的生命周期&#x2F;类加载过程"></a>类的生命周期&#x2F;类加载过程</h1><p>![image-20241210145925795](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241210145925795.png)</p>
+<h1 id="什么时候可以卸载类"><a href="#什么时候可以卸载类" class="headerlink" title="什么时候可以卸载类"></a>什么时候可以卸载类</h1><ol>
+<li>类的所有实例对象及其子类都被回收</li>
+<li>类的类加载器已经被回收</li>
+<li>类的java.lang.Class对象没有在任何地方被引用，也无法在任何地方通过反射访问该类的方法</li>
+</ol>
+<h1 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h1><ol>
 <li><p>类加载检查：当Java虚拟机遇到一条字节码new指令时，首先将去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过，如果没有，那必须先执行相应的类加载过程</p>
 </li>
 <li><p>分配内存：类加载检查通过后，虚拟机将为新生对象分配内存。有两种分配方式，选择哪种分配方式由Java堆是否规整决定，而Java堆是否规整又由所采用的垃圾收集器是否带有空间压缩整理的能力决定：</p>

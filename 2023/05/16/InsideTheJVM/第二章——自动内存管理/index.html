@@ -10,12 +10,12 @@
 <meta name="description" content="运行时数据区域![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png) ![image-20241205113328261](&#x2F;Users&#x2F;effy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第二章——Java内存区域与内存溢出异常">
-<meta property="og:url" content="http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:url" content="https://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="Effy&#39;s Page">
 <meta property="og:description" content="运行时数据区域![image-20241205134533749](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241205134533749.png) ![image-20241205113328261](&#x2F;Users&#x2F;effy">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-05-16T01:20:45.000Z">
-<meta property="article:modified_time" content="2024-12-13T08:51:19.115Z">
+<meta property="article:modified_time" content="2024-12-18T05:52:13.456Z">
 <meta property="article:author" content="Effy">
 <meta property="article:tag" content="深入理解Java虚拟机">
 <meta name="twitter:card" content="summary">
@@ -67,7 +67,7 @@
 
 
 <!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"http://www.liyafei.xyz","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
+<script>window.ASYNC_CONFIG = {"hostname":"aeffy.icu","author":"Effy","root":"/","typed_text":["好像在哪见过 你"],"favicon":{"logo":"/img/lyft.svg","icon16":"/img/lyft.ico","icon32":"/img/lyft.ico","appleTouchIcon":"apple-touch-icon.png","webmanifest":"/site.webmanifest","visibilitychange":true,"hidden":"/img/lyft.ico","showText":"你来啦！","hideText":"拜拜！"},"theme_version":"1.2.7","theme":{"switch":true,"default":"auto"},"search":{"enable":true,"type":"local","href":"https://www.bing.com/search?q=site:","domain":"https://www.aeffy.icu","path":"search.xml"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated."},"creative_commons":{"license":"by-nc-sa","language":"deed.zh","post":true,"clipboard":true},"swup":false};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=1.2.7" id="trm-switch-style">
@@ -398,7 +398,7 @@
             </div>
             <div name="tabs-toc" class="trm-tabs-item active">
                 <div class="post-toc">
-    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#运行时数据区域"  data-scroll-to="#运行时数据区域"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#不同JDK版本运行时数据区域的区别"  data-scroll-to="#不同JDK版本运行时数据区域的区别"><span class="toc-number">1.1.</span> <span class="toc-text">不同JDK版本运行时数据区域的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#类的生命周期-类加载过程"  data-scroll-to="#类的生命周期-类加载过程"><span class="toc-number">2.</span> <span class="toc-text">类的生命周期&#x2F;类加载过程</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#什么时候可以卸载类"  data-scroll-to="#什么时候可以卸载类"><span class="toc-number">3.</span> <span class="toc-text">什么时候可以卸载类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">4.</span> <span class="toc-text">对象的创建</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#运行时数据区域"  data-scroll-to="#运行时数据区域"><span class="toc-number">1.</span> <span class="toc-text">运行时数据区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a rel="nofollow" class="toc-link" href="#不同JDK版本运行时数据区域的区别"  data-scroll-to="#不同JDK版本运行时数据区域的区别"><span class="toc-number">1.1.</span> <span class="toc-text">不同JDK版本运行时数据区域的区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#类的生命周期-类加载过程"  data-scroll-to="#类的生命周期-类加载过程"><span class="toc-number">2.</span> <span class="toc-text">类的生命周期&#x2F;类加载过程</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#什么时候可以卸载类"  data-scroll-to="#什么时候可以卸载类"><span class="toc-number">3.</span> <span class="toc-text">什么时候可以卸载类</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象的创建"  data-scroll-to="#对象的创建"><span class="toc-number">4.</span> <span class="toc-text">对象的创建</span></a></li><li class="toc-item toc-level-1"><a rel="nofollow" class="toc-link" href="#对象在堆中的内存布局"  data-scroll-to="#对象在堆中的内存布局"><span class="toc-number">5.</span> <span class="toc-text">对象在堆中的内存布局</span></a></li></ol>
 </div>
             </div>
         </div>
@@ -475,7 +475,7 @@
 <li><p>执行&lt;init&gt;()构造函数</p>
 </li>
 </ol>
-
+<h1 id="对象在堆中的内存布局"><a href="#对象在堆中的内存布局" class="headerlink" title="对象在堆中的内存布局"></a>对象在堆中的内存布局</h1>
 </article>
     
     
@@ -487,7 +487,7 @@
     </li>
     <li class="trm-post-copyright-link">
         <strong>Post link: </strong>
-        <a href="http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="第二章——Java内存区域与内存溢出异常">http://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a>
+        <a href="https://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="第二章——Java内存区域与内存溢出异常">https://aeffy.icu/2023/05/16/InsideTheJVM/%E7%AC%AC%E4%BA%8C%E7%AB%A0%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</a>
     </li>
     <li class="trm-post-copyright-license">
         <strong>Copyright Notice: </strong>
@@ -581,7 +581,7 @@
 
     
         <div class="trm-footer-item">
-            <span>© 2022- 2024</span>
+            <span>© 2022- 2025</span>
             <span class="footer-separator">·</span>
             <span class="trm-accent-color">Effy</span>
         </div>

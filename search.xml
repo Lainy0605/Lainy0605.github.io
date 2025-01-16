@@ -2213,7 +2213,7 @@
 <li><p>执行&lt;init&gt;()构造函数</p>
 </li>
 </ol>
-]]></content>
+<h1 id="对象在堆中的内存布局"><a href="#对象在堆中的内存布局" class="headerlink" title="对象在堆中的内存布局"></a>对象在堆中的内存布局</h1>]]></content>
       <categories>
         <category>Books</category>
       </categories>
@@ -2607,7 +2607,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="为什么不推荐使用内置线程池"><a href="#为什么不推荐使用内置线程池" class="headerlink" title="为什么不推荐使用内置线程池"></a>为什么不推荐使用内置线程池</h2><p>《阿里巴巴Java开发手册》中不允许使用<code>Executors</code>创建，而是通过<code>ThreadPoolExecutor</code>构造函数的方式，这样让<strong>写的同学更加明确线程池的运行规则，规避资源耗尽的风险</strong></p>
+<h2 id="为什么不推荐使用工具类Executors创建线程池"><a href="#为什么不推荐使用工具类Executors创建线程池" class="headerlink" title="为什么不推荐使用工具类Executors创建线程池"></a>为什么不推荐使用工具类Executors创建线程池</h2><p>《阿里巴巴Java开发手册》中不允许使用<code>Executors</code>创建，而是通过<code>ThreadPoolExecutor</code>构造函数的方式，这样让<strong>写的同学更加明确线程池的运行规则，规避资源耗尽的风险</strong></p>
 <p><code>Executors</code>返回的线程池对象的弊端如下：</p>
 <ul>
 <li><strong><code>FixedThreadPool</code> 和 <code>SingleThreadExecutor</code></strong> ： 使用的是无界的 <code>LinkedBlockingQueue</code>，任务队列最大长度为 <code>Integer.MAX_VALUE</code>,可能堆积大量的请求，从而导致 OOM。</li>
@@ -2637,7 +2637,7 @@
 <ul>
 <li>容量为Intger.MAX_VALUE的LinkedBlockingQueue（无界队列）：FixedThreadPool和SingleThreadExector。由于队列永远不会被放满，因此FixesThreadPool最多只能创建核心线程数的线程</li>
 <li>SychronousQueue(同步队列)：CachedThreadPool。SynchronousQueue没有容量，不存储新元素，目的是保证对于提交的任务，如果有空闲线程，则使用空闲线程来处理，否则就新建一个线程来处理任务，也就是说CachedThreadPool的最大线程数是Integer.MAX_VALUE，可以理解为线程数是可以无限扩展的，可能会创建大量线程，从而导致OOM</li>
-<li>DelayedWorkQueue（延迟阻塞队列）：ScheduledThreadPool和SIngleThreadScheduledExecutor。DelayedWorkQueue的内部元素并不是按照放入的时间排序，而是会按照延迟的时间长短对任务进行排序，内部采用的是堆的数据结构，可以保证每次出队的任务是当前队列中执行时间最靠前的。DelayedWorkQueue添加元素满了之后会自动扩容到原来容量的1&#x2F;2，即永远不会阻塞，最大扩容可达Integer.MAX_VALUE，所以最多只能创建核心线程数的线程</li>
+<li>DelayedWorkQueue（延迟阻塞队列）：ScheduledThreadPool和SIngleThreadScheduledExecutor。DelayedWorkQueue的内部元素并不是按照放入的时间排序，而是会按照延迟的时间长短对任务进行排序，内部采用的是堆的数据结构，可以保证每次出队的任务是当前队列中执行时间最靠前的。DelayedWorkQueue添加元素满了之后会自动扩容到原来容量的1.5倍，即永远不会阻塞，最大扩容可达Integer.MAX_VALUE，所以最多只能创建核心线程数的线程</li>
 </ul>
 <p><img src="https://p0.meituan.net/travelcube/725a3db5114d95675f2098c12dc331c3316963.png" loading="lazy"></p>
 <h2 id="线程池处理任务的流程"><a href="#线程池处理任务的流程" class="headerlink" title="线程池处理任务的流程"></a>线程池处理任务的流程</h2><p><img src="https://p0.meituan.net/travelcube/31bad766983e212431077ca8da92762050214.png" loading="lazy"></p>
@@ -2729,13 +2729,15 @@
     <title>Java集合的常用方法</title>
     <url>/2023/03/09/Java/JavaCollection/</url>
     <content><![CDATA[<p><img src="https://guide-blog-images.oss-cn-shenzhen.aliyuncs.com/github/javaguide/java/collection/java-collection-hierarchy.png" loading="lazy"></p>
-<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//save without order</span></span><br><span class="line">HashMap&lt;Integer,String&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="comment">//put a new key-value entry if not existing before;</span></span><br><span class="line"><span class="comment">//replace the old value if existing such a key;</span></span><br><span class="line"><span class="comment">//return the old value or null if not existing</span></span><br><span class="line">hashMap.put(<span class="number">1</span>,<span class="string">&quot;my value is 1&quot;</span>);</span><br><span class="line"><span class="comment">//put a new entry only if there was no such key before</span></span><br><span class="line">hashMap.putIfAbsent(<span class="number">1</span>,<span class="string">&quot;my value is 1&quot;</span>);</span><br><span class="line">hashMap.remove(<span class="number">1</span>); <span class="comment">//remove the entry whose key is 1</span></span><br><span class="line">hashMap.remove(<span class="number">1</span>,<span class="string">&quot;my value is 2&quot;</span>); <span class="comment">//remove the entry whose key is 1 and value is &quot;my value is 2&quot;</span></span><br><span class="line">hashMap.get(<span class="number">1</span>); <span class="comment">//return the value whose key is 1</span></span><br><span class="line">hashMap.containsKey(<span class="number">1</span>);</span><br><span class="line">hashMap.containsValue(<span class="string">&quot;whose value is 2&quot;</span>);</span><br><span class="line">hashMap.forEach((key1, value1) -&gt; &#123;</span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//save with order</span></span><br><span class="line">TreeMap&lt;Integer,String&gt; treeMap = <span class="keyword">new</span> <span class="title class_">TreeMap</span>&lt;&gt;((a,b)-&gt;&#123;</span><br><span class="line">      <span class="keyword">return</span> a-b;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//save without order</span></span><br><span class="line">HashMap&lt;Integer,String&gt; hashMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="comment">//put a new key-value entry if not existing before;</span></span><br><span class="line"><span class="comment">//replace the old value if existing such a key;</span></span><br><span class="line"><span class="comment">//return the old value or null if not existing</span></span><br><span class="line">hashMap.put(<span class="number">1</span>,<span class="string">&quot;my value is 1&quot;</span>);</span><br><span class="line"><span class="comment">//put a new entry only if there was no such key before</span></span><br><span class="line">hashMap.putIfAbsent(<span class="number">1</span>,<span class="string">&quot;my value is 1&quot;</span>);</span><br><span class="line">hashMap.remove(<span class="number">1</span>); <span class="comment">//remove the entry whose key is 1</span></span><br><span class="line">hashMap.remove(<span class="number">1</span>,<span class="string">&quot;my value is 2&quot;</span>); <span class="comment">//remove the entry whose key is 1 and value is &quot;my value is 2&quot;</span></span><br><span class="line">hashMap.get(<span class="number">1</span>); <span class="comment">//return the value whose key is 1</span></span><br><span class="line">hashMap.set(<span class="number">1</span>, <span class="string">&quot;new value&quot;</span>)</span><br><span class="line">hashMap.containsKey(<span class="number">1</span>);</span><br><span class="line">hashMap.containsValue(<span class="string">&quot;whose value is 2&quot;</span>);</span><br><span class="line">hashMap.forEach((key1, value1) -&gt; &#123;</span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//save with order</span></span><br><span class="line">TreeMap&lt;Integer,String&gt; treeMap = <span class="keyword">new</span> <span class="title class_">TreeMap</span>&lt;&gt;((a,b)-&gt;&#123;</span><br><span class="line">      <span class="keyword">return</span> a-b;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <h1 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//save without order</span></span><br><span class="line">HashSet&lt;Integer&gt; integerSet = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line"><span class="type">boolean</span> <span class="variable">addReturn</span> <span class="operator">=</span>  integerSet.add(<span class="number">1</span>); <span class="comment">// true if set doesn&#x27;t contain target</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">containReturn</span> <span class="operator">=</span>  integerSet.contains(<span class="number">3</span>); <span class="comment">// true if set contains target</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">removeReturn</span> <span class="operator">=</span> integerSet.remove(<span class="number">4</span>);  <span class="comment">// true if set contains target</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">isEmptyReturn</span> <span class="operator">=</span>  integerSet.isEmpty();   <span class="comment">// true if set is empty</span></span><br><span class="line"><span class="comment">//save with order, and you can define your specific comparator using lambda expression</span></span><br><span class="line">TreeSet&lt;Integer&gt; integerTreeSet = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;((a,b)-&gt;&#123;</span><br><span class="line">     <span class="keyword">return</span> a-b;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">LinkedList&lt;Integer&gt; linkedList = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line"><span class="type">Integer</span> <span class="variable">temp</span> <span class="operator">=</span> linkedList.indexOf(<span class="number">2</span>); <span class="comment">//return the index of target object if exists else return false</span></span><br><span class="line">linkedList.remove((Object) <span class="number">2</span>); <span class="comment">//remove the object 2</span></span><br><span class="line">linkedList.remove(<span class="number">2</span>);<span class="comment">//remove the element whose index is 2</span></span><br><span class="line"><span class="comment">//Queue operations: add from tail and get from head, FIFO</span></span><br><span class="line">linkedList.offer(<span class="number">1</span>);    <span class="comment">// add target from tail</span></span><br><span class="line">temp = linkedList.peek(); <span class="comment">//simply return the head element of the list</span></span><br><span class="line">temp = linkedList.poll(); <span class="comment">//return the head element of the list and remove it</span></span><br><span class="line"><span class="comment">//Deque operations: add and get from both ends</span></span><br><span class="line">linkedList.offerFirst(<span class="number">1</span>); <span class="comment">//add from first</span></span><br><span class="line">linkedList.offerLast(<span class="number">2</span>);  <span class="comment">//add from last</span></span><br><span class="line">temp = linkedList.peekFirst();  <span class="comment">//peek from first</span></span><br><span class="line">temp = linkedList.peekLast();   <span class="comment">//peek from last</span></span><br><span class="line">temp = linkedList.pollFirst();  <span class="comment">//poll from first</span></span><br><span class="line">temp = linkedList.pollLast();   <span class="comment">//poll from last</span></span><br><span class="line">Collections.sort(linkedList);</span><br><span class="line"></span><br><span class="line"><span class="comment">//Stack operations:add and get from the same end, LIFO</span></span><br><span class="line">Stack&lt;Integer&gt; intStack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">intStack.push(<span class="number">1</span>);   <span class="comment">//push the target onto the stack</span></span><br><span class="line">intStack.push(<span class="number">2</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> intStack.pop();  <span class="comment">//return the element at the top of the stack and remove that element</span></span><br><span class="line"><span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> intStack.peek(); <span class="comment">//return the element at the top of the stack</span></span><br><span class="line"><span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> intStack.search(<span class="number">2</span>);   <span class="comment">//return the index of target object if it&#x27;s in the stack else return -1</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">isEmpty</span> <span class="operator">=</span> intStack.isEmpty(); <span class="comment">//return true if stack is empty else return false</span></span><br></pre></td></tr></table></figure>
 
 <h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//this is a max heap</span></span><br><span class="line">PriorityQueue&lt;Integer&gt; priorityQueue = <span class="keyword">new</span> <span class="title class_">PriorityQueue</span>&lt;&gt;((a,b)-&gt;&#123;</span><br><span class="line">      <span class="keyword">return</span> a-b;</span><br><span class="line">&#125;);</span><br><span class="line">priorityQueue.offer(<span class="number">1</span>); <span class="comment">//insert the target</span></span><br><span class="line">priorityQueue.peek(); <span class="comment">//return the max/min element decided by its type</span></span><br><span class="line">priorityQueue.poll(); <span class="comment">//return the max/min element and remove it</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="求和、排序"><a href="#求和、排序" class="headerlink" title="求和、排序"></a>求和、排序</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Integer&gt; values = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> values.stream().mapToInt(Integer::intValue).sum();</span><br><span class="line"></span><br><span class="line"><span class="comment">//数组排序，默认升序</span></span><br><span class="line">Arrays.sort(<span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">5</span>&#125;)  </span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -2754,7 +2756,7 @@
 <h1 id="什么是协程？协程、线程和进程的区别"><a href="#什么是协程？协程、线程和进程的区别" class="headerlink" title="什么是协程？协程、线程和进程的区别"></a>什么是协程？协程、线程和进程的区别</h1><p>进程：操作系统进行资源调度和分配的最小单位</p>
 <p>线程：程序执行的最小单位</p>
 <p>协程：一种轻量级线程，协程的切换可以用程序自己控制，切换创建开销小，不需要锁，因为同时只有一个协程在执行</p>
-<h2 id="线程-VS-协程"><a href="#线程-VS-协程" class="headerlink" title="线程 VS 协程"></a>线程 VS 协程</h2><table>
+<h2 id="线程-VS-协程"><a href="#线程-VS-协程" class="headerlink" title="线程 VS 协程"></a><a href="https://www.cnblogs.com/Survivalist/p/11527949.html#%E5%8D%8F%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%AF%94%E8%BE%83">线程 VS 协程</a></h2><table>
 <thead>
 <tr>
 <th></th>
@@ -2831,6 +2833,7 @@
 <h2 id="为什么sleep-方法定义在Thread中"><a href="#为什么sleep-方法定义在Thread中" class="headerlink" title="为什么sleep()方法定义在Thread中"></a>为什么sleep()方法定义在Thread中</h2><p><code>sleep()</code>是让当前线程暂停执行，不涉及到对象类，也不需要获得对象锁</p>
 <h1 id="可以直接调用Thread类的run方法吗？"><a href="#可以直接调用Thread类的run方法吗？" class="headerlink" title="可以直接调用Thread类的run方法吗？"></a>可以直接调用Thread类的run方法吗？</h1><p><strong>调用start()方法可启动线程并使线程进入就绪状态，但直接执行run()方法不会以多线程的方式执行</strong>。</p>
 <p>new一个Thread，线程进入新建状态。调用<code>start()</code>方法，会启动该线程并进入RUNNABLE状态。<code>start()</code>会执行线程的相应准备工作，然后自动执行<code>run()</code>方法的内容，只是真正的多线程工作。但是直接调用<code>run()</code>方法，会把<code>run()</code>方法当成一个main线程下的普通方法去执行，并不会在某个线程中执行它，所以并不是多线程工作</p>
+<h1 id="了解Java内存模型吗？"><a href="#了解Java内存模型吗？" class="headerlink" title="了解Java内存模型吗？"></a>了解Java内存模型吗？</h1><p>&#x2F;&#x2F;TODO</p>
 <h1 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h1><p><code>volatile</code>关键字作用：</p>
 <ol>
 <li>保证变量的可见性</li>
@@ -2878,9 +2881,9 @@
 <p>当且仅当V的值等于E时，CAS通过原子方式用新值N来更新V的值和E的值，如果不等，说明已经有其他线程更新了V，当前线程放弃更新并重新执行刚才的操作。</p>
 <p><img src="https://img-blog.csdnimg.cn/784c23466aef4419a011d86f649f3f40.png" loading="lazy"></p>
 <h3 id="CAS存在哪些问题？"><a href="#CAS存在哪些问题？" class="headerlink" title="CAS存在哪些问题？"></a>CAS存在哪些问题？</h3><ol>
-<li>ABA问题：数据从A-&gt;B-&gt;A，CAS检查时会发现它的值没有发生改变，可以用版本号机制来解决，<strong>JDK 1.5</strong>以后的<code>AtomicStampedReference</code>类就是用来解决ABA问题的，其中的<code>compareAndSet()</code>方法就是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，就以原子方式将该引用和该标志的值设置为给定的更新值</li>
-<li>循环时间长开销大：CAS经常会用到自旋操作来进行重试，如果长时间不成功，会给CPU带来非常大的执行开销</li>
-<li>只能保证一个共享变量的原子操作：CAS只对单个共享变量有效，当操作涉及跨多个共享变量时CAS无效。从<strong>JDK 1.5</strong>开始提供<code>AtomicReference</code>类来保证引用对象之间的原子性，可以把多个变量放在一个对象里来进行CAS操作</li>
+<li><strong>ABA问题</strong>：数据从A-&gt;B-&gt;A，CAS检查时会发现它的值没有发生改变，可以用版本号机制来解决，<strong>JDK 1.5</strong>以后的<code>AtomicStampedReference</code>类就是用来解决ABA问题的，其中的<code>compareAndSet()</code>方法就是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，就以原子方式将该引用和该标志的值设置为给定的更新值</li>
+<li><strong>循环时间长开销大</strong>：CAS经常会用到自旋操作来进行重试，如果长时间不成功，会给CPU带来非常大的执行开销</li>
+<li><strong>只能保证一个共享变量的原子操作</strong>：CAS只对单个共享变量有效，当操作涉及跨多个共享变量时CAS无效。从<strong>JDK 1.5</strong>开始提供<code>AtomicReference</code>类来保证引用对象之间的原子性，可以把多个变量放在一个对象里来进行CAS操作</li>
 </ol>
 <h1 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h1><h2 id="synchronized是什么？有什么用？"><a href="#synchronized是什么？有什么用？" class="headerlink" title="synchronized是什么？有什么用？"></a>synchronized是什么？有什么用？</h2><p><code>synchronized</code>主要解决多个线程之间访问资源的同步性，可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行</p>
 <h2 id="如何使用synchronized？"><a href="#如何使用synchronized？" class="headerlink" title="如何使用synchronized？"></a>如何使用synchronized？</h2><ol>
@@ -2895,13 +2898,47 @@
 </ol>
 <p>*尽量不要使用<code>synchronized(String a)</code>，因为JVM中字符串常量池具有缓存功能。</p>
 <h2 id="构造方法可以用synchronized修饰吗？"><a href="#构造方法可以用synchronized修饰吗？" class="headerlink" title="构造方法可以用synchronized修饰吗？"></a>构造方法可以用synchronized修饰吗？</h2><p>不可以，因为构造方法本身就属于线程安全的，不存在同步的构造方法一说。</p>
+<h2 id="synchronized实现了什么类型的锁"><a href="#synchronized实现了什么类型的锁" class="headerlink" title="synchronized实现了什么类型的锁"></a>synchronized实现了什么类型的锁</h2><ul>
+<li>悲观锁：每次访问共享资源时都会上锁</li>
+<li>非公平锁：线程获取锁的顺序不一定是按照线程阻塞的顺序</li>
+<li>可重入锁：已经获取锁的线程可以再次获取锁</li>
+<li>独占锁&#x2F;排他锁：该锁只能由一个线程持有，其他线程都会被阻塞</li>
+</ul>
+<h2 id="synchronized底层实现原理了解吗？"><a href="#synchronized底层实现原理了解吗？" class="headerlink" title="synchronized底层实现原理了解吗？"></a>synchronized底层实现原理了解吗？</h2><p><strong>同步代码块</strong>：通过对象的监视器monitor的monitorenter和monitorexit实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (<span class="built_in">this</span>) &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;testSync&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译后的字节码</p>
+<p>![image-20241217111234420](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241217111234420.png)</p>
+<p><strong>同步方法：</strong>通过方法访问标志ACC_SYNCHRONIZED实现</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">testSync2</span><span class="params">()</span> &#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;testSync2&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译后的字节码文件：</p>
+<p>![image-20241217111605214](&#x2F;Users&#x2F;effy&#x2F;Library&#x2F;Application Support&#x2F;typora-user-images&#x2F;image-20241217111605214.png)</p>
+<h2 id="什么是synchronized锁升级？"><a href="#什么是synchronized锁升级？" class="headerlink" title="什么是synchronized锁升级？"></a><a href="https://www.cnblogs.com/star95/p/17542850.html">什么是synchronized锁升级？</a></h2><p><strong>背景：</strong>JDK1.5及以前，synchronized加锁和释放锁JVM底层都会通过操作系统实现，会涉及上下文的切换（用户态到内核态），性能消耗极高，是公认的重量级锁。JDK1.6后对synchronized优化，引入“偏向锁”和“轻量级锁”</p>
+<ol>
+<li><p>无锁</p>
+<p>当JVM启动后，一个共享资源对象直到有线程第一个访问时，这段时间内是处于无锁状态，对象头的Markword里偏向锁标识位是0，锁标识位是01</p>
+<p><img src="https://img2023.cnblogs.com/blog/3230688/202311/3230688-20231101142443012-1772700968.png" alt="img" loading="lazy"></p>
+</li>
+<li><p>偏向锁（jdk1.6后默认打开，-XX:+UseBiasedLocking关闭偏向锁）</p>
+<p>当一个共享资源首次被某个线程访问时，锁就会从无锁状态升级到偏向锁状态，偏向锁会在Markword的偏向线程ID里存储当前线程的操作系统线程ID，偏向锁标识位是1，锁标识位是01。此后如果当前线程再次进入临界区域时，只比较这个偏向线程ID即可，这种情况是在只有一个线程访问的情况下，不再需要操作系统的重量级锁来切换上下文，提供程序的访问效率。</p>
+<p><img src="https://img2023.cnblogs.com/blog/3230688/202311/3230688-20231101142508587-1722367516.png" alt="img" loading="lazy"></p>
+</li>
+<li><p>轻量级锁</p>
+<p>当前共享资源锁已经是偏向锁时，再有第二个线程访问共享资源锁时，如有没有竞争，那么偏向锁的效率更高（因为频繁的锁竞争会导致偏向锁的撤销和升级到轻量级锁），继续保持偏向锁。如果有竞争，则锁状态会从偏向锁升级到轻量级锁</p>
+<p><img src="https://img2023.cnblogs.com/blog/3230688/202311/3230688-20231101142544543-1353049648.png" alt="img" loading="lazy"></p>
+</li>
+<li><p>重量级锁</p>
+<p>若当前只有一个等待线程，则可通过自旋继续尝试， 当自旋超过一定的次数，或者一个线程在持有锁，一个线程在自旋，又有第三个线程来访问时，轻量级锁就会膨胀为重量级锁，此时，JVM会将线程阻塞。</p>
+</li>
+</ol>
 <h1 id="synchronized和volatile有什么区别"><a href="#synchronized和volatile有什么区别" class="headerlink" title="synchronized和volatile有什么区别"></a>synchronized和volatile有什么区别</h1><ul>
 <li><code>volatile</code>是线程同步的轻量级实现，所以性能优于<code>synchronized</code>，但<code>volatile</code>关键字是能用于变量而<code>synchronized</code>可以修饰方法以及代码块</li>
 <li><code>volatile</code>能保证数据的可见性，但不能保证数据的原子性，<code>synchronized</code>两者都能保证</li>
 <li><code>volatile</code>主要用于解决变量在多个线程之间的可见性，而<code>synchronized</code>解决的是多个线程之间访问资源的同步性</li>
 </ul>
 <h1 id="synchronized和ReentrantLock有什么区别"><a href="#synchronized和ReentrantLock有什么区别" class="headerlink" title="synchronized和ReentrantLock有什么区别"></a>synchronized和ReentrantLock有什么区别</h1><h2 id="两者都是可重入锁"><a href="#两者都是可重入锁" class="headerlink" title="两者都是可重入锁"></a>两者都是可重入锁</h2><p><strong>可重入锁</strong> 也叫递归锁，指的是线程可以再次获取自己的内部锁。比如一个线程获得了某个对象的锁，此时这个对象锁还没有释放，当其想要再次获取这个对象的锁的时候还是可以获取的，如果是不可重入锁，就会造成死锁</p>
-<h2 id="sychronized依赖于JVM而ReentrantLocl依赖于API"><a href="#sychronized依赖于JVM而ReentrantLocl依赖于API" class="headerlink" title="sychronized依赖于JVM而ReentrantLocl依赖于API"></a>sychronized依赖于JVM而ReentrantLocl依赖于API</h2><ul>
+<h2 id="sychronized依赖于JVM而ReentrantLock依赖于API"><a href="#sychronized依赖于JVM而ReentrantLock依赖于API" class="headerlink" title="sychronized依赖于JVM而ReentrantLock依赖于API"></a>sychronized依赖于JVM而ReentrantLock依赖于API</h2><ul>
 <li><p><code>synchronized</code> 是依赖于 JVM 实现的，虚拟机团队在 JDK1.6 为 <code>synchronized</code> 关键字进行了很多优化，但是这些优化都是在虚拟机层面实现的，并没有直接暴露给我们</p>
 </li>
 <li><p><code>ReentrantLock</code> 是 JDK 层面实现的（也就是 API 层面，需要 lock() 和 unlock() 方法配合 try&#x2F;finally 语句块来完成），所以可以通过查看它的源代码，来看它是如何实现的</p>
@@ -3220,5 +3257,10 @@
       <tags>
         <tag>排序算法</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>springboot</title>
+    <url>/2025/01/16/springboot/</url>
+    <content><![CDATA[<h1 id="Cookie-Session-Token-JWT区别"><a href="#Cookie-Session-Token-JWT区别" class="headerlink" title="Cookie, Session, Token, JWT区别"></a>Cookie, Session, Token, JWT区别</h1><h1 id="RequestBody和RequestParam"><a href="#RequestBody和RequestParam" class="headerlink" title="RequestBody和RequestParam"></a>RequestBody和RequestParam</h1>]]></content>
   </entry>
 </search>
